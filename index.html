@@ -1,1 +1,1303 @@
-w3rfer
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Ethereum Wallet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f6fa;
+      --bg-alt: #eef1f7;
+      --card: #ffffff;
+      --card-soft: rgba(255, 255, 255, 0.7);
+      --text: #0c1222;
+      --muted: #7b879f;
+      --accent: #4f7cff;
+      --accent-2: #2cc28a;
+      --danger: #ff5a5f;
+      --success: #24b47e;
+      --warning: #f4a63a;
+      --shadow: 0 18px 45px rgba(24, 38, 65, 0.12);
+      --radius: 26px;
+      --transition: 0.25s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #dfe7ff 0%, #f6f7fb 50%, #eef1f7 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 12px;
+    }
+
+    .phone {
+      width: min(420px, 100%);
+      background: linear-gradient(180deg, #fdfdff 0%, #eef1f7 100%);
+      border-radius: 34px;
+      box-shadow: 0 40px 90px rgba(0, 0, 0, 0.18);
+      overflow: hidden;
+      position: relative;
+      min-height: 820px;
+      border: 1px solid rgba(18, 24, 39, 0.08);
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px 6px;
+      font-size: 12px;
+      color: rgba(12, 18, 34, 0.7);
+    }
+
+    .status-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+
+    .status-icons {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(79, 124, 255, 0.12);
+      border-radius: 999px;
+      font-size: 11px;
+      color: var(--accent);
+    }
+
+    .connection-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px rgba(36, 180, 126, 0.5);
+    }
+
+    .screen {
+      padding: 8px 20px 22px;
+      min-height: 760px;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .screen.hidden {
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+    }
+
+    .lock-screen {
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+      align-items: center;
+      padding-top: 48px;
+    }
+
+    .lock-title {
+      text-align: center;
+    }
+
+    .lock-title h1 {
+      font-size: 24px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .lock-title p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .pin-dots {
+      display: flex;
+      gap: 12px;
+    }
+
+    .pin-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(12, 18, 34, 0.18);
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .pin-dot.filled {
+      background: var(--accent);
+      transform: scale(1.1);
+    }
+
+    .biometric {
+      margin-top: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(12, 18, 34, 0.08);
+      font-size: 12px;
+      color: var(--muted);
+      box-shadow: var(--shadow);
+    }
+
+    .keypad {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      padding: 0 18px;
+    }
+
+    .keypad button {
+      height: 64px;
+      border-radius: 20px;
+      border: none;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text);
+      font-size: 20px;
+      font-weight: 500;
+      box-shadow: 0 10px 20px rgba(12, 18, 34, 0.08);
+      transition: transform 0.1s ease, box-shadow 0.2s ease;
+    }
+
+    .keypad button:active {
+      transform: scale(0.97);
+      box-shadow: 0 6px 12px rgba(12, 18, 34, 0.12);
+    }
+
+    .keypad button.utility {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .dashboard {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .hero-card {
+      background: linear-gradient(135deg, rgba(79, 124, 255, 0.12), rgba(44, 194, 138, 0.12));
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(79, 124, 255, 0.18);
+    }
+
+    .balance-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .balance-header h2 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .network-label {
+      background: rgba(79, 124, 255, 0.16);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      color: var(--accent);
+    }
+
+    .balance-eth {
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .balance-inr {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .price-row span strong {
+      color: var(--success);
+    }
+
+    .segment {
+      background: rgba(12, 18, 34, 0.04);
+      border-radius: 999px;
+      display: flex;
+      gap: 6px;
+      padding: 4px;
+      box-shadow: inset 0 0 0 1px rgba(12, 18, 34, 0.06);
+    }
+
+    .segment button {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .segment button.active {
+      background: #ffffff;
+      color: var(--text);
+      box-shadow: 0 6px 12px rgba(12, 18, 34, 0.08);
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .action-card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 12px 8px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text);
+      border: 1px solid rgba(12, 18, 34, 0.06);
+      transition: transform var(--transition), box-shadow var(--transition);
+      box-shadow: 0 10px 20px rgba(12, 18, 34, 0.06);
+    }
+
+    .action-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(12, 18, 34, 0.1);
+    }
+
+    .action-card span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .transaction-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .transaction-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px;
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid rgba(12, 18, 34, 0.06);
+      box-shadow: 0 12px 26px rgba(12, 18, 34, 0.08);
+    }
+
+    .transaction-item .meta {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .transaction-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: var(--text);
+      background: rgba(12, 18, 34, 0.04);
+    }
+
+    .transaction-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .tx-sent {
+      background: rgba(255, 90, 95, 0.12);
+      color: var(--danger);
+    }
+
+    .tx-received {
+      background: rgba(36, 180, 126, 0.12);
+      color: var(--success);
+    }
+
+    .tx-swap {
+      background: rgba(79, 124, 255, 0.12);
+      color: var(--accent);
+    }
+
+    .tx-gas {
+      background: rgba(244, 166, 58, 0.12);
+      color: var(--warning);
+    }
+
+    .transaction-item h4 {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .transaction-item p {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .amount {
+      text-align: right;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .amount span {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 16px 20px;
+      border-top: 1px solid rgba(12, 18, 34, 0.08);
+      background: rgba(255, 255, 255, 0.9);
+      position: sticky;
+      bottom: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: color var(--transition);
+    }
+
+    .tab-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .tab-btn.active {
+      color: var(--text);
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 18px;
+      border: 1px solid rgba(12, 18, 34, 0.06);
+      box-shadow: var(--shadow);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .form-group input {
+      background: rgba(12, 18, 34, 0.04);
+      border: 1px solid rgba(12, 18, 34, 0.08);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-size: 16px;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    .max-btn {
+      align-self: flex-end;
+      background: rgba(79, 124, 255, 0.12);
+      color: var(--accent);
+      border: none;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .primary-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, #4f7cff, #2cc28a);
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .secondary-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(12, 18, 34, 0.15);
+      background: transparent;
+      color: var(--text);
+      margin-top: 8px;
+    }
+
+    .qr-box {
+      background: rgba(12, 18, 34, 0.04);
+      border-radius: 18px;
+      padding: 18px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 16px;
+    }
+
+    .qr-grid {
+      width: 180px;
+      height: 180px;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 4px;
+    }
+
+    .qr-grid span {
+      background: rgba(12, 18, 34, 0.12);
+      border-radius: 2px;
+    }
+
+    .qr-grid span.on {
+      background: #0c1222;
+    }
+
+    .toast {
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 16px;
+      background: rgba(12, 18, 34, 0.9);
+      border-radius: 999px;
+      font-size: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 100;
+      color: #fff;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 10px);
+    }
+
+    .pull-indicator {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      padding: 8px 0 0;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .pull-indicator.visible {
+      opacity: 1;
+    }
+
+    .skeleton {
+      background: linear-gradient(90deg, rgba(12,18,34,0.06) 25%, rgba(12,18,34,0.15) 50%, rgba(12,18,34,0.06) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 14px;
+    }
+
+    .skeleton-line {
+      height: 12px;
+      margin-bottom: 10px;
+    }
+
+    .skeleton-card {
+      height: 90px;
+      margin-top: 12px;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    .processing {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+      justify-content: center;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid rgba(12, 18, 34, 0.2);
+      border-top-color: var(--accent);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(36, 180, 126, 0.12);
+      display: grid;
+      place-items: center;
+      color: var(--success);
+      margin: 18px auto;
+    }
+
+    .settings-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .settings-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(12, 18, 34, 0.04);
+    }
+
+    .toggle {
+      width: 42px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(12, 18, 34, 0.15);
+      position: relative;
+    }
+
+    .toggle::after {
+      content: "";
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      position: absolute;
+      top: 3px;
+      left: 4px;
+      transition: transform 0.3s ease;
+      box-shadow: 0 4px 10px rgba(12, 18, 34, 0.15);
+    }
+
+    .toggle.active {
+      background: rgba(44, 194, 138, 0.5);
+    }
+
+    .toggle.active::after {
+      transform: translateX(16px);
+    }
+
+    .fade-up {
+      animation: fadeUp 0.5s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .copy-btn {
+      background: rgba(12, 18, 34, 0.08);
+      border: none;
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+    }
+
+    .list-card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 14px;
+      border: 1px solid rgba(12, 18, 34, 0.06);
+      box-shadow: var(--shadow);
+    }
+
+    .list-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 4px;
+      border-bottom: 1px solid rgba(12, 18, 34, 0.06);
+      font-size: 13px;
+    }
+
+    .list-row:last-child {
+      border-bottom: none;
+    }
+
+    .list-row .label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .list-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 12px;
+      background: rgba(79, 124, 255, 0.12);
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+    }
+
+    .list-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="toast" id="toast">Transaction sent successfully</div>
+    <div class="status-bar">
+      <div class="status-left">
+        <div class="status-pill"><span class="connection-dot"></span>Connected</div>
+      </div>
+      <div class="status-icons">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+          <path d="M2 8.5C7.5 3 16.5 3 22 8.5"></path>
+          <path d="M5 12c4-4 10-4 14 0"></path>
+          <path d="M8.5 15.5c2.5-2.5 4.5-2.5 7 0"></path>
+          <circle cx="12" cy="19" r="1"></circle>
+        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+          <rect x="3" y="7" width="16" height="10" rx="2"></rect>
+          <line x1="21" y1="10" x2="21" y2="14"></line>
+        </svg>
+      </div>
+    </div>
+
+    <div class="screen lock-screen" id="lockScreen">
+      <div class="lock-title">
+        <h1>Welcome back</h1>
+        <p>Enter your wallet PIN</p>
+      </div>
+      <div class="pin-dots" id="pinDots">
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+      </div>
+      <div class="biometric">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+          <path d="M12 11v3"></path>
+          <path d="M7 11v3"></path>
+          <path d="M17 11v3"></path>
+          <path d="M5 8c0-2 2-4 7-4s7 2 7 4"></path>
+          <path d="M6 16c0 2 3 4 6 4s6-2 6-4"></path>
+        </svg>
+        Face ID / Fingerprint
+      </div>
+      <div class="keypad">
+        <button data-digit="1">1</button>
+        <button data-digit="2">2</button>
+        <button data-digit="3">3</button>
+        <button data-digit="4">4</button>
+        <button data-digit="5">5</button>
+        <button data-digit="6">6</button>
+        <button data-digit="7">7</button>
+        <button data-digit="8">8</button>
+        <button data-digit="9">9</button>
+        <button class="utility" id="clearPin">Clear</button>
+        <button data-digit="0">0</button>
+        <button class="utility" id="backspace">⌫</button>
+      </div>
+    </div>
+
+    <div class="screen hidden" id="dashboardScreen">
+      <div class="pull-indicator" id="pullIndicator">Refreshing portfolio...</div>
+      <div class="dashboard fade-up" id="dashboardContent">
+        <div class="hero-card">
+          <div class="balance-header">
+            <h2>Ethereum</h2>
+            <span class="network-label">Ethereum Mainnet</span>
+          </div>
+          <div class="balance-eth">3.4281 ETH</div>
+          <div class="balance-inr">₹6,00,240.80</div>
+          <div class="price-row">
+            <span>ETH price ₹2,40,000 today <strong>+2.3%</strong></span>
+            <span style="color: var(--success);">▲ +₹13,540</span>
+          </div>
+        </div>
+
+        <div class="segment">
+          <button class="active">Assets</button>
+          <button>Activity</button>
+        </div>
+
+        <div class="action-grid">
+          <button class="action-card" data-nav="send">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 2L11 13"></path>
+              <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+            </svg>
+            <span>Send</span>
+          </button>
+          <button class="action-card" data-nav="receive">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v14"></path>
+              <path d="M5 9l7 7 7-7"></path>
+              <path d="M4 22h16"></path>
+            </svg>
+            <span>Receive</span>
+          </button>
+          <button class="action-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 3h5v5"></path>
+              <path d="M8 21H3v-5"></path>
+              <path d="M21 8c-2.2-2.3-5.4-3.5-8.7-3"></path>
+              <path d="M3 16c2.2 2.3 5.4 3.5 8.7 3"></path>
+            </svg>
+            <span>Swap</span>
+          </button>
+          <button class="action-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+              <path d="M7 9h6"></path>
+              <path d="M7 13h10"></path>
+            </svg>
+            <span>Buy</span>
+          </button>
+        </div>
+
+        <div class="list-card">
+          <div class="section-title">
+            <span>Wallet services</span>
+            <span>See all</span>
+          </div>
+          <div class="list-row">
+            <div class="label">
+              <div class="list-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 12h18"></path>
+                  <path d="M7 8l-4 4 4 4"></path>
+                </svg>
+              </div>
+              Buy ETH with card
+            </div>
+            <span style="color: var(--muted); font-size: 11px;">0% fee</span>
+          </div>
+          <div class="list-row">
+            <div class="label">
+              <div class="list-icon" style="background: rgba(44, 194, 138, 0.12); color: var(--success);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v20"></path>
+                  <path d="M17 7H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+              </div>
+              Earn on ETH
+            </div>
+            <span style="color: var(--success); font-size: 11px;">Up to 4.2%</span>
+          </div>
+          <div class="list-row">
+            <div class="label">
+              <div class="list-icon" style="background: rgba(79, 124, 255, 0.12);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                  <path d="M7 8h10"></path>
+                  <path d="M7 12h6"></path>
+                </svg>
+              </div>
+              Virtual card
+            </div>
+            <span style="color: var(--muted); font-size: 11px;">Instant</span>
+          </div>
+        </div>
+
+        <div class="section-title">
+          <span>Recent activity</span>
+          <span>View all</span>
+        </div>
+        <div class="transaction-list" id="transactionList">
+          <div class="transaction-item">
+            <div class="meta">
+              <div class="transaction-icon tx-sent">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 2L11 13"></path>
+                  <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+                </svg>
+              </div>
+              <div>
+                <h4>Sent ETH</h4>
+                <p>Today • 09:14 AM · Completed</p>
+              </div>
+            </div>
+            <div class="amount">-0.24 ETH<span>₹57,600</span></div>
+          </div>
+          <div class="transaction-item">
+            <div class="meta">
+              <div class="transaction-icon tx-received">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v14"></path>
+                  <path d="M5 9l7 7 7-7"></path>
+                  <path d="M4 22h16"></path>
+                </svg>
+              </div>
+              <div>
+                <h4>Received ETH</h4>
+                <p>Yesterday • 06:40 PM · Completed</p>
+              </div>
+            </div>
+            <div class="amount">+0.52 ETH<span>₹1,24,800</span></div>
+          </div>
+          <div class="transaction-item">
+            <div class="meta">
+              <div class="transaction-icon tx-gas">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 3h7v6H6z"></path>
+                  <path d="M6 9v12"></path>
+                  <path d="M6 15h7"></path>
+                  <path d="M13 6h2"></path>
+                  <path d="M15 9v6"></path>
+                  <path d="M15 15a2 2 0 0 0 4 0v-4"></path>
+                </svg>
+              </div>
+              <div>
+                <h4>Gas Fee</h4>
+                <p>Yesterday • 06:41 PM · Completed</p>
+              </div>
+            </div>
+            <div class="amount">-0.006 ETH<span>₹1,440</span></div>
+          </div>
+          <div class="transaction-item">
+            <div class="meta">
+              <div class="transaction-icon tx-swap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 3h5v5"></path>
+                  <path d="M8 21H3v-5"></path>
+                  <path d="M21 8c-2.2-2.3-5.4-3.5-8.7-3"></path>
+                  <path d="M3 16c2.2 2.3 5.4 3.5 8.7 3"></path>
+                </svg>
+              </div>
+              <div>
+                <h4>Swap</h4>
+                <p>Dec 12 • 08:11 PM · Pending</p>
+              </div>
+            </div>
+            <div class="amount">-0.18 ETH<span>₹43,200</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen hidden" id="sendScreen">
+      <div class="card fade-up">
+        <h3 style="font-size: 18px; margin-bottom: 14px;">Send Ethereum</h3>
+        <div class="form-group">
+          <label>To address</label>
+          <input type="text" value="0x82a4...d98c" />
+        </div>
+        <div class="form-group">
+          <label>Amount (ETH)</label>
+          <input type="text" value="0.28" />
+          <button class="max-btn" type="button">Max</button>
+        </div>
+        <div class="form-group">
+          <label>Estimated gas fee</label>
+          <input type="text" value="0.0042 ETH (₹1,008)" />
+        </div>
+        <button class="primary-btn" id="confirmSend">Review &amp; Confirm</button>
+        <button class="secondary-btn" data-nav="home">Cancel</button>
+      </div>
+    </div>
+
+    <div class="screen hidden" id="confirmScreen">
+      <div class="card fade-up">
+        <h3 style="font-size: 18px; margin-bottom: 14px;">Confirm transfer</h3>
+        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px;">
+          <span>Amount</span>
+          <strong>0.28 ETH</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px;">
+          <span>Network</span>
+          <strong>Ethereum Mainnet</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px;">
+          <span>Gas fee</span>
+          <strong>0.0042 ETH</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 16px;">
+          <span>Total</span>
+          <strong>0.2842 ETH</strong>
+        </div>
+        <button class="primary-btn" id="processSend">Send now</button>
+        <button class="secondary-btn" data-nav="send">Back</button>
+      </div>
+    </div>
+
+    <div class="screen hidden" id="processingScreen">
+      <div class="card fade-up" style="text-align: center;">
+        <h3 style="font-size: 18px; margin-bottom: 12px;">Processing transfer</h3>
+        <p style="color: var(--muted); font-size: 13px;">Hold tight while we broadcast your transaction.</p>
+        <div class="processing"><span class="spinner"></span> Broadcasting on Ethereum Mainnet</div>
+        <button class="secondary-btn" data-nav="home" style="margin-top: 18px;">Go back</button>
+      </div>
+    </div>
+
+    <div class="screen hidden" id="successScreen">
+      <div class="card fade-up" style="text-align: center;">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="30" height="30">
+            <path d="M20 6L9 17l-5-5"></path>
+          </svg>
+        </div>
+        <h3 style="font-size: 18px; margin-bottom: 10px;">Transfer complete</h3>
+        <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;">0.28 ETH sent successfully.</p>
+        <div style="font-size: 12px; color: var(--muted); word-break: break-all;">
+          Tx Hash: 0x97f9c4e1b0d8a0c4...aa93
+        </div>
+        <button class="copy-btn" id="copyHash" style="margin-top: 12px;">Copy hash</button>
+        <button class="primary-btn" data-nav="home" style="margin-top: 16px;">Done</button>
+      </div>
+    </div>
+
+    <div class="screen hidden" id="receiveScreen">
+      <div class="card fade-up" style="text-align: center;">
+        <h3 style="font-size: 18px; margin-bottom: 14px;">Receive Ethereum</h3>
+        <div class="qr-box">
+          <div class="qr-grid" id="qrGrid"></div>
+        </div>
+        <div style="font-size: 12px; color: var(--muted); margin-bottom: 8px;">Wallet address</div>
+        <div style="font-size: 13px; margin-bottom: 12px;">0x82a4c2f8b9f1aa9d...d98c</div>
+        <button class="copy-btn" id="copyAddress">Copy address</button>
+        <button class="secondary-btn" style="margin-top: 12px;">Share</button>
+        <button class="secondary-btn" data-nav="home">Back</button>
+      </div>
+    </div>
+
+    <div class="screen hidden" id="settingsScreen">
+      <div class="card fade-up">
+        <h3 style="font-size: 18px; margin-bottom: 14px;">Settings</h3>
+        <div class="settings-list">
+          <div class="settings-item">
+            <div>
+              <div style="font-size: 13px;">Change PIN</div>
+              <div style="font-size: 11px; color: var(--muted);">Update wallet access code</div>
+            </div>
+            <span>›</span>
+          </div>
+          <div class="settings-item">
+            <div>
+              <div style="font-size: 13px;">Dark mode</div>
+              <div style="font-size: 11px; color: var(--muted);">Adaptive theme</div>
+            </div>
+            <div class="toggle" id="darkToggle"></div>
+          </div>
+          <div class="settings-item">
+            <div>
+              <div style="font-size: 13px;">Language</div>
+              <div style="font-size: 11px; color: var(--muted);">English (India)</div>
+            </div>
+            <span>›</span>
+          </div>
+          <div class="settings-item">
+            <div>
+              <div style="font-size: 13px;">Security</div>
+              <div style="font-size: 11px; color: var(--muted);">2-step &amp; biometric</div>
+            </div>
+            <span>›</span>
+          </div>
+          <div class="settings-item">
+            <div>
+              <div style="font-size: 13px;">Help &amp; Support</div>
+              <div style="font-size: 11px; color: var(--muted);">24/7 live chat</div>
+            </div>
+            <span>›</span>
+          </div>
+        </div>
+        <button class="secondary-btn" data-nav="home" style="margin-top: 16px;">Back to wallet</button>
+      </div>
+    </div>
+
+    <div class="tabs" id="tabBar">
+      <button class="tab-btn active" data-nav="home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 10l9-7 9 7"></path>
+          <path d="M9 22V12h6v10"></path>
+        </svg>
+        <span>Home</span>
+      </button>
+      <button class="tab-btn" data-nav="send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 2L11 13"></path>
+          <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+        </svg>
+        <span>Send</span>
+      </button>
+      <button class="tab-btn" data-nav="receive">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v14"></path>
+          <path d="M5 9l7 7 7-7"></path>
+          <path d="M4 22h16"></path>
+        </svg>
+        <span>Receive</span>
+      </button>
+      <button class="tab-btn" data-nav="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c0 .65.39 1.24 1 1.51H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        <span>Settings</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const pin = "000000";
+    let enteredPin = "";
+    const pinDots = document.querySelectorAll(".pin-dot");
+    const lockScreen = document.getElementById("lockScreen");
+    const dashboardScreen = document.getElementById("dashboardScreen");
+    const sendScreen = document.getElementById("sendScreen");
+    const confirmScreen = document.getElementById("confirmScreen");
+    const processingScreen = document.getElementById("processingScreen");
+    const successScreen = document.getElementById("successScreen");
+    const receiveScreen = document.getElementById("receiveScreen");
+    const settingsScreen = document.getElementById("settingsScreen");
+    const screens = [
+      lockScreen,
+      dashboardScreen,
+      sendScreen,
+      confirmScreen,
+      processingScreen,
+      successScreen,
+      receiveScreen,
+      settingsScreen,
+    ];
+    const toast = document.getElementById("toast");
+    const tabButtons = document.querySelectorAll(".tab-btn");
+
+    const showToast = (message) => {
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2200);
+    };
+
+    const showScreen = (screen) => {
+      screens.forEach((s) => s.classList.add("hidden"));
+      screen.classList.remove("hidden");
+    };
+
+    const updateTabs = (active) => {
+      tabButtons.forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.nav === active);
+      });
+    };
+
+    document.querySelectorAll(".keypad button[data-digit]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (enteredPin.length >= 6) return;
+        enteredPin += btn.dataset.digit;
+        pinDots[enteredPin.length - 1].classList.add("filled");
+        if (enteredPin.length === 6) {
+          setTimeout(() => {
+            if (enteredPin === pin) {
+              lockScreen.classList.add("hidden");
+              dashboardScreen.classList.remove("hidden");
+              updateTabs("home");
+            } else {
+              enteredPin = "";
+              pinDots.forEach((dot) => dot.classList.remove("filled"));
+              showToast("Incorrect PIN. Try again.");
+            }
+          }, 300);
+        }
+      });
+    });
+
+    document.getElementById("clearPin").addEventListener("click", () => {
+      enteredPin = "";
+      pinDots.forEach((dot) => dot.classList.remove("filled"));
+    });
+
+    document.getElementById("backspace").addEventListener("click", () => {
+      if (!enteredPin.length) return;
+      enteredPin = enteredPin.slice(0, -1);
+      pinDots[enteredPin.length]?.classList.remove("filled");
+    });
+
+    document.querySelectorAll("[data-nav]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.nav;
+        if (target === "home") {
+          showScreen(dashboardScreen);
+          updateTabs("home");
+          return;
+        }
+        if (target === "send") {
+          showScreen(sendScreen);
+          updateTabs("send");
+          return;
+        }
+        if (target === "receive") {
+          showScreen(receiveScreen);
+          updateTabs("receive");
+          return;
+        }
+        if (target === "settings") {
+          showScreen(settingsScreen);
+          updateTabs("settings");
+        }
+      });
+    });
+
+    document.getElementById("confirmSend").addEventListener("click", () => {
+      showScreen(confirmScreen);
+    });
+
+    document.getElementById("processSend").addEventListener("click", () => {
+      showScreen(processingScreen);
+      setTimeout(() => {
+        showScreen(successScreen);
+        showToast("Transaction sent successfully");
+      }, 1600);
+    });
+
+    document.getElementById("copyHash").addEventListener("click", () => {
+      showToast("Hash copied to clipboard");
+    });
+
+    document.getElementById("copyAddress").addEventListener("click", () => {
+      showToast("Address copied to clipboard");
+    });
+
+    const pullIndicator = document.getElementById("pullIndicator");
+    const dashboardContent = document.getElementById("dashboardContent");
+    let isRefreshing = false;
+    let startY = 0;
+
+    dashboardScreen.addEventListener("touchstart", (e) => {
+      if (dashboardScreen.classList.contains("hidden")) return;
+      startY = e.touches[0].clientY;
+    });
+
+    dashboardScreen.addEventListener("touchmove", (e) => {
+      const distance = e.touches[0].clientY - startY;
+      if (distance > 30 && !isRefreshing) {
+        pullIndicator.classList.add("visible");
+      }
+      if (distance > 80 && !isRefreshing) {
+        isRefreshing = true;
+        dashboardContent.innerHTML = `
+          <div class="hero-card skeleton-card skeleton"></div>
+          <div class="action-grid">
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+          </div>
+          <div class="skeleton-line skeleton" style="height: 18px;"></div>
+          <div class="skeleton-card skeleton"></div>
+        `;
+        showToast("Refreshing portfolio");
+        setTimeout(() => {
+          location.reload();
+        }, 900);
+      }
+    });
+
+    dashboardScreen.addEventListener("touchend", () => {
+      pullIndicator.classList.remove("visible");
+      startY = 0;
+    });
+
+    const qrGrid = document.getElementById("qrGrid");
+    const pattern = [0, 1, 2, 3, 9, 10, 12, 14, 15, 18, 20, 22, 25, 29, 33, 34, 38, 42, 45, 49, 52, 58, 60, 62, 64, 69, 70, 73, 75, 78, 80, 84, 87, 90, 92, 95, 99];
+    for (let i = 0; i < 100; i += 1) {
+      const cell = document.createElement("span");
+      if (pattern.includes(i)) cell.classList.add("on");
+      qrGrid.appendChild(cell);
+    }
+
+    const toggle = document.getElementById("darkToggle");
+    toggle.addEventListener("click", () => {
+      toggle.classList.toggle("active");
+      showToast("Display preference saved");
+    });
+  </script>
+</body>
+</html>
