@@ -1,1 +1,1077 @@
-w3rfer
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ethereum Wallet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0f1a;
+      --bg-light: #12182a;
+      --card: rgba(17, 25, 45, 0.7);
+      --card-strong: #141c33;
+      --text: #f5f7ff;
+      --muted: #9aa6c1;
+      --accent: #5c7cff;
+      --accent-2: #21d4a7;
+      --danger: #ff6b6b;
+      --success: #38d39f;
+      --warning: #ffc857;
+      --shadow: 0 20px 45px rgba(4, 8, 22, 0.55);
+      --radius: 24px;
+      --transition: 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #1a2652 0%, #0b0f1a 55%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 12px;
+    }
+
+    .phone {
+      width: min(420px, 100%);
+      background: linear-gradient(160deg, rgba(26, 38, 82, 0.9), rgba(11, 15, 26, 0.95));
+      border-radius: 32px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+      position: relative;
+      min-height: 820px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 22px 6px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .status-bar .status-icons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      font-size: 11px;
+    }
+
+    .connection-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 10px rgba(56, 211, 159, 0.8);
+    }
+
+    .screen {
+      padding: 10px 20px 22px;
+      min-height: 760px;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .screen.hidden {
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+    }
+
+    .lock-screen {
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+      align-items: center;
+      padding-top: 36px;
+    }
+
+    .lock-title {
+      text-align: center;
+    }
+
+    .lock-title h1 {
+      font-size: 26px;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .lock-title p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .pin-dots {
+      display: flex;
+      gap: 12px;
+    }
+
+    .pin-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .pin-dot.filled {
+      background: var(--accent);
+      transform: scale(1.1);
+    }
+
+    .biometric {
+      margin-top: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .keypad {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      padding: 0 12px;
+    }
+
+    .keypad button {
+      height: 64px;
+      border-radius: 18px;
+      border: none;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      font-size: 20px;
+      font-weight: 500;
+      transition: transform 0.1s ease, background 0.2s ease;
+    }
+
+    .keypad button:active {
+      transform: scale(0.96);
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .keypad button.utility {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .dashboard {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .hero-card {
+      background: linear-gradient(135deg, rgba(92, 124, 255, 0.18), rgba(33, 212, 167, 0.18));
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .balance-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .balance-header h2 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .network-label {
+      background: rgba(255, 255, 255, 0.12);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .balance-eth {
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .balance-inr {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .price-row span strong {
+      color: var(--success);
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .action-card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 14px 10px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: transform var(--transition), background var(--transition);
+    }
+
+    .action-card:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .action-card span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .transaction-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .transaction-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px;
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 12px 30px rgba(5, 10, 25, 0.35);
+    }
+
+    .transaction-item .meta {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .transaction-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 16px;
+      color: var(--text);
+    }
+
+    .tx-sent {
+      background: rgba(255, 107, 107, 0.2);
+      color: var(--danger);
+    }
+
+    .tx-received {
+      background: rgba(56, 211, 159, 0.2);
+      color: var(--success);
+    }
+
+    .tx-swap {
+      background: rgba(92, 124, 255, 0.2);
+      color: var(--accent);
+    }
+
+    .tx-gas {
+      background: rgba(255, 200, 87, 0.2);
+      color: var(--warning);
+    }
+
+    .transaction-item h4 {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .transaction-item p {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .amount {
+      text-align: right;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .amount span {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 16px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(10, 14, 26, 0.9);
+      position: sticky;
+      bottom: 0;
+      z-index: 20;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: color var(--transition);
+    }
+
+    .tab-btn.active {
+      color: var(--text);
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: var(--shadow);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .form-group input {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .max-btn {
+      align-self: flex-end;
+      background: rgba(92, 124, 255, 0.2);
+      color: var(--accent);
+      border: none;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+    }
+
+    .primary-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, #5c7cff, #21d4a7);
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .secondary-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: transparent;
+      color: var(--text);
+      margin-top: 8px;
+    }
+
+    .qr-box {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 18px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 16px;
+    }
+
+    .qr-grid {
+      width: 180px;
+      height: 180px;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 4px;
+    }
+
+    .qr-grid span {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 2px;
+    }
+
+    .qr-grid span.on {
+      background: #fff;
+    }
+
+    .toast {
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 16px;
+      background: rgba(9, 12, 22, 0.9);
+      border-radius: 999px;
+      font-size: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 100;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 10px);
+    }
+
+    .pull-indicator {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      padding: 8px 0 0;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .pull-indicator.visible {
+      opacity: 1;
+    }
+
+    .skeleton {
+      background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.05) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 14px;
+    }
+
+    .skeleton-line {
+      height: 12px;
+      margin-bottom: 10px;
+    }
+
+    .skeleton-card {
+      height: 90px;
+      margin-top: 12px;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    .processing {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-top-color: var(--accent);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(56, 211, 159, 0.2);
+      display: grid;
+      place-items: center;
+      font-size: 32px;
+      color: var(--success);
+      margin: 18px auto;
+    }
+
+    .settings-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .settings-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px;
+      border-radius: 16px;
+      background: var(--card);
+    }
+
+    .toggle {
+      width: 42px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.15);
+      position: relative;
+    }
+
+    .toggle::after {
+      content: "";
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      position: absolute;
+      top: 3px;
+      left: 4px;
+      transition: transform 0.3s ease;
+    }
+
+    .toggle.active {
+      background: rgba(33, 212, 167, 0.4);
+    }
+
+    .toggle.active::after {
+      transform: translateX(16px);
+    }
+
+    .fade-up {
+      animation: fadeUp 0.5s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="toast" id="toast">Transaction sent successfully</div>
+    <div class="status-bar">
+      <div>09:41</div>
+      <div class="status-icons">
+        <div class="status-pill"><span class="connection-dot"></span>Connected</div>
+        <div>5G</div>
+        <div>92%</div>
+      </div>
+    </div>
+
+    <div class="screen lock-screen" id="lockScreen">
+      <div class="lock-title">
+        <h1>Welcome back</h1>
+        <p>Enter your wallet PIN</p>
+      </div>
+      <div class="pin-dots" id="pinDots">
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+      </div>
+      <div class="biometric">🔒 Face ID / Fingerprint</div>
+      <div class="keypad">
+        <button data-digit="1">1</button>
+        <button data-digit="2">2</button>
+        <button data-digit="3">3</button>
+        <button data-digit="4">4</button>
+        <button data-digit="5">5</button>
+        <button data-digit="6">6</button>
+        <button data-digit="7">7</button>
+        <button data-digit="8">8</button>
+        <button data-digit="9">9</button>
+        <button class="utility" id="clearPin">Clear</button>
+        <button data-digit="0">0</button>
+        <button class="utility" id="backspace">⌫</button>
+      </div>
+    </div>
+
+    <div class="screen hidden" id="dashboardScreen">
+      <div class="pull-indicator" id="pullIndicator">Refreshing portfolio...</div>
+      <div class="dashboard fade-up" id="dashboardContent">
+        <div class="hero-card">
+          <div class="balance-header">
+            <h2>Ethereum</h2>
+            <span class="network-label">Ethereum Mainnet</span>
+          </div>
+          <div class="balance-eth">3.4281 ETH</div>
+          <div class="balance-inr">₹6,00,240.80</div>
+          <div class="price-row">
+            <span>ETH price ₹2,40,000 today <strong>+2.3%</strong></span>
+            <span style="color: var(--success);">▲ +₹13,540</span>
+          </div>
+        </div>
+
+        <div class="action-grid">
+          <button class="action-card" data-nav="send">
+            ✈️
+            <span>Send</span>
+          </button>
+          <button class="action-card" data-nav="receive">
+            📥
+            <span>Receive</span>
+          </button>
+          <button class="action-card">
+            🔁
+            <span>Swap / Buy</span>
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="section-title">
+            <span>Market overview</span>
+            <span style="color: var(--success);">Live</span>
+          </div>
+          <div style="margin-top: 12px; display: flex; justify-content: space-between; font-size: 12px; color: var(--muted);">
+            <div>
+              <div>24H High</div>
+              <strong style="color: var(--text);">₹2,51,200</strong>
+            </div>
+            <div>
+              <div>24H Low</div>
+              <strong style="color: var(--text);">₹2,31,950</strong>
+            </div>
+            <div>
+              <div>Vol (INR)</div>
+              <strong style="color: var(--text);">₹8.2B</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-title">
+          <span>Recent activity</span>
+          <span>View all</span>
+        </div>
+        <div class="transaction-list" id="transactionList">
+          <div class="transaction-item">
+            <div class="meta">
+              <div class="transaction-icon tx-sent">⬆️</div>
+              <div>
+                <h4>Sent ETH</h4>
+                <p>Today • 09:14 AM · Completed</p>
+              </div>
+            </div>
+            <div class="amount">-0.24 ETH<span>₹57,600</span></div>
+          </div>
+          <div class="transaction-item">
+            <div class="meta">
+              <div class="transaction-icon tx-received">⬇️</div>
+              <div>
+                <h4>Received ETH</h4>
+                <p>Yesterday • 06:40 PM · Completed</p>
+              </div>
+            </div>
+            <div class="amount">+0.52 ETH<span>₹1,24,800</span></div>
+          </div>
+          <div class="transaction-item">
+            <div class="meta">
+              <div class="transaction-icon tx-gas">⛽</div>
+              <div>
+                <h4>Gas Fee</h4>
+                <p>Yesterday • 06:41 PM · Completed</p>
+              </div>
+            </div>
+            <div class="amount">-0.006 ETH<span>₹1,440</span></div>
+          </div>
+          <div class="transaction-item">
+            <div class="meta">
+              <div class="transaction-icon tx-swap">🔄</div>
+              <div>
+                <h4>Swap</h4>
+                <p>Dec 12 • 08:11 PM · Pending</p>
+              </div>
+            </div>
+            <div class="amount">-0.18 ETH<span>₹43,200</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen hidden" id="sendScreen">
+      <div class="card fade-up">
+        <h3 style="font-size: 18px; margin-bottom: 14px;">Send Ethereum</h3>
+        <div class="form-group">
+          <label>To address</label>
+          <input type="text" value="0x82a4...d98c" />
+        </div>
+        <div class="form-group">
+          <label>Amount (ETH)</label>
+          <input type="text" value="0.28" />
+          <button class="max-btn" type="button">Max</button>
+        </div>
+        <div class="form-group">
+          <label>Estimated gas fee</label>
+          <input type="text" value="0.0042 ETH (₹1,008)" />
+        </div>
+        <button class="primary-btn" id="confirmSend">Review &amp; Confirm</button>
+        <button class="secondary-btn" data-nav="home">Cancel</button>
+      </div>
+    </div>
+
+    <div class="screen hidden" id="confirmScreen">
+      <div class="card fade-up">
+        <h3 style="font-size: 18px; margin-bottom: 14px;">Confirm transfer</h3>
+        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px;">
+          <span>Amount</span>
+          <strong>0.28 ETH</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px;">
+          <span>Network</span>
+          <strong>Ethereum Mainnet</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px;">
+          <span>Gas fee</span>
+          <strong>0.0042 ETH</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 16px;">
+          <span>Total</span>
+          <strong>0.2842 ETH</strong>
+        </div>
+        <button class="primary-btn" id="processSend">Send now</button>
+        <button class="secondary-btn" data-nav="send">Back</button>
+      </div>
+    </div>
+
+    <div class="screen hidden" id="processingScreen">
+      <div class="card fade-up" style="text-align: center;">
+        <h3 style="font-size: 18px; margin-bottom: 12px;">Processing transfer</h3>
+        <p style="color: var(--muted); font-size: 13px;">Hold tight while we broadcast your transaction.</p>
+        <div class="processing"><span class="spinner"></span> Broadcasting on Ethereum Mainnet</div>
+        <button class="secondary-btn" data-nav="home" style="margin-top: 18px;">Go back</button>
+      </div>
+    </div>
+
+    <div class="screen hidden" id="successScreen">
+      <div class="card fade-up" style="text-align: center;">
+        <div class="success-icon">✓</div>
+        <h3 style="font-size: 18px; margin-bottom: 10px;">Transfer complete</h3>
+        <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;">0.28 ETH sent successfully.</p>
+        <div style="font-size: 12px; color: var(--muted); word-break: break-all;">
+          Tx Hash: 0x97f9c4e1b0d8a0c4...aa93
+        </div>
+        <button class="copy-btn" id="copyHash" style="margin-top: 12px;">Copy hash</button>
+        <button class="primary-btn" data-nav="home" style="margin-top: 16px;">Done</button>
+      </div>
+    </div>
+
+    <div class="screen hidden" id="receiveScreen">
+      <div class="card fade-up" style="text-align: center;">
+        <h3 style="font-size: 18px; margin-bottom: 14px;">Receive Ethereum</h3>
+        <div class="qr-box">
+          <div class="qr-grid" id="qrGrid"></div>
+        </div>
+        <div style="font-size: 12px; color: var(--muted); margin-bottom: 8px;">Wallet address</div>
+        <div style="font-size: 13px; margin-bottom: 12px;">0x82a4c2f8b9f1aa9d...d98c</div>
+        <button class="copy-btn" id="copyAddress">Copy address</button>
+        <button class="secondary-btn" style="margin-top: 12px;">Share</button>
+        <button class="secondary-btn" data-nav="home">Back</button>
+      </div>
+    </div>
+
+    <div class="screen hidden" id="settingsScreen">
+      <div class="card fade-up">
+        <h3 style="font-size: 18px; margin-bottom: 14px;">Settings</h3>
+        <div class="settings-list">
+          <div class="settings-item">
+            <div>
+              <div style="font-size: 13px;">Change PIN</div>
+              <div style="font-size: 11px; color: var(--muted);">Update wallet access code</div>
+            </div>
+            <span>›</span>
+          </div>
+          <div class="settings-item">
+            <div>
+              <div style="font-size: 13px;">Dark mode</div>
+              <div style="font-size: 11px; color: var(--muted);">Adaptive theme</div>
+            </div>
+            <div class="toggle" id="darkToggle"></div>
+          </div>
+          <div class="settings-item">
+            <div>
+              <div style="font-size: 13px;">Language</div>
+              <div style="font-size: 11px; color: var(--muted);">English (India)</div>
+            </div>
+            <span>›</span>
+          </div>
+          <div class="settings-item">
+            <div>
+              <div style="font-size: 13px;">Security</div>
+              <div style="font-size: 11px; color: var(--muted);">2-step &amp; biometric</div>
+            </div>
+            <span>›</span>
+          </div>
+          <div class="settings-item">
+            <div>
+              <div style="font-size: 13px;">Help &amp; Support</div>
+              <div style="font-size: 11px; color: var(--muted);">24/7 live chat</div>
+            </div>
+            <span>›</span>
+          </div>
+        </div>
+        <button class="secondary-btn" data-nav="home" style="margin-top: 16px;">Back to wallet</button>
+      </div>
+    </div>
+
+    <div class="tabs" id="tabBar">
+      <button class="tab-btn active" data-nav="home">🏠<span>Home</span></button>
+      <button class="tab-btn" data-nav="send">✈️<span>Send</span></button>
+      <button class="tab-btn" data-nav="receive">📥<span>Receive</span></button>
+      <button class="tab-btn" data-nav="settings">⚙️<span>Settings</span></button>
+    </div>
+  </div>
+
+  <script>
+    const pin = "000000";
+    let enteredPin = "";
+    const pinDots = document.querySelectorAll(".pin-dot");
+    const lockScreen = document.getElementById("lockScreen");
+    const dashboardScreen = document.getElementById("dashboardScreen");
+    const sendScreen = document.getElementById("sendScreen");
+    const confirmScreen = document.getElementById("confirmScreen");
+    const processingScreen = document.getElementById("processingScreen");
+    const successScreen = document.getElementById("successScreen");
+    const receiveScreen = document.getElementById("receiveScreen");
+    const settingsScreen = document.getElementById("settingsScreen");
+    const screens = [
+      lockScreen,
+      dashboardScreen,
+      sendScreen,
+      confirmScreen,
+      processingScreen,
+      successScreen,
+      receiveScreen,
+      settingsScreen,
+    ];
+    const toast = document.getElementById("toast");
+    const tabButtons = document.querySelectorAll(".tab-btn");
+
+    const showToast = (message) => {
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2200);
+    };
+
+    const showScreen = (screen) => {
+      screens.forEach((s) => s.classList.add("hidden"));
+      screen.classList.remove("hidden");
+    };
+
+    const updateTabs = (active) => {
+      tabButtons.forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.nav === active);
+      });
+    };
+
+    document.querySelectorAll(".keypad button[data-digit]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (enteredPin.length >= 6) return;
+        enteredPin += btn.dataset.digit;
+        pinDots[enteredPin.length - 1].classList.add("filled");
+        if (enteredPin.length === 6) {
+          setTimeout(() => {
+            if (enteredPin === pin) {
+              lockScreen.classList.add("hidden");
+              dashboardScreen.classList.remove("hidden");
+              updateTabs("home");
+            } else {
+              enteredPin = "";
+              pinDots.forEach((dot) => dot.classList.remove("filled"));
+              showToast("Incorrect PIN. Try again.");
+            }
+          }, 300);
+        }
+      });
+    });
+
+    document.getElementById("clearPin").addEventListener("click", () => {
+      enteredPin = "";
+      pinDots.forEach((dot) => dot.classList.remove("filled"));
+    });
+
+    document.getElementById("backspace").addEventListener("click", () => {
+      if (!enteredPin.length) return;
+      enteredPin = enteredPin.slice(0, -1);
+      pinDots[enteredPin.length]?.classList.remove("filled");
+    });
+
+    document.querySelectorAll("[data-nav]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.nav;
+        if (target === "home") {
+          showScreen(dashboardScreen);
+          updateTabs("home");
+          return;
+        }
+        if (target === "send") {
+          showScreen(sendScreen);
+          updateTabs("send");
+          return;
+        }
+        if (target === "receive") {
+          showScreen(receiveScreen);
+          updateTabs("receive");
+          return;
+        }
+        if (target === "settings") {
+          showScreen(settingsScreen);
+          updateTabs("settings");
+        }
+      });
+    });
+
+    document.getElementById("confirmSend").addEventListener("click", () => {
+      showScreen(confirmScreen);
+    });
+
+    document.getElementById("processSend").addEventListener("click", () => {
+      showScreen(processingScreen);
+      setTimeout(() => {
+        showScreen(successScreen);
+        showToast("Transaction sent successfully");
+      }, 1600);
+    });
+
+    document.getElementById("copyHash").addEventListener("click", () => {
+      showToast("Hash copied to clipboard");
+    });
+
+    document.getElementById("copyAddress").addEventListener("click", () => {
+      showToast("Address copied to clipboard");
+    });
+
+    const pullIndicator = document.getElementById("pullIndicator");
+    const dashboardContent = document.getElementById("dashboardContent");
+    let isRefreshing = false;
+    let startY = 0;
+
+    dashboardScreen.addEventListener("touchstart", (e) => {
+      if (dashboardScreen.classList.contains("hidden")) return;
+      startY = e.touches[0].clientY;
+    });
+
+    dashboardScreen.addEventListener("touchmove", (e) => {
+      const distance = e.touches[0].clientY - startY;
+      if (distance > 30 && !isRefreshing) {
+        pullIndicator.classList.add("visible");
+      }
+      if (distance > 80 && !isRefreshing) {
+        isRefreshing = true;
+        dashboardContent.innerHTML = `
+          <div class="hero-card skeleton-card skeleton"></div>
+          <div class="action-grid">
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+            <div class="skeleton-card skeleton"></div>
+          </div>
+          <div class="skeleton-line skeleton" style="height: 18px;"></div>
+          <div class="skeleton-card skeleton"></div>
+        `;
+        showToast("Refreshing portfolio");
+        setTimeout(() => {
+          location.reload();
+        }, 900);
+      }
+    });
+
+    dashboardScreen.addEventListener("touchend", () => {
+      pullIndicator.classList.remove("visible");
+      startY = 0;
+    });
+
+    const qrGrid = document.getElementById("qrGrid");
+    const pattern = [0, 1, 2, 3, 9, 10, 12, 14, 15, 18, 20, 22, 25, 29, 33, 34, 38, 42, 45, 49, 52, 58, 60, 62, 64, 69, 70, 73, 75, 78, 80, 84, 87, 90, 92, 95, 99];
+    for (let i = 0; i < 100; i += 1) {
+      const cell = document.createElement("span");
+      if (pattern.includes(i)) cell.classList.add("on");
+      qrGrid.appendChild(cell);
+    }
+
+    const toggle = document.getElementById("darkToggle");
+    toggle.addEventListener("click", () => {
+      toggle.classList.toggle("active");
+      showToast("Display preference saved");
+    });
+  </script>
+</body>
+</html>
