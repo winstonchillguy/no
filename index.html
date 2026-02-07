@@ -151,6 +151,16 @@
       box-shadow: var(--shadow);
     }
 
+    .biometric svg {
+      animation: pulse 2.6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.08); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.7; }
+    }
+
     .keypad {
       width: 100%;
       display: grid;
@@ -214,6 +224,8 @@
       border-radius: 999px;
       font-size: 11px;
       color: var(--accent);
+      border: none;
+      cursor: pointer;
     }
 
     .balance-eth {
@@ -225,6 +237,27 @@
     .balance-inr {
       font-size: 14px;
       color: var(--muted);
+    }
+
+    .chart {
+      margin-top: 14px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 16px;
+      padding: 12px;
+      border: 1px solid rgba(12, 18, 34, 0.06);
+    }
+
+    .chart svg {
+      width: 100%;
+      height: 80px;
+    }
+
+    .chart-legend {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 8px;
     }
 
     .price-row {
@@ -303,6 +336,68 @@
       font-size: 13px;
       color: var(--muted);
       margin-top: 4px;
+    }
+
+    .pane {
+      display: block;
+    }
+
+    .pane.hidden {
+      display: none;
+    }
+
+    .token-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .token-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px;
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid rgba(12, 18, 34, 0.06);
+      box-shadow: 0 10px 20px rgba(12, 18, 34, 0.06);
+    }
+
+    .token-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .token-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      background: rgba(79, 124, 255, 0.12);
+      color: var(--accent);
+    }
+
+    .token-icon.success {
+      background: rgba(44, 194, 138, 0.12);
+      color: var(--success);
+    }
+
+    .token-icon.warning {
+      background: rgba(244, 166, 58, 0.12);
+      color: var(--warning);
+    }
+
+    .token-item h4 {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .token-item p {
+      font-size: 11px;
+      color: var(--muted);
     }
 
     .transaction-list {
@@ -447,6 +542,41 @@
       color: var(--text);
       font-size: 16px;
       -webkit-text-size-adjust: 100%;
+    }
+
+    .speed-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .speed-btn {
+      border: 1px solid rgba(12, 18, 34, 0.12);
+      background: #fff;
+      padding: 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      transition: all var(--transition);
+    }
+
+    .speed-btn.active {
+      border-color: rgba(79, 124, 255, 0.4);
+      color: var(--text);
+      box-shadow: 0 10px 20px rgba(12, 18, 34, 0.08);
+    }
+
+    .fee-breakdown {
+      display: grid;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .fee-breakdown div {
+      display: flex;
+      justify-content: space-between;
     }
 
     .max-btn {
@@ -664,6 +794,41 @@
       font-size: 11px;
     }
 
+    .modal {
+      position: absolute;
+      inset: 0;
+      background: rgba(12, 18, 34, 0.3);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 200;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-card {
+      width: 100%;
+      background: #fff;
+      border-radius: 24px 24px 0 0;
+      padding: 20px;
+      box-shadow: 0 -20px 45px rgba(12, 18, 34, 0.18);
+      max-height: 80%;
+      overflow-y: auto;
+    }
+
+    .modal-card h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .modal-card p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
     .list-card {
       background: var(--card);
       border-radius: 20px;
@@ -732,6 +897,14 @@
 <body>
   <div class="phone">
     <div class="toast" id="toast">Transaction sent successfully</div>
+    <div class="modal" id="actionModal">
+      <div class="modal-card">
+        <h3 id="modalTitle">Action</h3>
+        <p id="modalDescription">Details go here.</p>
+        <button class="primary-btn" id="modalPrimary">Continue</button>
+        <button class="secondary-btn" id="modalClose">Close</button>
+      </div>
+    </div>
     <div class="status-bar">
       <div class="status-left"></div>
       <div class="status-icons"></div>
@@ -782,13 +955,30 @@
         <div class="hero-card">
           <div class="balance-header">
             <h2>Ethereum</h2>
-            <span class="network-label">Ethereum Mainnet</span>
+            <button class="network-label" id="networkLabel">Ethereum Mainnet</button>
           </div>
           <div class="balance-eth" id="balanceEth">3.4281 ETH</div>
           <div class="balance-inr" id="balanceInr">₹6,00,240.80</div>
           <div class="price-row">
             <span>ETH price ₹2,40,000 today <strong>+2.3%</strong></span>
             <span style="color: var(--success);">▲ +₹13,540</span>
+          </div>
+          <div class="chart">
+            <svg viewBox="0 0 300 80" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 60 C40 20, 80 40, 120 25 C160 10, 200 40, 240 20 C260 10, 280 25, 295 15" stroke="url(#grad)"></path>
+              <defs>
+                <linearGradient id="grad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#4f7cff"></stop>
+                  <stop offset="100%" stop-color="#2cc28a"></stop>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="chart-legend">
+              <span>1D</span>
+              <span>1W</span>
+              <span>1M</span>
+              <span>1Y</span>
+            </div>
           </div>
         </div>
 
@@ -832,122 +1022,95 @@
           </button>
         </div>
 
-        <div class="list-card">
+        <div class="pane" id="assetsPane">
           <div class="section-title">
-            <span>Wallet services</span>
-            <span>See all</span>
+            <span>Your assets</span>
+            <span>3 tokens</span>
           </div>
-          <div class="list-row" data-action="buy-card">
-            <div class="label">
-              <div class="list-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M3 12h18"></path>
-                  <path d="M7 8l-4 4 4 4"></path>
-                </svg>
+          <div class="token-list">
+            <div class="token-item">
+              <div class="token-meta">
+                <div class="token-icon">Ξ</div>
+                <div>
+                  <h4>Ethereum</h4>
+                  <p>Mainnet · ETH</p>
+                </div>
               </div>
-              Buy ETH with card
+              <div class="amount" id="tokenEthBalance">3.4281 ETH<span id="tokenEthInr">₹6,00,240.80</span></div>
             </div>
-            <span style="color: var(--muted); font-size: 11px;">0% fee</span>
-          </div>
-          <div class="list-row" data-action="earn">
-            <div class="label">
-              <div class="list-icon" style="background: rgba(44, 194, 138, 0.12); color: var(--success);">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 2v20"></path>
-                  <path d="M17 7H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"></path>
-                </svg>
+            <div class="token-item">
+              <div class="token-meta">
+                <div class="token-icon success">U</div>
+                <div>
+                  <h4>USD Coin</h4>
+                  <p>Stablecoin · USDC</p>
+                </div>
               </div>
-              Earn on ETH
+              <div class="amount">1,250.00 USDC<span>₹1,03,750.00</span></div>
             </div>
-            <span style="color: var(--success); font-size: 11px;">Up to 4.2%</span>
-          </div>
-          <div class="list-row" data-action="virtual-card">
-            <div class="label">
-              <div class="list-icon" style="background: rgba(79, 124, 255, 0.12);">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="4" width="18" height="16" rx="2"></rect>
-                  <path d="M7 8h10"></path>
-                  <path d="M7 12h6"></path>
-                </svg>
+            <div class="token-item">
+              <div class="token-meta">
+                <div class="token-icon warning">M</div>
+                <div>
+                  <h4>Polygon</h4>
+                  <p>Layer 2 · MATIC</p>
+                </div>
               </div>
-              Virtual card
+              <div class="amount">2,840.20 MATIC<span>₹2,27,216.00</span></div>
             </div>
-            <span style="color: var(--muted); font-size: 11px;">Instant</span>
           </div>
         </div>
 
-        <div class="section-title">
-          <span>Recent activity</span>
-          <span>View all</span>
-        </div>
-        <div class="transaction-list" id="transactionList">
-          <div class="transaction-item">
-            <div class="meta">
-              <div class="transaction-icon tx-sent">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M22 2L11 13"></path>
-                  <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
-                </svg>
-              </div>
-              <div>
-                <h4>Sent ETH</h4>
-                <p>Today • 09:14 AM · Completed</p>
-              </div>
+        <div class="pane hidden" id="activityPane">
+          <div class="list-card">
+            <div class="section-title">
+              <span>Wallet services</span>
+              <span>See all</span>
             </div>
-            <div class="amount">-0.24 ETH<span>₹57,600</span></div>
-          </div>
-          <div class="transaction-item">
-            <div class="meta">
-              <div class="transaction-icon tx-received">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 2v14"></path>
-                  <path d="M5 9l7 7 7-7"></path>
-                  <path d="M4 22h16"></path>
-                </svg>
+            <div class="list-row" data-action="buy-card">
+              <div class="label">
+                <div class="list-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12h18"></path>
+                    <path d="M7 8l-4 4 4 4"></path>
+                  </svg>
+                </div>
+                Buy ETH with card
               </div>
-              <div>
-                <h4>Received ETH</h4>
-                <p>Yesterday • 06:40 PM · Completed</p>
-              </div>
+              <span style="color: var(--muted); font-size: 11px;">0% fee</span>
             </div>
-            <div class="amount">+0.52 ETH<span>₹1,24,800</span></div>
-          </div>
-          <div class="transaction-item">
-            <div class="meta">
-              <div class="transaction-icon tx-gas">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M6 3h7v6H6z"></path>
-                  <path d="M6 9v12"></path>
-                  <path d="M6 15h7"></path>
-                  <path d="M13 6h2"></path>
-                  <path d="M15 9v6"></path>
-                  <path d="M15 15a2 2 0 0 0 4 0v-4"></path>
-                </svg>
+            <div class="list-row" data-action="earn">
+              <div class="label">
+                <div class="list-icon" style="background: rgba(44, 194, 138, 0.12); color: var(--success);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2v20"></path>
+                    <path d="M17 7H9.5a3.5 3.5 0 0 0 0 7H14a3.5 3.5 0 0 1 0 7H6"></path>
+                  </svg>
+                </div>
+                Earn on ETH
               </div>
-              <div>
-                <h4>Gas Fee</h4>
-                <p>Yesterday • 06:41 PM · Completed</p>
-              </div>
+              <span style="color: var(--success); font-size: 11px;">Up to 4.2%</span>
             </div>
-            <div class="amount">-0.006 ETH<span>₹1,440</span></div>
-          </div>
-          <div class="transaction-item">
-            <div class="meta">
-              <div class="transaction-icon tx-swap">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M16 3h5v5"></path>
-                  <path d="M8 21H3v-5"></path>
-                  <path d="M21 8c-2.2-2.3-5.4-3.5-8.7-3"></path>
-                  <path d="M3 16c2.2 2.3 5.4 3.5 8.7 3"></path>
-                </svg>
+            <div class="list-row" data-action="virtual-card">
+              <div class="label">
+                <div class="list-icon" style="background: rgba(79, 124, 255, 0.12);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                    <path d="M7 8h10"></path>
+                    <path d="M7 12h6"></path>
+                  </svg>
+                </div>
+                Virtual card
               </div>
-              <div>
-                <h4>Swap</h4>
-                <p>Dec 12 • 08:11 PM · Pending</p>
-              </div>
+              <span style="color: var(--muted); font-size: 11px;">Instant</span>
             </div>
-            <div class="amount">-0.18 ETH<span>₹43,200</span></div>
           </div>
+
+          <div class="section-title">
+            <span>Recent activity</span>
+            <span>View all</span>
+          </div>
+          <div class="transaction-list" id="transactionList"></div>
         </div>
       </div>
     </div>
@@ -965,8 +1128,20 @@
           <button class="max-btn" type="button" data-action="max">Max</button>
         </div>
         <div class="form-group">
+          <label>Speed</label>
+          <div class="speed-selector" id="speedSelector">
+            <button class="speed-btn" data-speed="slow">Slow</button>
+            <button class="speed-btn active" data-speed="standard">Standard</button>
+            <button class="speed-btn" data-speed="fast">Fast</button>
+          </div>
+        </div>
+        <div class="form-group">
           <label>Estimated gas fee</label>
           <input type="text" id="gasInput" value="0.0042 ETH (₹1,008)" />
+        </div>
+        <div class="form-group">
+          <label>Memo</label>
+          <input type="text" id="memoInput" placeholder="Add a note (optional)" />
         </div>
         <button class="primary-btn" id="confirmSend">Review &amp; Confirm</button>
         <button class="secondary-btn" data-nav="home">Cancel</button>
@@ -987,6 +1162,10 @@
         <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px;">
           <span>Gas fee</span>
           <strong id="confirmGas">0.0042 ETH</strong>
+        </div>
+        <div class="fee-breakdown">
+          <div><span>Base fee</span><span id="baseFee">0.0031 ETH</span></div>
+          <div><span>Priority fee</span><span id="priorityFee">0.0011 ETH</span></div>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 16px;">
           <span>Total</span>
@@ -1128,15 +1307,29 @@
     const settingsScreen = document.getElementById("settingsScreen");
     const balanceEth = document.getElementById("balanceEth");
     const balanceInr = document.getElementById("balanceInr");
+    const tokenEthBalance = document.getElementById("tokenEthBalance");
+    const tokenEthInr = document.getElementById("tokenEthInr");
     const amountInput = document.getElementById("amountInput");
     const addressInput = document.getElementById("addressInput");
     const gasInput = document.getElementById("gasInput");
+    const memoInput = document.getElementById("memoInput");
+    const speedSelector = document.getElementById("speedSelector");
     const confirmAmount = document.getElementById("confirmAmount");
     const confirmGas = document.getElementById("confirmGas");
     const confirmTotal = document.getElementById("confirmTotal");
+    const baseFee = document.getElementById("baseFee");
+    const priorityFee = document.getElementById("priorityFee");
     const successMessage = document.getElementById("successMessage");
     const successHash = document.getElementById("successHash");
     const transactionList = document.getElementById("transactionList");
+    const assetsPane = document.getElementById("assetsPane");
+    const activityPane = document.getElementById("activityPane");
+    const networkLabel = document.getElementById("networkLabel");
+    const actionModal = document.getElementById("actionModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalDescription = document.getElementById("modalDescription");
+    const modalPrimary = document.getElementById("modalPrimary");
+    const modalClose = document.getElementById("modalClose");
     const screens = [
       lockScreen,
       dashboardScreen,
@@ -1150,7 +1343,22 @@
     const toast = document.getElementById("toast");
     const tabButtons = document.querySelectorAll(".tab-btn");
     const ethPrice = 240000;
+    const gasRates = {
+      slow: { base: 0.0026, priority: 0.0007 },
+      standard: { base: 0.0031, priority: 0.0011 },
+      fast: { base: 0.0042, priority: 0.0019 },
+    };
+    const networks = ["Ethereum Mainnet", "Base Mainnet", "Arbitrum One"];
+    let networkIndex = 0;
     let availableEth = 3.4281;
+    let transactions = [];
+
+    const initialTransactions = [
+      { type: "sent", title: "Sent ETH", amount: -0.24, status: "Completed", timestamp: "Today · 09:14 AM" },
+      { type: "received", title: "Received ETH", amount: 0.52, status: "Completed", timestamp: "Yesterday · 06:40 PM" },
+      { type: "gas", title: "Gas Fee", amount: -0.006, status: "Completed", timestamp: "Yesterday · 06:41 PM" },
+      { type: "swap", title: "Swap", amount: -0.18, status: "Pending", timestamp: "Dec 12 · 08:11 PM" },
+    ];
 
     const formatEth = (value) => `${value.toFixed(4)} ETH`;
     const formatInr = (value) => `₹${value.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -1162,6 +1370,90 @@
     const updateBalance = () => {
       balanceEth.textContent = formatEth(availableEth);
       balanceInr.textContent = formatInr(availableEth * ethPrice);
+      if (tokenEthBalance) tokenEthBalance.firstChild.textContent = formatEth(availableEth);
+      if (tokenEthInr) tokenEthInr.textContent = formatInr(availableEth * ethPrice);
+    };
+
+    const renderTransactions = () => {
+      if (!transactionList) return;
+      transactionList.innerHTML = "";
+      transactions.forEach((tx) => {
+        const txItem = document.createElement("div");
+        txItem.className = "transaction-item";
+        const iconClass = tx.type === "received" ? "tx-received" : tx.type === "gas" ? "tx-gas" : tx.type === "swap" ? "tx-swap" : "tx-sent";
+        const amountPrefix = tx.amount >= 0 ? "+" : "";
+        const iconSvg = tx.type === "received"
+          ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v14"></path>
+              <path d="M5 9l7 7 7-7"></path>
+              <path d="M4 22h16"></path>
+            </svg>`
+          : tx.type === "gas"
+            ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 3h7v6H6z"></path>
+                <path d="M6 9v12"></path>
+                <path d="M6 15h7"></path>
+                <path d="M13 6h2"></path>
+                <path d="M15 9v6"></path>
+                <path d="M15 15a2 2 0 0 0 4 0v-4"></path>
+              </svg>`
+            : tx.type === "swap"
+              ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 3h5v5"></path>
+                  <path d="M8 21H3v-5"></path>
+                  <path d="M21 8c-2.2-2.3-5.4-3.5-8.7-3"></path>
+                  <path d="M3 16c2.2 2.3 5.4 3.5 8.7 3"></path>
+                </svg>`
+              : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 2L11 13"></path>
+                  <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+                </svg>`;
+        txItem.innerHTML = `
+          <div class="meta">
+            <div class="transaction-icon ${iconClass}">
+              ${iconSvg}
+            </div>
+            <div>
+              <h4>${tx.title}</h4>
+              <p>${tx.timestamp} · ${tx.status}</p>
+            </div>
+          </div>
+          <div class="amount">${amountPrefix}${tx.amount.toFixed(3)} ETH<span>${formatInr(Math.abs(tx.amount) * ethPrice)}</span></div>
+        `;
+        transactionList.appendChild(txItem);
+      });
+    };
+
+    const loadState = () => {
+      const storedBalance = localStorage.getItem("walletBalance");
+      const storedTransactions = localStorage.getItem("walletTransactions");
+      if (storedBalance) availableEth = Number.parseFloat(storedBalance) || availableEth;
+      transactions = storedTransactions ? JSON.parse(storedTransactions) : initialTransactions;
+    };
+
+    const persistState = () => {
+      localStorage.setItem("walletBalance", availableEth.toString());
+      localStorage.setItem("walletTransactions", JSON.stringify(transactions));
+    };
+
+    const updateGasEstimate = (speed) => {
+      const rate = gasRates[speed] || gasRates.standard;
+      const totalGas = rate.base + rate.priority;
+      gasInput.value = `${totalGas.toFixed(4)} ETH (${formatInr(totalGas * ethPrice)})`;
+      confirmGas.textContent = `${totalGas.toFixed(4)} ETH`;
+      baseFee.textContent = `${rate.base.toFixed(4)} ETH`;
+      priorityFee.textContent = `${rate.priority.toFixed(4)} ETH`;
+    };
+
+    const openModal = (title, description, actionLabel) => {
+      modalTitle.textContent = title;
+      modalDescription.textContent = description;
+      modalPrimary.textContent = actionLabel;
+      actionModal.classList.add("active");
+    };
+
+    const closeModal = () => {
+      actionModal.classList.remove("active");
     };
 
     const showToast = (message) => {
@@ -1181,7 +1473,19 @@
       });
     };
 
+    loadState();
     updateBalance();
+    renderTransactions();
+    updateGasEstimate("standard");
+
+    modalClose.addEventListener("click", closeModal);
+    modalPrimary.addEventListener("click", () => {
+      closeModal();
+      showToast("Action initiated");
+    });
+    actionModal.addEventListener("click", (event) => {
+      if (event.target === actionModal) closeModal();
+    });
 
     document.querySelectorAll(".keypad button[data-digit]").forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -1242,7 +1546,7 @@
 
     document.getElementById("confirmSend").addEventListener("click", () => {
       const amountValue = Number.parseFloat(amountInput.value) || 0;
-      const gasValue = 0.0042;
+      const gasValue = Number.parseFloat(gasInput.value) || 0.0042;
       confirmAmount.textContent = `${amountValue.toFixed(2)} ETH`;
       confirmGas.textContent = `${gasValue.toFixed(4)} ETH`;
       confirmTotal.textContent = `${(amountValue + gasValue).toFixed(4)} ETH`;
@@ -1266,24 +1570,16 @@
         const txHash = `0x${Math.random().toString(16).slice(2, 10)}...${Math.random().toString(16).slice(2, 6)}`;
         successMessage.textContent = `${amountValue.toFixed(2)} ETH sent successfully.`;
         successHash.textContent = txHash;
-        const txItem = document.createElement("div");
-        txItem.className = "transaction-item";
-        txItem.innerHTML = `
-          <div class="meta">
-            <div class="transaction-icon tx-sent">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 2L11 13"></path>
-                <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
-              </svg>
-            </div>
-            <div>
-              <h4>Sent ETH</h4>
-              <p>${getTimeLabel()} · Completed</p>
-            </div>
-          </div>
-          <div class="amount">-${amountValue.toFixed(2)} ETH<span>${formatInr(amountValue * ethPrice)}</span></div>
-        `;
-        transactionList.prepend(txItem);
+        transactions.unshift({
+          type: "sent",
+          title: "Sent ETH",
+          amount: -amountValue,
+          status: "Completed",
+          timestamp: getTimeLabel(),
+          memo: memoInput?.value || "",
+        });
+        renderTransactions();
+        persistState();
         showScreen(successScreen);
         showToast("Transaction sent successfully");
       }, 1600);
@@ -1309,7 +1605,7 @@
     });
 
     document.getElementById("shareAddress").addEventListener("click", () => {
-      showToast("Share sheet opened");
+      openModal("Share address", "Share your wallet address securely with another contact.", "Share");
     });
 
     document.querySelectorAll("[data-action]").forEach((btn) => {
@@ -1321,39 +1617,39 @@
           return;
         }
         if (action === "swap") {
-          showToast("Swap flow opened");
+          openModal("Swap assets", "Swap ETH to USDC with zero hidden fees and live pricing.", "Start swap");
           return;
         }
         if (action === "buy") {
-          showToast("Buy flow opened");
+          openModal("Buy crypto", "Purchase ETH instantly with bank transfer or card.", "Buy ETH");
           return;
         }
         if (action === "buy-card") {
-          showToast("Card purchase options");
+          openModal("Buy with card", "Choose a card and confirm your purchase amount.", "Select card");
           return;
         }
         if (action === "earn") {
-          showToast("Earning program details");
+          openModal("Earn rewards", "Stake ETH to earn up to 4.2% APY.", "Start earning");
           return;
         }
         if (action === "virtual-card") {
-          showToast("Virtual card issued");
+          openModal("Virtual card", "Create a virtual card for secure online purchases.", "Create card");
           return;
         }
         if (action === "change-pin") {
-          showToast("PIN change flow");
+          openModal("Change PIN", "Update your wallet PIN for added security.", "Update PIN");
           return;
         }
         if (action === "language") {
-          showToast("Language preferences");
+          openModal("Language", "Choose your preferred language and locale.", "Save language");
           return;
         }
         if (action === "security") {
-          showToast("Security settings");
+          openModal("Security", "Manage 2-step verification and device approvals.", "Open security");
           return;
         }
         if (action === "support") {
-          showToast("Support chat opened");
+          openModal("Help & Support", "Connect with our support team any time.", "Start chat");
         }
       });
     });
@@ -1364,10 +1660,27 @@
         button.addEventListener("click", () => {
           segmentControl.querySelectorAll("button").forEach((btn) => btn.classList.remove("active"));
           button.classList.add("active");
-          showToast(button.dataset.segment === "activity" ? "Showing activity" : "Showing assets");
+          const isActivity = button.dataset.segment === "activity";
+          assetsPane.classList.toggle("hidden", isActivity);
+          activityPane.classList.toggle("hidden", !isActivity);
         });
       });
     }
+
+    speedSelector?.querySelectorAll(".speed-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        speedSelector.querySelectorAll(".speed-btn").forEach((button) => button.classList.remove("active"));
+        btn.classList.add("active");
+        updateGasEstimate(btn.dataset.speed);
+        showToast(`Speed set to ${btn.dataset.speed}`);
+      });
+    });
+
+    networkLabel?.addEventListener("click", () => {
+      networkIndex = (networkIndex + 1) % networks.length;
+      networkLabel.textContent = networks[networkIndex];
+      showToast(`Switched to ${networks[networkIndex]}`);
+    });
 
     const pullIndicator = document.getElementById("pullIndicator");
     const dashboardContent = document.getElementById("dashboardContent");
