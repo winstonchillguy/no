@@ -462,6 +462,7 @@
       background: var(--card);
       border: 1px solid rgba(12, 18, 34, 0.06);
       box-shadow: 0 10px 20px rgba(12, 18, 34, 0.06);
+      cursor: pointer;
     }
 
     .token-meta {
@@ -499,6 +500,20 @@
     .token-item p {
       font-size: 11px;
       color: var(--muted);
+    }
+
+    .token-network {
+      margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(79, 124, 255, 0.12);
+      color: var(--accent);
+      border: none;
+      cursor: pointer;
     }
 
     .transaction-list {
@@ -1265,7 +1280,8 @@
                 <div class="token-icon">Ξ</div>
                 <div>
                   <h4>Ethereum</h4>
-                  <p>Mainnet · ETH</p>
+                  <p id="ethNetworkLabel">Mainnet · ETH</p>
+                  <button class="token-network" type="button" data-token="ETH">Change network</button>
                 </div>
               </div>
               <div class="amount" id="tokenEthBalance">3.4281 ETH<span id="tokenEthInr">₹6,00,240.80</span></div>
@@ -1275,7 +1291,8 @@
                 <div class="token-icon success">U</div>
                 <div>
                   <h4>USD Coin</h4>
-                  <p>Stablecoin · USDC</p>
+                  <p id="usdcNetworkLabel">Stablecoin · USDC</p>
+                  <button class="token-network" type="button" data-token="USDC">Change network</button>
                 </div>
               </div>
               <div class="amount">1,250.00 USDC<span>₹1,03,750.00</span></div>
@@ -1285,7 +1302,8 @@
                 <div class="token-icon warning">M</div>
                 <div>
                   <h4>Polygon</h4>
-                  <p>Layer 2 · MATIC</p>
+                  <p id="maticNetworkLabel">Layer 2 · MATIC</p>
+                  <button class="token-network" type="button" data-token="MATIC">Change network</button>
                 </div>
               </div>
               <div class="amount">2,840.20 MATIC<span>₹2,27,216.00</span></div>
@@ -1623,6 +1641,9 @@
     const confirmRecipientAddress = document.getElementById("confirmRecipientAddress");
     const riskBanner = document.getElementById("riskBanner");
     const activityFilters = document.getElementById("activityFilters");
+    const ethNetworkLabel = document.getElementById("ethNetworkLabel");
+    const usdcNetworkLabel = document.getElementById("usdcNetworkLabel");
+    const maticNetworkLabel = document.getElementById("maticNetworkLabel");
     const gasInput = document.getElementById("gasInput");
     const memoInput = document.getElementById("memoInput");
     const speedSelector = document.getElementById("speedSelector");
@@ -1706,6 +1727,17 @@
       "1W": "M5 55 C30 40, 70 20, 110 28 C150 36, 190 15, 230 30 C260 40, 280 18, 295 22",
       "1M": "M5 50 C45 35, 85 45, 125 30 C165 20, 205 35, 245 18 C270 10, 285 25, 295 12",
       "1Y": "M5 65 C40 55, 80 30, 120 40 C160 20, 200 35, 240 25 C265 20, 280 30, 295 18",
+    };
+
+    const tokenNetworks = {
+      ETH: ["Ethereum Mainnet", "Arbitrum One", "Base Mainnet"],
+      USDC: ["Ethereum Mainnet", "Polygon", "Solana"],
+      MATIC: ["Polygon", "Ethereum Mainnet", "zkEVM"],
+    };
+    const tokenNetworkIndex = {
+      ETH: 0,
+      USDC: 0,
+      MATIC: 0,
     };
 
     const formatEth = (value) => `${value.toFixed(4)} ETH`;
@@ -1858,6 +1890,12 @@
       if (confirmRecipientAddress) confirmRecipientAddress.textContent = address || "0x...";
     };
 
+    const updateTokenNetworks = () => {
+      if (ethNetworkLabel) ethNetworkLabel.textContent = `${tokenNetworks.ETH[tokenNetworkIndex.ETH]} · ETH`;
+      if (usdcNetworkLabel) usdcNetworkLabel.textContent = `${tokenNetworks.USDC[tokenNetworkIndex.USDC]} · USDC`;
+      if (maticNetworkLabel) maticNetworkLabel.textContent = `${tokenNetworks.MATIC[tokenNetworkIndex.MATIC]} · MATIC`;
+    };
+
     const openTransactionModal = (tx) => {
       if (!transactionModal) return;
       const confirmations = tx.confirmations ?? 0;
@@ -1922,6 +1960,7 @@
       btn.classList.toggle("active", btn.dataset.speed === selectedSpeed);
     });
     updateRecipientPreview("Arjun Kumar", "0x4b29...a8d2", true);
+    updateTokenNetworks();
 
     modalClose.addEventListener("click", closeModal);
     modalPrimary.addEventListener("click", () => {
@@ -2180,6 +2219,23 @@
         chip.classList.add("active");
         activeFilter = chip.dataset.filter;
         renderTransactions();
+      });
+    });
+
+    document.querySelectorAll(".token-network").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const token = button.dataset.token;
+        tokenNetworkIndex[token] = (tokenNetworkIndex[token] + 1) % tokenNetworks[token].length;
+        updateTokenNetworks();
+        showToast(`${token} network: ${tokenNetworks[token][tokenNetworkIndex[token]]}`);
+      });
+    });
+
+    document.querySelectorAll(".token-item").forEach((item) => {
+      item.addEventListener("click", () => {
+        const title = item.querySelector("h4")?.textContent || "Asset";
+        openModal(`${title} details`, "View balance, network, and recent activity for this asset.", "View activity");
       });
     });
 
