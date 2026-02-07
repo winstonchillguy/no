@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Ethereum Wallet" />
+  <meta name="theme-color" content="#f6f7fb" />
   <title>Ethereum Wallet</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,6 +42,7 @@
       background: radial-gradient(circle at top, #dfe7ff 0%, #f6f7fb 50%, #eef1f7 100%);
       color: var(--text);
       min-height: 100vh;
+      min-height: 100svh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -59,7 +64,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 20px 6px;
+      padding: calc(env(safe-area-inset-top) + 8px) 20px 6px;
       font-size: 12px;
       color: rgba(12, 18, 34, 0.7);
     }
@@ -75,25 +80,6 @@
       display: flex;
       gap: 10px;
       align-items: center;
-    }
-
-    .status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      background: rgba(79, 124, 255, 0.12);
-      border-radius: 999px;
-      font-size: 11px;
-      color: var(--accent);
-    }
-
-    .connection-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--success);
-      box-shadow: 0 0 8px rgba(36, 180, 126, 0.5);
     }
 
     .screen {
@@ -123,7 +109,7 @@
     }
 
     .lock-title h1 {
-      font-size: 26px;
+      font-size: 24px;
       margin-bottom: 6px;
       font-weight: 600;
     }
@@ -175,23 +161,25 @@
 
     .keypad button {
       height: 64px;
-      border-radius: 18px;
+      border-radius: 20px;
       border: none;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.9);
       color: var(--text);
       font-size: 20px;
       font-weight: 500;
-      transition: transform 0.1s ease, background 0.2s ease;
+      box-shadow: 0 10px 20px rgba(12, 18, 34, 0.08);
+      transition: transform 0.1s ease, box-shadow 0.2s ease;
     }
 
     .keypad button:active {
-      transform: scale(0.96);
-      background: rgba(255, 255, 255, 0.18);
+      transform: scale(0.97);
+      box-shadow: 0 6px 12px rgba(12, 18, 34, 0.12);
     }
 
     .keypad button.utility {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--muted);
+      font-weight: 500;
     }
 
     .dashboard {
@@ -401,7 +389,7 @@
     .tabs {
       display: flex;
       justify-content: space-around;
-      padding: 12px 16px 20px;
+      padding: 12px 16px calc(env(safe-area-inset-bottom) + 20px);
       border-top: 1px solid rgba(12, 18, 34, 0.08);
       background: rgba(255, 255, 255, 0.9);
       position: sticky;
@@ -691,6 +679,7 @@
       padding: 10px 4px;
       border-bottom: 1px solid rgba(12, 18, 34, 0.06);
       font-size: 13px;
+      cursor: pointer;
     }
 
     .list-row:last-child {
@@ -718,6 +707,20 @@
       height: 16px;
     }
 
+    @media (max-width: 480px) {
+      body {
+        padding: 0;
+      }
+
+      .phone {
+        width: 100vw;
+        min-height: 100svh;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       * {
         animation: none !important;
@@ -730,21 +733,8 @@
   <div class="phone">
     <div class="toast" id="toast">Transaction sent successfully</div>
     <div class="status-bar">
-      <div class="status-left">
-        <div class="status-pill"><span class="connection-dot"></span>Connected</div>
-      </div>
-      <div class="status-icons">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-          <path d="M2 8.5C7.5 3 16.5 3 22 8.5"></path>
-          <path d="M5 12c4-4 10-4 14 0"></path>
-          <path d="M8.5 15.5c2.5-2.5 4.5-2.5 7 0"></path>
-          <circle cx="12" cy="19" r="1"></circle>
-        </svg>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
-          <rect x="3" y="7" width="16" height="10" rx="2"></rect>
-          <line x1="21" y1="10" x2="21" y2="14"></line>
-        </svg>
-      </div>
+      <div class="status-left"></div>
+      <div class="status-icons"></div>
     </div>
 
     <div class="screen lock-screen" id="lockScreen">
@@ -794,17 +784,17 @@
             <h2>Ethereum</h2>
             <span class="network-label">Ethereum Mainnet</span>
           </div>
-          <div class="balance-eth">3.4281 ETH</div>
-          <div class="balance-inr">₹6,00,240.80</div>
+          <div class="balance-eth" id="balanceEth">3.4281 ETH</div>
+          <div class="balance-inr" id="balanceInr">₹6,00,240.80</div>
           <div class="price-row">
             <span>ETH price ₹2,40,000 today <strong>+2.3%</strong></span>
             <span style="color: var(--success);">▲ +₹13,540</span>
           </div>
         </div>
 
-        <div class="segment">
-          <button class="active">Assets</button>
-          <button>Activity</button>
+        <div class="segment" id="segmentControl">
+          <button class="active" data-segment="assets">Assets</button>
+          <button data-segment="activity">Activity</button>
         </div>
 
         <div class="action-grid">
@@ -823,7 +813,7 @@
             </svg>
             <span>Receive</span>
           </button>
-          <button class="action-card">
+          <button class="action-card" data-action="swap">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M16 3h5v5"></path>
               <path d="M8 21H3v-5"></path>
@@ -832,7 +822,7 @@
             </svg>
             <span>Swap</span>
           </button>
-          <button class="action-card">
+          <button class="action-card" data-action="buy">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="5" width="18" height="14" rx="2"></rect>
               <path d="M7 9h6"></path>
@@ -847,7 +837,7 @@
             <span>Wallet services</span>
             <span>See all</span>
           </div>
-          <div class="list-row">
+          <div class="list-row" data-action="buy-card">
             <div class="label">
               <div class="list-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -859,7 +849,7 @@
             </div>
             <span style="color: var(--muted); font-size: 11px;">0% fee</span>
           </div>
-          <div class="list-row">
+          <div class="list-row" data-action="earn">
             <div class="label">
               <div class="list-icon" style="background: rgba(44, 194, 138, 0.12); color: var(--success);">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -871,7 +861,7 @@
             </div>
             <span style="color: var(--success); font-size: 11px;">Up to 4.2%</span>
           </div>
-          <div class="list-row">
+          <div class="list-row" data-action="virtual-card">
             <div class="label">
               <div class="list-icon" style="background: rgba(79, 124, 255, 0.12);">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -967,16 +957,16 @@
         <h3 style="font-size: 18px; margin-bottom: 14px;">Send Ethereum</h3>
         <div class="form-group">
           <label>To address</label>
-          <input type="text" value="0x82a4...d98c" />
+          <input type="text" id="addressInput" value="0x82a4...d98c" />
         </div>
         <div class="form-group">
           <label>Amount (ETH)</label>
-          <input type="text" value="0.28" />
-          <button class="max-btn" type="button">Max</button>
+          <input type="text" id="amountInput" value="0.28" />
+          <button class="max-btn" type="button" data-action="max">Max</button>
         </div>
         <div class="form-group">
           <label>Estimated gas fee</label>
-          <input type="text" value="0.0042 ETH (₹1,008)" />
+          <input type="text" id="gasInput" value="0.0042 ETH (₹1,008)" />
         </div>
         <button class="primary-btn" id="confirmSend">Review &amp; Confirm</button>
         <button class="secondary-btn" data-nav="home">Cancel</button>
@@ -988,7 +978,7 @@
         <h3 style="font-size: 18px; margin-bottom: 14px;">Confirm transfer</h3>
         <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px;">
           <span>Amount</span>
-          <strong>0.28 ETH</strong>
+          <strong id="confirmAmount">0.28 ETH</strong>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px;">
           <span>Network</span>
@@ -996,11 +986,11 @@
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px;">
           <span>Gas fee</span>
-          <strong>0.0042 ETH</strong>
+          <strong id="confirmGas">0.0042 ETH</strong>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 16px;">
           <span>Total</span>
-          <strong>0.2842 ETH</strong>
+          <strong id="confirmTotal">0.2842 ETH</strong>
         </div>
         <button class="primary-btn" id="processSend">Send now</button>
         <button class="secondary-btn" data-nav="send">Back</button>
@@ -1024,9 +1014,9 @@
           </svg>
         </div>
         <h3 style="font-size: 18px; margin-bottom: 10px;">Transfer complete</h3>
-        <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;">0.28 ETH sent successfully.</p>
+        <p style="color: var(--muted); font-size: 13px; margin-bottom: 16px;" id="successMessage">0.28 ETH sent successfully.</p>
         <div style="font-size: 12px; color: var(--muted); word-break: break-all;">
-          Tx Hash: 0x97f9c4e1b0d8a0c4...aa93
+          Tx Hash: <span id="successHash">0x97f9c4e1b0d8a0c4...aa93</span>
         </div>
         <button class="copy-btn" id="copyHash" style="margin-top: 12px;">Copy hash</button>
         <button class="primary-btn" data-nav="home" style="margin-top: 16px;">Done</button>
@@ -1042,7 +1032,7 @@
         <div style="font-size: 12px; color: var(--muted); margin-bottom: 8px;">Wallet address</div>
         <div style="font-size: 13px; margin-bottom: 12px;">0x82a4c2f8b9f1aa9d...d98c</div>
         <button class="copy-btn" id="copyAddress">Copy address</button>
-        <button class="secondary-btn" style="margin-top: 12px;">Share</button>
+        <button class="secondary-btn" id="shareAddress" style="margin-top: 12px;">Share</button>
         <button class="secondary-btn" data-nav="home">Back</button>
       </div>
     </div>
@@ -1051,28 +1041,28 @@
       <div class="card fade-up">
         <h3 style="font-size: 18px; margin-bottom: 14px;">Settings</h3>
         <div class="settings-list">
-          <div class="settings-item">
+          <div class="settings-item" data-action="change-pin">
             <div>
               <div style="font-size: 13px;">Change PIN</div>
               <div style="font-size: 11px; color: var(--muted);">Update wallet access code</div>
             </div>
             <span>›</span>
           </div>
-          <div class="settings-item">
+          <div class="settings-item" data-action="language">
             <div>
               <div style="font-size: 13px;">Dark mode</div>
               <div style="font-size: 11px; color: var(--muted);">Adaptive theme</div>
             </div>
             <div class="toggle" id="darkToggle"></div>
           </div>
-          <div class="settings-item">
+          <div class="settings-item" data-action="security">
             <div>
               <div style="font-size: 13px;">Language</div>
               <div style="font-size: 11px; color: var(--muted);">English (India)</div>
             </div>
             <span>›</span>
           </div>
-          <div class="settings-item">
+          <div class="settings-item" data-action="support">
             <div>
               <div style="font-size: 13px;">Security</div>
               <div style="font-size: 11px; color: var(--muted);">2-step &amp; biometric</div>
@@ -1136,6 +1126,17 @@
     const successScreen = document.getElementById("successScreen");
     const receiveScreen = document.getElementById("receiveScreen");
     const settingsScreen = document.getElementById("settingsScreen");
+    const balanceEth = document.getElementById("balanceEth");
+    const balanceInr = document.getElementById("balanceInr");
+    const amountInput = document.getElementById("amountInput");
+    const addressInput = document.getElementById("addressInput");
+    const gasInput = document.getElementById("gasInput");
+    const confirmAmount = document.getElementById("confirmAmount");
+    const confirmGas = document.getElementById("confirmGas");
+    const confirmTotal = document.getElementById("confirmTotal");
+    const successMessage = document.getElementById("successMessage");
+    const successHash = document.getElementById("successHash");
+    const transactionList = document.getElementById("transactionList");
     const screens = [
       lockScreen,
       dashboardScreen,
@@ -1148,6 +1149,20 @@
     ];
     const toast = document.getElementById("toast");
     const tabButtons = document.querySelectorAll(".tab-btn");
+    const ethPrice = 240000;
+    let availableEth = 3.4281;
+
+    const formatEth = (value) => `${value.toFixed(4)} ETH`;
+    const formatInr = (value) => `₹${value.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const getTimeLabel = () => {
+      const now = new Date();
+      return now.toLocaleString("en-IN", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+    };
+
+    const updateBalance = () => {
+      balanceEth.textContent = formatEth(availableEth);
+      balanceInr.textContent = formatInr(availableEth * ethPrice);
+    };
 
     const showToast = (message) => {
       toast.textContent = message;
@@ -1165,6 +1180,8 @@
         btn.classList.toggle("active", btn.dataset.nav === active);
       });
     };
+
+    updateBalance();
 
     document.querySelectorAll(".keypad button[data-digit]").forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -1224,24 +1241,133 @@
     });
 
     document.getElementById("confirmSend").addEventListener("click", () => {
+      const amountValue = Number.parseFloat(amountInput.value) || 0;
+      const gasValue = 0.0042;
+      confirmAmount.textContent = `${amountValue.toFixed(2)} ETH`;
+      confirmGas.textContent = `${gasValue.toFixed(4)} ETH`;
+      confirmTotal.textContent = `${(amountValue + gasValue).toFixed(4)} ETH`;
       showScreen(confirmScreen);
     });
 
     document.getElementById("processSend").addEventListener("click", () => {
+      const amountValue = Number.parseFloat(amountInput.value) || 0;
+      if (amountValue <= 0) {
+        showToast("Enter a valid amount");
+        return;
+      }
+      if (amountValue > availableEth) {
+        showToast("Insufficient balance");
+        return;
+      }
       showScreen(processingScreen);
       setTimeout(() => {
+        availableEth = Math.max(0, availableEth - amountValue);
+        updateBalance();
+        const txHash = `0x${Math.random().toString(16).slice(2, 10)}...${Math.random().toString(16).slice(2, 6)}`;
+        successMessage.textContent = `${amountValue.toFixed(2)} ETH sent successfully.`;
+        successHash.textContent = txHash;
+        const txItem = document.createElement("div");
+        txItem.className = "transaction-item";
+        txItem.innerHTML = `
+          <div class="meta">
+            <div class="transaction-icon tx-sent">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 2L11 13"></path>
+                <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+              </svg>
+            </div>
+            <div>
+              <h4>Sent ETH</h4>
+              <p>${getTimeLabel()} · Completed</p>
+            </div>
+          </div>
+          <div class="amount">-${amountValue.toFixed(2)} ETH<span>${formatInr(amountValue * ethPrice)}</span></div>
+        `;
+        transactionList.prepend(txItem);
         showScreen(successScreen);
         showToast("Transaction sent successfully");
       }, 1600);
     });
 
+    const copyToClipboard = async (value, successMessage) => {
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(value);
+        }
+        showToast(successMessage);
+      } catch (error) {
+        showToast("Unable to copy");
+      }
+    };
+
     document.getElementById("copyHash").addEventListener("click", () => {
-      showToast("Hash copied to clipboard");
+      copyToClipboard("0x97f9c4e1b0d8a0c4aa93", "Hash copied to clipboard");
     });
 
     document.getElementById("copyAddress").addEventListener("click", () => {
-      showToast("Address copied to clipboard");
+      copyToClipboard(addressInput?.value || "0x82a4c2f8b9f1aa9dd98c", "Address copied to clipboard");
     });
+
+    document.getElementById("shareAddress").addEventListener("click", () => {
+      showToast("Share sheet opened");
+    });
+
+    document.querySelectorAll("[data-action]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const action = btn.dataset.action;
+        if (action === "max") {
+          if (amountInput) amountInput.value = availableEth.toFixed(2);
+          showToast("Max amount applied");
+          return;
+        }
+        if (action === "swap") {
+          showToast("Swap flow opened");
+          return;
+        }
+        if (action === "buy") {
+          showToast("Buy flow opened");
+          return;
+        }
+        if (action === "buy-card") {
+          showToast("Card purchase options");
+          return;
+        }
+        if (action === "earn") {
+          showToast("Earning program details");
+          return;
+        }
+        if (action === "virtual-card") {
+          showToast("Virtual card issued");
+          return;
+        }
+        if (action === "change-pin") {
+          showToast("PIN change flow");
+          return;
+        }
+        if (action === "language") {
+          showToast("Language preferences");
+          return;
+        }
+        if (action === "security") {
+          showToast("Security settings");
+          return;
+        }
+        if (action === "support") {
+          showToast("Support chat opened");
+        }
+      });
+    });
+
+    const segmentControl = document.getElementById("segmentControl");
+    if (segmentControl) {
+      segmentControl.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => {
+          segmentControl.querySelectorAll("button").forEach((btn) => btn.classList.remove("active"));
+          button.classList.add("active");
+          showToast(button.dataset.segment === "activity" ? "Showing activity" : "Showing assets");
+        });
+      });
+    }
 
     const pullIndicator = document.getElementById("pullIndicator");
     const dashboardContent = document.getElementById("dashboardContent");
