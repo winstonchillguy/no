@@ -56,6 +56,8 @@
       box-shadow: 0 40px 90px rgba(0, 0, 0, 0.18);
       overflow: hidden;
       position: relative;
+      display: flex;
+      flex-direction: column;
       height: min(852px, 100svh);
       min-height: 760px;
       border: 1px solid rgba(18, 24, 39, 0.08);
@@ -85,7 +87,8 @@
 
     .screen {
       padding: 8px 20px 22px;
-      min-height: calc(100% - 54px);
+      min-height: 0;
+      flex: 1;
       transition: opacity 0.35s ease, transform 0.35s ease;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
@@ -605,8 +608,7 @@
       padding: 12px 16px calc(env(safe-area-inset-bottom) + 20px);
       border-top: 1px solid rgba(12, 18, 34, 0.08);
       background: rgba(255, 255, 255, 0.9);
-      position: sticky;
-      bottom: 0;
+      position: relative;
       z-index: 20;
       backdrop-filter: blur(8px);
     }
