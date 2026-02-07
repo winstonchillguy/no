@@ -225,6 +225,67 @@
       margin-bottom: 14px;
     }
 
+    .recipient-identity {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(12, 18, 34, 0.04);
+      border-radius: 14px;
+      padding: 10px 12px;
+      border: 1px solid rgba(12, 18, 34, 0.06);
+      margin-bottom: 12px;
+    }
+
+    .recipient-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(79, 124, 255, 0.3), rgba(44, 194, 138, 0.3));
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .recipient-meta h5 {
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .recipient-meta p {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .verified-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      color: var(--success);
+      background: rgba(36, 180, 126, 0.16);
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-left: 6px;
+    }
+
+    .risk-banner {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      background: rgba(244, 166, 58, 0.16);
+      color: var(--warning);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 11px;
+      margin-bottom: 12px;
+    }
+
+    .risk-banner.active {
+      display: flex;
+    }
+
     .balance-header h2 {
       font-size: 18px;
       font-weight: 600;
@@ -446,6 +507,28 @@
       gap: 12px;
     }
 
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .filter-chip {
+      border: none;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: rgba(12, 18, 34, 0.06);
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .filter-chip.active {
+      background: rgba(79, 124, 255, 0.16);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
     .transaction-item {
       display: flex;
       align-items: center;
@@ -623,6 +706,8 @@
       align-items: center;
       gap: 6px;
       transition: color var(--transition);
+      padding: 6px 10px;
+      border-radius: 14px;
     }
 
     .tab-btn svg {
@@ -632,6 +717,7 @@
 
     .tab-btn.active {
       color: var(--text);
+      background: rgba(79, 124, 255, 0.12);
     }
 
     .card {
@@ -1041,7 +1127,10 @@
           <div class="tx-detail-row"><span>Confirmations</span><span id="txDetailConf">0/12</span></div>
           <div class="tx-detail-row"><span>Hash</span><span id="txDetailHash">0x97f9...aa93</span></div>
         </div>
-        <button class="copy-btn" id="copyTxHash" style="margin-top: 14px;">Copy hash</button>
+        <div class="recipient-list" style="justify-content: flex-start; margin-top: 14px;">
+          <button class="copy-btn" id="copyTxHash">Copy hash</button>
+          <button class="copy-btn" id="openExplorer">View on Explorer</button>
+        </div>
         <button class="secondary-btn" id="txDetailClose" style="margin-top: 10px;">Close</button>
       </div>
     </div>
@@ -1253,6 +1342,12 @@
             <span>Recent activity</span>
             <span>View all</span>
           </div>
+          <div class="filter-row" id="activityFilters">
+            <button class="filter-chip active" data-filter="all">All</button>
+            <button class="filter-chip" data-filter="sent">Sent</button>
+            <button class="filter-chip" data-filter="received">Received</button>
+            <button class="filter-chip" data-filter="pending">Pending</button>
+          </div>
           <div class="transaction-list" id="transactionList"></div>
         </div>
       </div>
@@ -1261,6 +1356,16 @@
     <div class="screen hidden" id="sendScreen">
       <div class="card fade-up">
         <h3 style="font-size: 18px; margin-bottom: 14px;">Send Ethereum</h3>
+        <div class="recipient-identity">
+          <div class="recipient-avatar" id="recipientAvatar">AK</div>
+          <div class="recipient-meta">
+            <h5 id="recipientDisplay">Arjun Kumar <span class="verified-pill">Verified</span></h5>
+            <p id="recipientAddress">0x4b29...a8d2</p>
+          </div>
+        </div>
+        <div class="risk-banner" id="riskBanner">
+          New address detected · Verify before sending
+        </div>
         <div class="form-group">
           <label>Recipient name</label>
           <input type="text" id="recipientInput" placeholder="Name (optional)" />
@@ -1315,6 +1420,13 @@
     <div class="screen hidden" id="confirmScreen">
       <div class="card fade-up">
         <h3 style="font-size: 18px; margin-bottom: 14px;">Confirm transfer</h3>
+        <div class="recipient-identity" style="margin-bottom: 16px;">
+          <div class="recipient-avatar" id="confirmAvatar">AK</div>
+          <div class="recipient-meta">
+            <h5 id="confirmRecipient">Arjun Kumar <span class="verified-pill">Verified</span></h5>
+            <p id="confirmRecipientAddress">0x4b29...a8d2</p>
+          </div>
+        </div>
         <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px;">
           <span>Amount</span>
           <strong id="confirmAmount">0.28 ETH</strong>
@@ -1423,6 +1535,13 @@
             </div>
             <span>›</span>
           </div>
+          <div class="settings-item" data-action="backup">
+            <div>
+              <div style="font-size: 13px;">Backup &amp; Recovery</div>
+              <div style="font-size: 11px; color: var(--muted);">Secure your recovery phrase</div>
+            </div>
+            <span>›</span>
+          </div>
           <div class="settings-item" data-action="support">
             <div>
               <div style="font-size: 13px;">Security</div>
@@ -1496,6 +1615,14 @@
     const amountHint = document.getElementById("amountHint");
     const addressInput = document.getElementById("addressInput");
     const recipientInput = document.getElementById("recipientInput");
+    const recipientAvatar = document.getElementById("recipientAvatar");
+    const recipientDisplay = document.getElementById("recipientDisplay");
+    const recipientAddress = document.getElementById("recipientAddress");
+    const confirmAvatar = document.getElementById("confirmAvatar");
+    const confirmRecipient = document.getElementById("confirmRecipient");
+    const confirmRecipientAddress = document.getElementById("confirmRecipientAddress");
+    const riskBanner = document.getElementById("riskBanner");
+    const activityFilters = document.getElementById("activityFilters");
     const gasInput = document.getElementById("gasInput");
     const memoInput = document.getElementById("memoInput");
     const speedSelector = document.getElementById("speedSelector");
@@ -1538,6 +1665,7 @@
     const txDetailHash = document.getElementById("txDetailHash");
     const txDetailClose = document.getElementById("txDetailClose");
     const copyTxHash = document.getElementById("copyTxHash");
+    const openExplorer = document.getElementById("openExplorer");
     const screens = [
       lockScreen,
       dashboardScreen,
@@ -1564,6 +1692,7 @@
     let lastTxHash = "0x97f9c4e1b0d8a0c4...aa93";
     let selectedSpeed = "standard";
     let selectedChartRange = "1D";
+    let activeFilter = "all";
 
     const initialTransactions = [
       { type: "sent", title: "Sent ETH", amount: -0.24, status: "Completed", timestamp: "Today · 09:14 AM", hash: "0x9f12...2cd8", to: "0x4b29...a8d2", speed: "standard", confirmations: 12 },
@@ -1597,7 +1726,12 @@
     const renderTransactions = () => {
       if (!transactionList) return;
       transactionList.innerHTML = "";
-      transactions.forEach((tx) => {
+      const filtered = transactions.filter((tx) => {
+        if (activeFilter === "all") return true;
+        if (activeFilter === "pending") return tx.status === "Pending";
+        return tx.type === activeFilter;
+      });
+      filtered.forEach((tx) => {
         const txItem = document.createElement("div");
         txItem.className = "transaction-item";
         txItem.dataset.hash = tx.hash || "";
@@ -1714,6 +1848,16 @@
       if (confirmTotalInr) confirmTotalInr.textContent = formatInr((ethValue + gasValue) * ethPrice);
     };
 
+    const updateRecipientPreview = (name, address, verified) => {
+      const initials = name ? name.split(" ").map((part) => part[0]).join("").slice(0, 2).toUpperCase() : "NA";
+      if (recipientAvatar) recipientAvatar.textContent = initials;
+      if (recipientDisplay) recipientDisplay.innerHTML = `${name || "New recipient"}${verified ? ' <span class="verified-pill">Verified</span>' : ""}`;
+      if (recipientAddress) recipientAddress.textContent = address || "0x...";
+      if (confirmAvatar) confirmAvatar.textContent = initials;
+      if (confirmRecipient) confirmRecipient.innerHTML = `${name || "New recipient"}${verified ? ' <span class="verified-pill">Verified</span>' : ""}`;
+      if (confirmRecipientAddress) confirmRecipientAddress.textContent = address || "0x...";
+    };
+
     const openTransactionModal = (tx) => {
       if (!transactionModal) return;
       const confirmations = tx.confirmations ?? 0;
@@ -1777,6 +1921,7 @@
     speedSelector?.querySelectorAll(".speed-btn").forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.speed === selectedSpeed);
     });
+    updateRecipientPreview("Arjun Kumar", "0x4b29...a8d2", true);
 
     modalClose.addEventListener("click", closeModal);
     modalPrimary.addEventListener("click", () => {
@@ -1789,6 +1934,10 @@
     txDetailClose?.addEventListener("click", () => transactionModal.classList.remove("active"));
     transactionModal?.addEventListener("click", (event) => {
       if (event.target === transactionModal) transactionModal.classList.remove("active");
+    });
+    openExplorer?.addEventListener("click", () => {
+      showToast("Opening explorer");
+      transactionModal.classList.remove("active");
     });
 
     document.querySelectorAll(".keypad button[data-digit]").forEach((btn) => {
@@ -1862,7 +2011,11 @@
     document.getElementById("confirmSend").addEventListener("click", () => {
       const amountValue = parseNumber(amountInput.value);
       const gasValue = parseNumber(gasInput.value) || 0.0042;
+      const recipientName = recipientInput?.value || "New recipient";
+      const recipientAddr = addressInput?.value || "0x...";
+      const isVerified = document.querySelector(`.recipient-chip[data-address="${recipientAddr}"]`) !== null;
       updateConfirmTotals(amountValue, gasValue);
+      updateRecipientPreview(recipientName, recipientAddr, isVerified);
       showScreen(confirmScreen);
     });
 
@@ -2000,6 +2153,10 @@
         }
         if (action === "support") {
           openModal("Help & Support", "Connect with our support team any time.", "Start chat");
+          return;
+        }
+        if (action === "backup") {
+          openModal("Backup & Recovery", "Secure your recovery phrase and keep your wallet protected.", "Start backup");
         }
       });
     });
@@ -2016,6 +2173,15 @@
         });
       });
     }
+
+    activityFilters?.querySelectorAll(".filter-chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        activityFilters.querySelectorAll(".filter-chip").forEach((btn) => btn.classList.remove("active"));
+        chip.classList.add("active");
+        activeFilter = chip.dataset.filter;
+        renderTransactions();
+      });
+    });
 
     chartTabs?.querySelectorAll("button").forEach((button) => {
       button.addEventListener("click", () => {
@@ -2058,12 +2224,25 @@
 
     addressInput?.addEventListener("input", persistPreferences);
     recipientInput?.addEventListener("input", persistPreferences);
+    addressInput?.addEventListener("input", () => {
+      persistPreferences();
+      const matchedChip = document.querySelector(`.recipient-chip[data-address="${addressInput.value}"]`);
+      if (matchedChip) {
+        updateRecipientPreview(matchedChip.dataset.name, matchedChip.dataset.address, true);
+        riskBanner?.classList.remove("active");
+      } else {
+        updateRecipientPreview(recipientInput?.value || "New recipient", addressInput.value, false);
+        riskBanner?.classList.add("active");
+      }
+    });
 
     document.querySelectorAll(".recipient-chip").forEach((chip) => {
       chip.addEventListener("click", () => {
         addressInput.value = chip.dataset.address;
         if (recipientInput) recipientInput.value = chip.dataset.name || "";
         persistPreferences();
+        updateRecipientPreview(chip.dataset.name, chip.dataset.address, true);
+        riskBanner?.classList.remove("active");
         showToast(`Recipient set to ${chip.dataset.name}`);
       });
     });
@@ -2090,10 +2269,15 @@
       if (dashboardScreen.scrollTop > 0) return;
       const distance = e.touches[0].clientY - startY;
       if (distance > 120 && !isRefreshing) {
+        pullIndicator.textContent = "Pull to refresh";
         pullIndicator.classList.add("visible");
+      }
+      if (distance > 200 && !isRefreshing) {
+        pullIndicator.textContent = "Release to refresh";
       }
       if (distance > 220 && !isRefreshing) {
         isRefreshing = true;
+        pullIndicator.textContent = "Refreshing portfolio...";
         dashboardContent.innerHTML = `
           <div class="hero-card skeleton-card skeleton"></div>
           <div class="action-grid">
