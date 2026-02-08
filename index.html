@@ -16,8 +16,11 @@
       color-scheme: light;
       --bg: #f5f6fa;
       --bg-alt: #eef1f7;
+      --bg-gradient: radial-gradient(circle at top, #dfe7ff 0%, #f6f7fb 50%, #eef1f7 100%);
       --card: #ffffff;
       --card-soft: rgba(255, 255, 255, 0.7);
+      --surface: #ffffff;
+      --surface-alt: rgba(255, 255, 255, 0.9);
       --text: #0c1222;
       --muted: #7b879f;
       --accent: #4f7cff;
@@ -25,9 +28,32 @@
       --danger: #ff5a5f;
       --success: #24b47e;
       --warning: #f4a63a;
+      --border: rgba(12, 18, 34, 0.08);
+      --shadow-sm: 0 8px 18px rgba(24, 38, 65, 0.08);
       --shadow: 0 18px 45px rgba(24, 38, 65, 0.12);
       --radius: 26px;
       --transition: 0.25s ease;
+    }
+
+    body[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #0c101a;
+      --bg-alt: #101826;
+      --bg-gradient: radial-gradient(circle at top, #111c34 0%, #0c101a 45%, #0b0f18 100%);
+      --card: #121a2a;
+      --card-soft: rgba(18, 26, 42, 0.8);
+      --surface: #101827;
+      --surface-alt: rgba(16, 24, 39, 0.9);
+      --text: #f2f5ff;
+      --muted: #9aa5bd;
+      --accent: #7aa2ff;
+      --accent-2: #44d4a3;
+      --danger: #ff7b7f;
+      --success: #46d596;
+      --warning: #f7b45d;
+      --border: rgba(148, 163, 184, 0.16);
+      --shadow-sm: 0 10px 24px rgba(2, 4, 10, 0.45);
+      --shadow: 0 18px 45px rgba(5, 8, 16, 0.4);
     }
 
     * {
@@ -39,7 +65,7 @@
     }
 
     body {
-      background: radial-gradient(circle at top, #dfe7ff 0%, #f6f7fb 50%, #eef1f7 100%);
+      background: var(--bg-gradient);
       color: var(--text);
       min-height: 100vh;
       min-height: 100svh;
@@ -47,11 +73,12 @@
       align-items: center;
       justify-content: center;
       padding: 24px 12px;
+      letter-spacing: -0.01em;
     }
 
     .phone {
       width: min(393px, 100%);
-      background: linear-gradient(180deg, #fdfdff 0%, #eef1f7 100%);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, var(--bg-alt) 100%);
       border-radius: 34px;
       box-shadow: 0 40px 90px rgba(0, 0, 0, 0.18);
       overflow: hidden;
@@ -60,7 +87,17 @@
       flex-direction: column;
       height: min(852px, 100svh);
       min-height: 760px;
-      border: 1px solid rgba(18, 24, 39, 0.08);
+      border: 1px solid var(--border);
+    }
+
+    body[data-theme="dark"] .phone {
+      background: linear-gradient(180deg, rgba(15, 21, 34, 0.95) 0%, rgba(8, 12, 20, 0.98) 100%);
+      border-color: rgba(148, 163, 184, 0.12);
+      box-shadow: 0 40px 90px rgba(0, 0, 0, 0.45);
+    }
+
+    body[data-theme="dark"] .status-bar {
+      color: rgba(226, 232, 240, 0.7);
     }
 
     .status-bar {
@@ -68,8 +105,10 @@
       justify-content: space-between;
       align-items: center;
       padding: calc(env(safe-area-inset-top) + 8px) 20px 6px;
-      font-size: 12px;
+      font-size: 11.5px;
       color: rgba(12, 18, 34, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
     }
 
     .status-left {
@@ -102,12 +141,34 @@
       inset: 0;
     }
 
+    .phone::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.6), transparent 45%);
+      opacity: 0.45;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    body[data-theme="dark"] .phone::before {
+      opacity: 0.2;
+    }
+
     .lock-screen {
       display: flex;
       flex-direction: column;
       gap: 26px;
       align-items: center;
       padding-top: 48px;
+    }
+
+    .lock-screen .lock-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-top: 6px;
     }
 
     .lock-title {
@@ -144,26 +205,7 @@
     }
 
     .biometric {
-      margin-top: 6px;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 16px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid rgba(12, 18, 34, 0.08);
-      font-size: 12px;
-      color: var(--muted);
-      box-shadow: var(--shadow);
-    }
-
-    .biometric svg {
-      animation: pulse 2.6s ease-in-out infinite;
-    }
-
-    .biometric.scanning {
-      box-shadow: 0 0 0 6px rgba(79, 124, 255, 0.16);
-      color: var(--accent);
+      display: none;
     }
 
     @keyframes pulse {
@@ -209,13 +251,113 @@
       gap: 18px;
     }
 
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 4px 0;
+    }
+
+    .account-selector {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      border: none;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .account-selector span {
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 12px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .icon-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      display: grid;
+      place-items: center;
+      color: var(--text);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .icon-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .account-modal {
+      padding-bottom: 28px;
+    }
+
+    .account-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .account-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: var(--shadow-sm);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .account-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .account-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: rgba(79, 124, 255, 0.14);
+      color: var(--accent);
+      display: grid;
+      place-items: center;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .account-item strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
+
     .hero-card {
       background: linear-gradient(135deg, rgba(79, 124, 255, 0.12), rgba(44, 194, 138, 0.12));
       border-radius: var(--radius);
       padding: 22px;
       box-shadow: var(--shadow);
-      border: 1px solid rgba(79, 124, 255, 0.18);
+      border: 1px solid rgba(79, 124, 255, 0.2);
       backdrop-filter: blur(8px);
+    }
+
+    body[data-theme="dark"] .hero-card {
+      background: linear-gradient(135deg, rgba(122, 162, 255, 0.18), rgba(68, 212, 163, 0.12));
+      border-color: rgba(122, 162, 255, 0.28);
     }
 
     .balance-header {
@@ -320,15 +462,47 @@
 
     .chart {
       margin-top: 14px;
-      background: rgba(255, 255, 255, 0.7);
+      background: var(--surface-alt);
       border-radius: 16px;
       padding: 12px;
-      border: 1px solid rgba(12, 18, 34, 0.06);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
     }
 
     .chart svg {
       width: 100%;
       height: 80px;
+    }
+
+    .chart-volume {
+      position: absolute;
+      inset: 12px 12px auto 12px;
+      height: 80px;
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      pointer-events: none;
+      opacity: 0.25;
+    }
+
+    .chart-volume span {
+      flex: 1;
+      background: linear-gradient(180deg, rgba(79, 124, 255, 0.6), rgba(79, 124, 255, 0.05));
+      border-radius: 6px 6px 0 0;
+    }
+
+    .chart-tooltip {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 6px 10px;
+      font-size: 11px;
+      color: var(--text);
+      box-shadow: var(--shadow-sm);
     }
 
     .chart-tabs {
@@ -357,10 +531,10 @@
 
     .allocation-card {
       margin-top: 14px;
-      background: rgba(255, 255, 255, 0.7);
+      background: var(--surface-alt);
       border-radius: 16px;
       padding: 12px;
-      border: 1px solid rgba(12, 18, 34, 0.06);
+      border: 1px solid var(--border);
     }
 
     .allocation-bar {
@@ -409,12 +583,12 @@
     }
 
     .segment {
-      background: rgba(12, 18, 34, 0.04);
+      background: rgba(12, 18, 34, 0.035);
       border-radius: 999px;
       display: flex;
       gap: 6px;
       padding: 4px;
-      box-shadow: inset 0 0 0 1px rgba(12, 18, 34, 0.06);
+      box-shadow: inset 0 0 0 1px var(--border);
     }
 
     .segment button {
@@ -430,9 +604,14 @@
     }
 
     .segment button.active {
-      background: #ffffff;
+      background: var(--surface);
       color: var(--text);
       box-shadow: 0 6px 12px rgba(12, 18, 34, 0.08);
+    }
+
+    body[data-theme="dark"] .segment button.active {
+      background: rgba(15, 24, 40, 0.95);
+      box-shadow: 0 6px 12px rgba(2, 4, 10, 0.6);
     }
 
     .action-grid {
@@ -442,27 +621,35 @@
     }
 
     .action-card {
-      background: var(--card);
+      background: var(--surface);
       border-radius: 18px;
-      padding: 12px 8px;
+      padding: 14px 8px 12px;
       text-align: center;
       font-size: 11px;
       color: var(--text);
-      border: 1px solid rgba(12, 18, 34, 0.06);
-      transition: transform var(--transition), box-shadow var(--transition);
-      box-shadow: 0 10px 20px rgba(12, 18, 34, 0.06);
+      border: 1px solid var(--border);
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      box-shadow: var(--shadow-sm);
     }
 
     .action-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 24px rgba(12, 18, 34, 0.1);
+      box-shadow: 0 14px 28px rgba(12, 18, 34, 0.12);
+    }
+
+    .action-card svg {
+      width: 22px;
+      height: 22px;
+      color: var(--text);
+      opacity: 0.9;
     }
 
     .action-card span {
       display: block;
       margin-top: 8px;
-      color: var(--muted);
+      color: var(--text);
       font-size: 11px;
+      font-weight: 600;
     }
 
     .section-title {
@@ -494,10 +681,20 @@
       align-items: center;
       padding: 14px;
       border-radius: 18px;
-      background: var(--card);
-      border: 1px solid rgba(12, 18, 34, 0.06);
-      box-shadow: 0 10px 20px rgba(12, 18, 34, 0.06);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
       cursor: pointer;
+    }
+
+    body[data-theme="dark"] .token-item,
+    body[data-theme="dark"] .transaction-item,
+    body[data-theme="dark"] .action-card,
+    body[data-theme="dark"] .card,
+    body[data-theme="dark"] .list-card,
+    body[data-theme="dark"] .modal-card {
+      border-color: rgba(148, 163, 184, 0.16);
+      box-shadow: 0 16px 32px rgba(2, 4, 10, 0.45);
     }
 
     .token-meta {
@@ -507,12 +704,12 @@
     }
 
     .token-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 14px;
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
       display: grid;
       place-items: center;
-      font-size: 14px;
+      font-size: 12px;
       background: rgba(79, 124, 255, 0.12);
       color: var(--accent);
     }
@@ -586,9 +783,9 @@
       justify-content: space-between;
       padding: 14px;
       border-radius: 18px;
-      background: var(--card);
-      border: 1px solid rgba(12, 18, 34, 0.06);
-      box-shadow: 0 12px 26px rgba(12, 18, 34, 0.08);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
       cursor: pointer;
     }
 
@@ -740,11 +937,24 @@
       display: flex;
       justify-content: space-around;
       padding: 12px 16px calc(env(safe-area-inset-bottom) + 20px);
-      border-top: 1px solid rgba(12, 18, 34, 0.08);
+      border-top: 1px solid var(--border);
       background: rgba(255, 255, 255, 0.9);
       position: relative;
       z-index: 20;
       backdrop-filter: blur(8px);
+    }
+
+    .tabs.locked {
+      display: none;
+    }
+
+    body[data-theme="dark"] .tabs {
+      background: rgba(9, 13, 20, 0.9);
+      border-top-color: rgba(148, 163, 184, 0.12);
+    }
+
+    body[data-theme="dark"] .tab-btn.active {
+      background: rgba(122, 162, 255, 0.2);
     }
 
     .tab-btn {
@@ -756,7 +966,7 @@
       flex-direction: column;
       align-items: center;
       gap: 6px;
-      transition: color var(--transition);
+      transition: color var(--transition), background var(--transition);
       padding: 6px 10px;
       border-radius: 14px;
     }
@@ -784,11 +994,11 @@
     }
 
     .card {
-      background: var(--card);
+      background: var(--surface);
       border-radius: 20px;
       padding: 18px;
-      border: 1px solid rgba(12, 18, 34, 0.06);
-      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
     }
 
     .form-group {
@@ -804,8 +1014,8 @@
     }
 
     .form-group input {
-      background: rgba(12, 18, 34, 0.04);
-      border: 1px solid rgba(12, 18, 34, 0.08);
+      background: rgba(12, 18, 34, 0.03);
+      border: 1px solid var(--border);
       border-radius: 12px;
       padding: 12px 14px;
       color: var(--text);
@@ -820,8 +1030,8 @@
     }
 
     .speed-btn {
-      border: 1px solid rgba(12, 18, 34, 0.12);
-      background: #fff;
+      border: 1px solid var(--border);
+      background: var(--surface);
       padding: 10px;
       border-radius: 12px;
       font-size: 12px;
@@ -864,19 +1074,20 @@
       padding: 14px;
       border-radius: 14px;
       border: none;
-      background: linear-gradient(135deg, #4f7cff, #2cc28a);
+      background: linear-gradient(135deg, #4f7cff, #3ccf9c);
       color: #fff;
       font-weight: 600;
       font-size: 14px;
       margin-top: 8px;
+      box-shadow: 0 12px 24px rgba(79, 124, 255, 0.25);
     }
 
     .secondary-btn {
       width: 100%;
       padding: 12px;
       border-radius: 14px;
-      border: 1px solid rgba(12, 18, 34, 0.15);
-      background: transparent;
+      border: 1px solid var(--border);
+      background: var(--surface);
       color: var(--text);
       margin-top: 8px;
     }
@@ -890,30 +1101,13 @@
       margin-bottom: 16px;
     }
 
-    .qr-grid {
-      width: 180px;
-      height: 180px;
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      gap: 4px;
-    }
-
-    .qr-grid span {
-      background: rgba(12, 18, 34, 0.12);
-      border-radius: 2px;
-    }
-
-    .qr-grid span.on {
-      background: #0c1222;
-    }
-
     .toast {
       position: absolute;
       top: 18px;
       left: 50%;
       transform: translateX(-50%);
       padding: 10px 16px;
-      background: rgba(12, 18, 34, 0.9);
+      background: rgba(12, 18, 34, 0.92);
       border-radius: 999px;
       font-size: 12px;
       opacity: 0;
@@ -921,6 +1115,7 @@
       transition: opacity 0.3s ease, transform 0.3s ease;
       z-index: 100;
       color: #fff;
+      box-shadow: 0 12px 24px rgba(12, 18, 34, 0.2);
     }
 
     .toast.show {
@@ -1066,7 +1261,7 @@
     .modal {
       position: absolute;
       inset: 0;
-      background: rgba(12, 18, 34, 0.3);
+      background: rgba(12, 18, 34, 0.35);
       display: none;
       align-items: flex-end;
       justify-content: center;
@@ -1079,10 +1274,10 @@
 
     .modal-card {
       width: 100%;
-      background: #fff;
+      background: var(--card);
       border-radius: 24px 24px 0 0;
       padding: 20px;
-      box-shadow: 0 -20px 45px rgba(12, 18, 34, 0.18);
+      box-shadow: 0 -20px 45px rgba(12, 18, 34, 0.2);
       max-height: 80%;
       overflow-y: auto;
     }
@@ -1096,6 +1291,50 @@
       font-size: 13px;
       color: var(--muted);
       margin-bottom: 16px;
+    }
+
+    .scan-preview {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      background: rgba(12, 18, 34, 0.1);
+      margin-bottom: 12px;
+      height: 220px;
+    }
+
+    .scan-preview video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .scan-overlay {
+      position: absolute;
+      inset: 0;
+      border: 2px dashed rgba(255, 255, 255, 0.6);
+      margin: 24px;
+      border-radius: 16px;
+      box-shadow: 0 0 0 200vmax rgba(12, 18, 34, 0.35);
+      pointer-events: none;
+    }
+
+    .scan-status {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .qr-box img {
+      width: 180px;
+      height: 180px;
+      border-radius: 12px;
+      background: #fff;
+      padding: 6px;
+      box-shadow: 0 10px 24px rgba(12, 18, 34, 0.12);
+    }
+
+    body[data-theme="dark"] .qr-box img {
+      background: #fff;
     }
 
     .list-card {
@@ -1175,6 +1414,17 @@
         <button class="secondary-btn" id="modalClose">Close</button>
       </div>
     </div>
+    <div class="modal" id="scanModal">
+      <div class="modal-card">
+        <h3 id="scanTitle">Scan QR code</h3>
+        <p class="scan-status" id="scanStatus">Point your camera at a QR code.</p>
+        <div class="scan-preview">
+          <video id="scanVideo" autoplay muted playsinline></video>
+          <div class="scan-overlay"></div>
+        </div>
+        <button class="secondary-btn" id="scanClose">Close</button>
+      </div>
+    </div>
     <div class="modal" id="transactionModal">
       <div class="modal-card">
         <h3>Transaction details</h3>
@@ -1200,6 +1450,15 @@
         <button class="secondary-btn" id="txDetailClose" style="margin-top: 10px;">Close</button>
       </div>
     </div>
+    <div class="modal" id="accountModal">
+      <div class="modal-card account-modal">
+        <h3>Accounts</h3>
+        <p>Switch between your saved wallets.</p>
+        <div class="account-list" id="accountList"></div>
+        <button class="secondary-btn" id="addAccount">Add new account</button>
+        <button class="secondary-btn" id="accountClose">Close</button>
+      </div>
+    </div>
     <div class="status-bar">
       <div class="status-left"></div>
       <div class="status-icons"></div>
@@ -1209,6 +1468,7 @@
       <div class="lock-title">
         <h1>Welcome back</h1>
         <p>Enter your wallet PIN</p>
+        <div class="lock-subtitle">Secure access</div>
       </div>
       <div class="pin-dots" id="pinDots">
         <span class="pin-dot"></span>
@@ -1217,16 +1477,6 @@
         <span class="pin-dot"></span>
         <span class="pin-dot"></span>
         <span class="pin-dot"></span>
-      </div>
-      <div class="biometric">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-          <path d="M12 11v3"></path>
-          <path d="M7 11v3"></path>
-          <path d="M17 11v3"></path>
-          <path d="M5 8c0-2 2-4 7-4s7 2 7 4"></path>
-          <path d="M6 16c0 2 3 4 6 4s6-2 6-4"></path>
-        </svg>
-        Face ID / Fingerprint
       </div>
       <div class="keypad">
         <button data-digit="1">1</button>
@@ -1247,6 +1497,43 @@
     <div class="screen hidden" id="dashboardScreen">
       <div class="pull-indicator" id="pullIndicator">Refreshing portfolio...</div>
       <div class="dashboard fade-up" id="dashboardContent">
+        <div class="top-bar">
+          <button class="account-selector" id="accountSelector" type="button" aria-label="Switch account">
+            Account 1
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
+              <path d="M6 9l6 6 6-6"></path>
+            </svg>
+          </button>
+          <div class="top-actions">
+            <button class="icon-btn" type="button" aria-label="Copy address">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="10" height="10" rx="2"></rect>
+                <path d="M5 15V5a2 2 0 0 1 2-2h10"></path>
+              </svg>
+            </button>
+            <button class="icon-btn" type="button" aria-label="Scan QR">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                <path d="M3 14v7h7"></path>
+              </svg>
+            </button>
+            <button class="icon-btn" type="button" aria-label="Notifications">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+            </button>
+            <button class="icon-btn" type="button" aria-label="Menu">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 6h16"></path>
+                <path d="M4 12h16"></path>
+                <path d="M4 18h16"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
         <div class="hero-card">
           <div class="balance-header">
             <h2>Ethereum</h2>
@@ -1262,7 +1549,20 @@
             <span>ETH price ₹2,40,000 today <strong>+2.3%</strong></span>
             <span style="color: var(--success);">▲ +₹13,540</span>
           </div>
-          <div class="chart">
+          <div class="chart" id="chartWidget">
+            <div class="chart-tooltip" id="chartTooltip">₹2,40,000 · 1D</div>
+            <div class="chart-volume" id="chartVolume">
+              <span style="height: 28%;"></span>
+              <span style="height: 44%;"></span>
+              <span style="height: 36%;"></span>
+              <span style="height: 60%;"></span>
+              <span style="height: 48%;"></span>
+              <span style="height: 70%;"></span>
+              <span style="height: 52%;"></span>
+              <span style="height: 64%;"></span>
+              <span style="height: 40%;"></span>
+              <span style="height: 58%;"></span>
+            </div>
             <svg viewBox="0 0 300 80" fill="none" stroke="currentColor" stroke-width="2">
               <path id="chartPath" d="M5 60 C40 20, 80 40, 120 25 C160 10, 200 40, 240 20 C260 10, 280 25, 295 15" stroke="url(#grad)"></path>
               <defs>
@@ -1304,19 +1604,29 @@
 
         <div class="action-grid">
           <button class="action-card" data-nav="send">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 2L11 13"></path>
-              <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M9 15l6-6"></path>
+              <path d="M10 9h5v5"></path>
             </svg>
             <span>Send</span>
           </button>
           <button class="action-card" data-nav="receive">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2v14"></path>
-              <path d="M5 9l7 7 7-7"></path>
-              <path d="M4 22h16"></path>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M15 9l-6 6"></path>
+              <path d="M9 10v5h5"></path>
             </svg>
             <span>Receive</span>
+          </button>
+          <button class="action-card" data-action="scan">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+              <path d="M3 14v7h7"></path>
+            </svg>
+            <span>Scan</span>
           </button>
           <button class="action-card" data-action="swap">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1326,6 +1636,14 @@
               <path d="M3 16c2.2 2.3 5.4 3.5 8.7 3"></path>
             </svg>
             <span>Swap</span>
+          </button>
+          <button class="action-card" data-action="apy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v18"></path>
+              <path d="M7 8l5-5 5 5"></path>
+              <path d="M7 16l5 5 5-5"></path>
+            </svg>
+            <span>APY</span>
           </button>
           <button class="action-card" data-action="buy">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1582,7 +1900,7 @@
       <div class="card fade-up" style="text-align: center;">
         <h3 style="font-size: 18px; margin-bottom: 14px;">Receive Ethereum</h3>
         <div class="qr-box">
-          <div class="qr-grid" id="qrGrid"></div>
+          <img id="qrImage" alt="Wallet QR code" />
         </div>
         <div style="font-size: 12px; color: var(--muted); margin-bottom: 8px;">Wallet address</div>
         <div style="font-size: 13px; margin-bottom: 12px;">0x82a4c2f8b9f1aa9d...d98c</div>
@@ -1600,6 +1918,7 @@
           <input type="text" id="receiveMemo" placeholder="Add a note for the sender" />
         </div>
         <button class="secondary-btn" id="shareAddress" style="margin-top: 12px;">Share</button>
+        <button class="secondary-btn" id="scanQr">Scan QR</button>
         <button class="secondary-btn" data-nav="home">Back</button>
       </div>
     </div>
@@ -1664,17 +1983,18 @@
         <span>Home</span>
       </button>
       <button class="tab-btn" data-nav="send">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M22 2L11 13"></path>
-          <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M9 15l6-6"></path>
+          <path d="M10 9h5v5"></path>
         </svg>
         <span>Send</span>
       </button>
       <button class="tab-btn" data-nav="receive">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2v14"></path>
-          <path d="M5 9l7 7 7-7"></path>
-          <path d="M4 22h16"></path>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M15 9l-6 6"></path>
+          <path d="M9 10v5h5"></path>
         </svg>
         <span>Receive</span>
       </button>
@@ -1689,7 +2009,7 @@
   </div>
 
   <script>
-    const pin = "000000";
+    const pin = "999999";
     let enteredPin = "";
     const pinDots = document.querySelectorAll(".pin-dot");
     const lockScreen = document.getElementById("lockScreen");
@@ -1745,14 +2065,29 @@
     const assetsPane = document.getElementById("assetsPane");
     const activityPane = document.getElementById("activityPane");
     const networkLabel = document.getElementById("networkLabel");
-    const biometricButton = document.querySelector(".biometric");
     const chartTabs = document.getElementById("chartTabs");
     const chartPath = document.getElementById("chartPath");
+    const chartTooltip = document.getElementById("chartTooltip");
+    const chartVolume = document.getElementById("chartVolume");
+    const chartWidget = document.getElementById("chartWidget");
     const actionModal = document.getElementById("actionModal");
     const modalTitle = document.getElementById("modalTitle");
     const modalDescription = document.getElementById("modalDescription");
     const modalPrimary = document.getElementById("modalPrimary");
     const modalClose = document.getElementById("modalClose");
+    const accountModal = document.getElementById("accountModal");
+    const accountList = document.getElementById("accountList");
+    const accountClose = document.getElementById("accountClose");
+    const addAccount = document.getElementById("addAccount");
+    const accountSelector = document.getElementById("accountSelector");
+    const scanModal = document.getElementById("scanModal");
+    const scanTitle = document.getElementById("scanTitle");
+    const scanStatus = document.getElementById("scanStatus");
+    const scanVideo = document.getElementById("scanVideo");
+    const scanClose = document.getElementById("scanClose");
+    const scanQrButton = document.getElementById("scanQr");
+    const qrImage = document.getElementById("qrImage");
+    const themeToggle = document.getElementById("darkToggle");
     const transactionModal = document.getElementById("transactionModal");
     const txDetailStatus = document.getElementById("txDetailStatus");
     const txDetailAmount = document.getElementById("txDetailAmount");
@@ -1780,6 +2115,7 @@
       settingsScreen,
     ];
     const toast = document.getElementById("toast");
+    const tabs = document.getElementById("tabBar");
     const tabButtons = document.querySelectorAll(".tab-btn");
     const ethPrice = 240000;
     const gasRates = {
@@ -1788,9 +2124,15 @@
       fast: { base: 0.0042, priority: 0.0019, eta: "~20 seconds" },
     };
     const networks = ["Ethereum Mainnet", "Base Mainnet", "Arbitrum One"];
-    const walletAddress = "0x82a4c2f8b9f1aa9dd98c";
+    const accounts = [
+      { id: "acc-1", name: "Account 1", address: "0x82a4c2f8b9f1aa9dd98c", balance: 3.4281, initials: "A1" },
+      { id: "acc-2", name: "Trading Vault", address: "0x41d9c7a1a233fa91c981", balance: 7.9342, initials: "TV" },
+      { id: "acc-3", name: "Savings", address: "0x28f4c9e8d1b2a77f502e", balance: 1.2046, initials: "SV" },
+    ];
+    let activeAccountId = accounts[0].id;
+    const walletAddress = accounts[0].address;
     let networkIndex = 0;
-    let availableEth = 3.4281;
+    let availableEth = accounts[0].balance;
     let transactions = [];
     let lastTxHash = "0x97f9c4e1b0d8a0c4...aa93";
     let selectedSpeed = "standard";
@@ -1798,14 +2140,17 @@
     let activeFilter = "all";
     let activeTokenFilter = "all";
     let autoLockTimer;
+    let scanStream;
+    let scanInterval;
+    let scanSource = "scan";
 
     const initialTransactions = [
-      { type: "sent", title: "Sent ETH", amount: -0.24, status: "Completed", timestamp: "Today · 09:14 AM", hash: "0x9f12...2cd8", to: "0x4b29...a8d2", speed: "standard", confirmations: 12, token: "ETH", block: "18,503,101", nonce: 27 },
-      { type: "received", title: "Received ETH", amount: 0.52, status: "Completed", timestamp: "Yesterday · 06:40 PM", hash: "0xb861...7c22", to: "0x82a4...d98c", speed: "standard", confirmations: 12, token: "ETH", block: "18,502,890", nonce: 26 },
-      { type: "gas", title: "Gas Fee", amount: -0.006, status: "Completed", timestamp: "Yesterday · 06:41 PM", hash: "0x61aa...b301", to: "Ethereum Mainnet", speed: "standard", confirmations: 12, token: "ETH", block: "18,502,891", nonce: 26 },
-      { type: "swap", title: "Swap", amount: -0.18, status: "Pending", timestamp: "Dec 12 · 08:11 PM", hash: "0xf11d...bb01", to: "Swap Router", speed: "fast", confirmations: 3, token: "ETH", block: "18,501,332", nonce: 25 },
-      { type: "received", title: "Received USDC", amount: 125.0, status: "Completed", timestamp: "Dec 10 · 05:20 PM", hash: "0x85ac...0f11", to: "0x82a4...d98c", speed: "standard", confirmations: 12, token: "USDC", block: "18,499,221", nonce: 24 },
-      { type: "received", title: "Received MATIC", amount: 520.0, status: "Completed", timestamp: "Dec 09 · 02:18 PM", hash: "0x992a...92bf", to: "0x82a4...d98c", speed: "standard", confirmations: 12, token: "MATIC", block: "18,497,890", nonce: 23 },
+      { type: "sent", title: "Sent ETH", amount: -0.24, status: "Completed", timestamp: "Today · 09:14 AM", hash: "0x9f12...2cd8", to: "0x4b29...a8d2", counterparty: "Arjun Kumar", speed: "standard", confirmations: 12, fee: 0.0042, token: "ETH", block: "18,503,101", nonce: 27 },
+      { type: "received", title: "Received ETH", amount: 0.52, status: "Completed", timestamp: "Yesterday · 06:40 PM", hash: "0xb861...7c22", to: "0x82a4...d98c", counterparty: "Neha Singh", speed: "standard", confirmations: 12, fee: 0.0008, token: "ETH", block: "18,502,890", nonce: 26 },
+      { type: "gas", title: "Gas Fee", amount: -0.006, status: "Completed", timestamp: "Yesterday · 06:41 PM", hash: "0x61aa...b301", to: "Ethereum Mainnet", counterparty: "Base fee", speed: "standard", confirmations: 12, fee: 0.006, token: "ETH", block: "18,502,891", nonce: 26 },
+      { type: "swap", title: "Swap", amount: -0.18, status: "Pending", timestamp: "Dec 12 · 08:11 PM", hash: "0xf11d...bb01", to: "Swap Router", counterparty: "Uniswap", speed: "fast", confirmations: 3, fee: 0.0021, token: "ETH", block: "18,501,332", nonce: 25 },
+      { type: "received", title: "Received USDC", amount: 125.0, status: "Completed", timestamp: "Dec 10 · 05:20 PM", hash: "0x85ac...0f11", to: "0x82a4...d98c", counterparty: "Moonpay", speed: "standard", confirmations: 12, fee: 0.0006, token: "USDC", block: "18,499,221", nonce: 24 },
+      { type: "received", title: "Received MATIC", amount: 520.0, status: "Completed", timestamp: "Dec 09 · 02:18 PM", hash: "0x992a...92bf", to: "0x82a4...d98c", counterparty: "Polygon Bridge", speed: "standard", confirmations: 12, fee: 0.0004, token: "MATIC", block: "18,497,890", nonce: 23 },
     ];
 
     const chartRanges = {
@@ -1831,9 +2176,72 @@
     const formatEth = (value) => `${value.toFixed(4)} ETH`;
     const formatInr = (value) => `₹${value.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     const parseNumber = (value) => Number.parseFloat(String(value).replace(/[^\d.]/g, "")) || 0;
+    const themeStorageKey = "walletTheme";
+
+    const applyTheme = (theme) => {
+      const isDark = theme === "dark";
+      document.body.dataset.theme = isDark ? "dark" : "light";
+      if (themeToggle) themeToggle.classList.toggle("active", isDark);
+      const themeMeta = document.querySelector('meta[name="theme-color"]');
+      if (themeMeta) themeMeta.setAttribute("content", isDark ? "#0c101a" : "#f6f7fb");
+    };
+
+    const getPreferredTheme = () => {
+      const storedTheme = localStorage.getItem(themeStorageKey);
+      if (storedTheme === "dark" || storedTheme === "light") return storedTheme;
+      return window.matchMedia?.("(prefers-color-scheme: dark)")?.matches ? "dark" : "light";
+    };
+
+    const setTheme = (theme) => {
+      applyTheme(theme);
+      localStorage.setItem(themeStorageKey, theme);
+    };
+
+    const buildQrPayload = () => {
+      const amountValue = parseNumber(receiveAmount?.value);
+      const memoValue = receiveMemo?.value?.trim();
+      const params = new URLSearchParams();
+      if (amountValue > 0) params.set("amount", amountValue.toFixed(4));
+      if (memoValue) params.set("message", memoValue);
+      const query = params.toString();
+      return `ethereum:${walletAddress}${query ? `?${query}` : ""}`;
+    };
+
+    const updateQrCode = () => {
+      if (!qrImage) return;
+      const payload = buildQrPayload();
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(payload)}`;
+      qrImage.src = qrUrl;
+      qrImage.alt = `Wallet QR for ${walletAddress}`;
+    };
     const getTimeLabel = () => {
       const now = new Date();
       return now.toLocaleString("en-IN", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+    };
+
+    const updateChartTooltip = (range, priceOverride) => {
+      if (!chartTooltip) return;
+      const priceMap = {
+        "1D": "₹2,40,000 · 1D",
+        "1W": "₹2,28,420 · 1W",
+        "1M": "₹2,18,900 · 1M",
+        "1Y": "₹1,98,300 · 1Y",
+      };
+      chartTooltip.textContent = priceOverride || priceMap[range] || "₹2,40,000";
+    };
+
+    const updateChartVolume = (range) => {
+      if (!chartVolume) return;
+      const ranges = {
+        "1D": [28, 44, 36, 60, 48, 70, 52, 64, 40, 58],
+        "1W": [18, 38, 30, 52, 46, 62, 41, 55, 36, 49],
+        "1M": [12, 28, 24, 40, 34, 48, 30, 42, 22, 36],
+        "1Y": [16, 26, 22, 34, 29, 38, 25, 32, 20, 28],
+      };
+      const heights = ranges[range] || ranges["1D"];
+      chartVolume.querySelectorAll("span").forEach((bar, index) => {
+        bar.style.height = `${heights[index] || 30}%`;
+      });
     };
 
     const updateBalance = () => {
@@ -1841,6 +2249,39 @@
       balanceInr.textContent = formatInr(availableEth * ethPrice);
       if (tokenEthBalance) tokenEthBalance.firstChild.textContent = formatEth(availableEth);
       if (tokenEthInr) tokenEthInr.textContent = formatInr(availableEth * ethPrice);
+    };
+
+    const renderAccountList = () => {
+      if (!accountList) return;
+      accountList.innerHTML = "";
+      accounts.forEach((account) => {
+        const item = document.createElement("div");
+        item.className = "account-item";
+        item.innerHTML = `
+          <div class="account-meta">
+            <div class="account-avatar">${account.initials}</div>
+            <div>
+              <strong>${account.name}</strong>
+              <div style="color: var(--muted); font-size: 11px;">${account.address.slice(0, 6)}...${account.address.slice(-4)}</div>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-weight: 600;">${account.balance.toFixed(4)} ETH</div>
+            <div style="color: var(--muted); font-size: 11px;">${formatInr(account.balance * ethPrice)}</div>
+          </div>
+        `;
+        item.addEventListener("click", () => {
+          activeAccountId = account.id;
+          availableEth = account.balance;
+          updateBalance();
+          if (accountSelector) {
+            accountSelector.childNodes[0].textContent = `${account.name} `;
+          }
+          accountModal.classList.remove("active");
+          showToast(`${account.name} selected`);
+        });
+        accountList.appendChild(item);
+      });
     };
 
     const renderTransactions = () => {
@@ -1887,6 +2328,9 @@
                   <path d="M22 2L11 13"></path>
                   <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
                 </svg>`;
+        const confirmations = tx.confirmations ?? (tx.status === "Completed" ? 12 : 0);
+        const counterparty = tx.counterparty || tx.to || "Unknown";
+        const feeLabel = tx.fee ? `Fee ${tx.fee.toFixed(4)} ETH` : "No fee";
         txItem.innerHTML = `
           <div class="meta">
             <div class="transaction-icon ${iconClass}">
@@ -1894,7 +2338,8 @@
             </div>
             <div>
               <h4>${tx.title}</h4>
-              <p>${tx.timestamp} · ${tx.status}</p>
+              <p>${tx.timestamp} · ${tx.status} · ${confirmations}/12</p>
+              <p>${counterparty} · ${feeLabel}</p>
             </div>
           </div>
           <div class="amount">${amountPrefix}${tx.amount.toFixed(3)} ETH<span>${formatInr(Math.abs(tx.amount) * ethPrice)}</span></div>
@@ -1956,6 +2401,8 @@
         token: tx.token || "ETH",
         block: tx.block || "18,503,221",
         nonce: tx.nonce ?? 27,
+        fee: tx.fee ?? 0.0042,
+        counterparty: tx.counterparty || tx.to || "Unknown",
         ...tx,
       }));
     };
@@ -2033,6 +2480,8 @@
       chartTabs?.querySelectorAll("button").forEach((btn) => {
         btn.classList.toggle("active", btn.dataset.range === range);
       });
+      updateChartTooltip(range);
+      updateChartVolume(range);
     };
 
     const openModal = (title, description, actionLabel) => {
@@ -2052,6 +2501,96 @@
       setTimeout(() => toast.classList.remove("show"), 2200);
     };
 
+    const stopScan = () => {
+      if (scanInterval) {
+        clearInterval(scanInterval);
+        scanInterval = null;
+      }
+      if (scanStream) {
+        scanStream.getTracks().forEach((track) => track.stop());
+        scanStream = null;
+      }
+      if (scanVideo) scanVideo.srcObject = null;
+    };
+
+    const runDummyTransaction = (payload, source) => {
+      const amountFromPayload = (() => {
+        if (!payload || typeof payload !== "string") return 0;
+        const queryStart = payload.indexOf("?");
+        if (queryStart === -1) return 0;
+        const params = new URLSearchParams(payload.slice(queryStart + 1));
+        return parseNumber(params.get("amount"));
+      })();
+      const amountValue = amountFromPayload > 0 ? amountFromPayload : Number.parseFloat((0.045 + Math.random() * 0.08).toFixed(4));
+      const txHash = `0x${Math.random().toString(16).slice(2, 10)}...${Math.random().toString(16).slice(2, 6)}`;
+      lastTxHash = txHash;
+
+      showScreen(processingScreen);
+      setTimeout(() => {
+        availableEth += amountValue;
+        updateBalance();
+        const txTitle = source === "apy" ? "APY reward" : "QR payment";
+        const newTx = {
+          type: "received",
+          title: txTitle,
+          amount: amountValue,
+          status: "Completed",
+          timestamp: getTimeLabel(),
+          memo: payload || "",
+          hash: txHash,
+          to: walletAddress,
+          speed: "standard",
+          confirmations: 12,
+          fee: 0,
+          token: "ETH",
+          block: "18,503,888",
+          nonce: 29,
+        };
+        transactions.unshift(newTx);
+        renderTransactions();
+        persistState();
+        successTitle.textContent = source === "apy" ? "APY reward received" : "QR payment received";
+        successMessage.textContent = `${amountValue.toFixed(4)} ETH added to your balance.`;
+        successHash.textContent = txHash;
+        successNetwork.textContent = networks[networkIndex];
+        successFee.textContent = "0.0000 ETH";
+        successTotalInr.textContent = formatInr(amountValue * ethPrice);
+        successStatus.textContent = "Completed · 12/12 confirmations";
+        successStatus.classList.add("completed");
+        showScreen(successScreen);
+        showToast("QR transaction completed");
+      }, 1200);
+    };
+
+    const openScanModal = async (source = "scan") => {
+      scanSource = source;
+      if (!scanModal) return;
+      scanTitle.textContent = source === "apy" ? "Scan APY QR" : "Scan QR code";
+      scanStatus.textContent = "Point your camera at a QR code.";
+      scanModal.classList.add("active");
+      try {
+        scanStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        scanVideo.srcObject = scanStream;
+        if (!("BarcodeDetector" in window)) {
+          scanStatus.textContent = "QR scanning not supported on this device.";
+          return;
+        }
+        const detector = new BarcodeDetector({ formats: ["qr_code"] });
+        scanInterval = setInterval(async () => {
+          if (!scanVideo || scanVideo.readyState < 2) return;
+          const codes = await detector.detect(scanVideo);
+          if (codes.length) {
+            const payload = codes[0].rawValue || "";
+            stopScan();
+            scanModal.classList.remove("active");
+            runDummyTransaction(payload, scanSource);
+          }
+        }, 700);
+      } catch (error) {
+        scanStatus.textContent = "Unable to access camera.";
+      }
+    };
+
     const showScreen = (screen) => {
       screens.forEach((s) => s.classList.add("hidden"));
       screen.classList.remove("hidden");
@@ -2063,6 +2602,8 @@
       });
     };
 
+    setTheme(getPreferredTheme());
+    if (tabs) tabs.classList.add("locked");
     loadState();
     loadPreferences();
     normalizeTransactions();
@@ -2078,6 +2619,7 @@
     });
     updateRecipientPreview("Arjun Kumar", "0x4b29...a8d2", true);
     updateTokenNetworks();
+    updateQrCode();
 
     modalClose.addEventListener("click", closeModal);
     modalPrimary.addEventListener("click", () => {
@@ -2086,6 +2628,29 @@
     });
     actionModal.addEventListener("click", (event) => {
       if (event.target === actionModal) closeModal();
+    });
+    accountSelector?.addEventListener("click", () => {
+      renderAccountList();
+      accountModal.classList.add("active");
+    });
+    accountClose?.addEventListener("click", () => {
+      accountModal.classList.remove("active");
+    });
+    accountModal?.addEventListener("click", (event) => {
+      if (event.target === accountModal) accountModal.classList.remove("active");
+    });
+    addAccount?.addEventListener("click", () => {
+      openModal("Add account", "Create a new wallet or import an existing address.", "Add account");
+    });
+    scanClose?.addEventListener("click", () => {
+      stopScan();
+      scanModal.classList.remove("active");
+    });
+    scanModal?.addEventListener("click", (event) => {
+      if (event.target === scanModal) {
+        stopScan();
+        scanModal.classList.remove("active");
+      }
     });
     txDetailClose?.addEventListener("click", () => transactionModal.classList.remove("active"));
     transactionModal?.addEventListener("click", (event) => {
@@ -2100,6 +2665,18 @@
       transactionModal.classList.remove("active");
     });
 
+    chartWidget?.addEventListener("mousemove", (event) => {
+      const rect = chartWidget.getBoundingClientRect();
+      const ratio = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
+      const base = 240000;
+      const delta = (ratio - 0.5) * 12000;
+      const price = Math.round(base + delta);
+      updateChartTooltip(selectedChartRange, `₹${price.toLocaleString("en-IN")} · ${selectedChartRange}`);
+    });
+    chartWidget?.addEventListener("mouseleave", () => {
+      updateChartTooltip(selectedChartRange);
+    });
+
     document.querySelectorAll(".keypad button[data-digit]").forEach((btn) => {
       btn.addEventListener("click", () => {
         if (enteredPin.length >= 6) return;
@@ -2110,6 +2687,7 @@
             if (enteredPin === pin) {
               lockScreen.classList.add("hidden");
               dashboardScreen.classList.remove("hidden");
+              tabs?.classList.remove("locked");
               updateTabs("home");
             } else {
               enteredPin = "";
@@ -2119,18 +2697,6 @@
           }, 300);
         }
       });
-    });
-
-    biometricButton?.addEventListener("click", () => {
-      resetAutoLock();
-      biometricButton.classList.add("scanning");
-      setTimeout(() => {
-        biometricButton.classList.remove("scanning");
-        lockScreen.classList.add("hidden");
-        dashboardScreen.classList.remove("hidden");
-        updateTabs("home");
-        showToast("Face ID verified");
-      }, 900);
     });
 
     document.getElementById("clearPin").addEventListener("click", () => {
@@ -2222,6 +2788,7 @@
           memo: memoInput?.value || "",
           hash: txHash,
           to: addressInput?.value || "0x82a4...d98c",
+          counterparty: recipientInput?.value || "New recipient",
           speed: selectedSpeed,
           confirmations: 0,
           fee: gasValue,
@@ -2280,6 +2847,9 @@
     document.getElementById("shareAddress").addEventListener("click", () => {
       openModal("Share address", "Share your wallet address securely with another contact.", "Share");
     });
+    scanQrButton?.addEventListener("click", () => {
+      openScanModal("scan");
+    });
 
     document.querySelectorAll("[data-action]").forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -2293,6 +2863,14 @@
         }
         if (action === "swap") {
           openModal("Swap assets", "Swap ETH to USDC with zero hidden fees and live pricing.", "Start swap");
+          return;
+        }
+        if (action === "scan") {
+          openScanModal("scan");
+          return;
+        }
+        if (action === "apy") {
+          openScanModal("apy");
           return;
         }
         if (action === "buy") {
@@ -2431,10 +3009,12 @@
     });
 
     receiveAmount?.addEventListener("input", () => {
+      updateQrCode();
       showToast("Receive amount updated");
     });
 
     receiveMemo?.addEventListener("input", () => {
+      updateQrCode();
       showToast("Receive note updated");
     });
 
@@ -2518,17 +3098,9 @@
       startY = 0;
     });
 
-    const qrGrid = document.getElementById("qrGrid");
-    const pattern = [0, 1, 2, 3, 9, 10, 12, 14, 15, 18, 20, 22, 25, 29, 33, 34, 38, 42, 45, 49, 52, 58, 60, 62, 64, 69, 70, 73, 75, 78, 80, 84, 87, 90, 92, 95, 99];
-    for (let i = 0; i < 100; i += 1) {
-      const cell = document.createElement("span");
-      if (pattern.includes(i)) cell.classList.add("on");
-      qrGrid.appendChild(cell);
-    }
-
-    const toggle = document.getElementById("darkToggle");
-    toggle.addEventListener("click", () => {
-      toggle.classList.toggle("active");
+    themeToggle?.addEventListener("click", () => {
+      const nextTheme = document.body.dataset.theme === "dark" ? "light" : "dark";
+      setTheme(nextTheme);
       showToast("Display preference saved");
     });
   </script>
