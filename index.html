@@ -2338,6 +2338,39 @@
       });
     };
 
+    const renderAccountList = () => {
+      if (!accountList) return;
+      accountList.innerHTML = "";
+      accounts.forEach((account) => {
+        const item = document.createElement("div");
+        item.className = "account-item";
+        item.innerHTML = `
+          <div class="account-meta">
+            <div class="account-avatar">${account.initials}</div>
+            <div>
+              <strong>${account.name}</strong>
+              <div style="color: var(--muted); font-size: 11px;">${account.address.slice(0, 6)}...${account.address.slice(-4)}</div>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-weight: 600;">${account.balance.toFixed(4)} ETH</div>
+            <div style="color: var(--muted); font-size: 11px;">${formatInr(account.balance * ethPrice)}</div>
+          </div>
+        `;
+        item.addEventListener("click", () => {
+          activeAccountId = account.id;
+          availableEth = account.balance;
+          updateBalance();
+          if (accountSelector) {
+            accountSelector.childNodes[0].textContent = `${account.name} `;
+          }
+          accountModal.classList.remove("active");
+          showToast(`${account.name} selected`);
+        });
+        accountList.appendChild(item);
+      });
+    };
+
     const renderTransactions = () => {
       if (!transactionList) return;
       transactionList.innerHTML = "";
