@@ -1536,7 +1536,7 @@
         </div>
         <div class="hero-card">
           <div class="balance-header">
-            <h2>Ethereum</h2>
+            <h2 id="primaryAssetName">Ethereum</h2>
             <button class="network-label" id="networkLabel">Ethereum Mainnet</button>
           </div>
           <div class="network-status" id="networkStatus">Network status: Normal gas</div>
@@ -1546,7 +1546,7 @@
             <span>Secure · 2FA enabled</span>
           </div>
           <div class="price-row">
-            <span>ETH price ₹2,40,000 today <strong>+2.3%</strong></span>
+            <span id="assetPriceLabel">ETH price ₹2,40,000 today <strong>+2.3%</strong></span>
             <span style="color: var(--success);">▲ +₹13,540</span>
           </div>
           <div class="chart" id="chartWidget">
@@ -1590,7 +1590,7 @@
               <span style="width: 15%; background: rgba(244, 166, 58, 0.6);"></span>
             </div>
             <div class="allocation-legend">
-              <span>ETH 62%</span>
+              <span><span id="allocationAssetLabel">ETH</span> 62%</span>
               <span>USDC 23%</span>
               <span>MATIC 15%</span>
             </div>
@@ -1663,14 +1663,14 @@
           <div class="token-list">
             <div class="token-item">
               <div class="token-meta">
-                <div class="token-icon">Ξ</div>
+                <div class="token-icon" id="primaryTokenIcon">Ξ</div>
                 <div>
-                  <h4>Ethereum</h4>
-                  <p id="ethNetworkLabel">Mainnet · ETH</p>
-                  <button class="token-network" type="button" data-token="ETH">Change network</button>
+                  <h4 id="primaryTokenName">Ethereum</h4>
+                  <p id="primaryNetworkLabel">Mainnet · ETH</p>
+                  <button class="token-network" id="primaryTokenNetworkButton" type="button" data-token="ETH">Change network</button>
                 </div>
               </div>
-              <div class="amount" id="tokenEthBalance">3.4281 ETH<span id="tokenEthInr">₹6,00,240.80</span></div>
+              <div class="amount" id="primaryTokenBalance">3.4281 ETH<span id="primaryTokenInr">₹6,00,240.80</span></div>
             </div>
             <div class="token-item">
               <div class="token-meta">
@@ -1784,10 +1784,10 @@
           </div>
         </div>
         <div class="form-group">
-          <label>Amount (ETH)</label>
+          <label>Amount (<span id="amountAssetLabel">ETH</span>)</label>
           <div class="input-row">
             <input type="text" id="amountInput" value="0.28" />
-            <div class="input-unit">ETH</div>
+            <div class="input-unit" id="amountAssetUnit">ETH</div>
           </div>
           <div class="input-hint" id="amountHint">≈ ₹67,200.00</div>
           <button class="max-btn" type="button" data-action="max">Max</button>
@@ -2022,8 +2022,8 @@
     const settingsScreen = document.getElementById("settingsScreen");
     const balanceEth = document.getElementById("balanceEth");
     const balanceInr = document.getElementById("balanceInr");
-    const tokenEthBalance = document.getElementById("tokenEthBalance");
-    const tokenEthInr = document.getElementById("tokenEthInr");
+    const primaryTokenBalance = document.getElementById("primaryTokenBalance");
+    const primaryTokenInr = document.getElementById("primaryTokenInr");
     const amountInput = document.getElementById("amountInput");
     const amountInrInput = document.getElementById("amountInrInput");
     const amountHint = document.getElementById("amountHint");
@@ -2037,7 +2037,15 @@
     const confirmRecipientAddress = document.getElementById("confirmRecipientAddress");
     const riskBanner = document.getElementById("riskBanner");
     const activityFilters = document.getElementById("activityFilters");
-    const ethNetworkLabel = document.getElementById("ethNetworkLabel");
+    const primaryNetworkLabel = document.getElementById("primaryNetworkLabel");
+    const primaryTokenName = document.getElementById("primaryTokenName");
+    const primaryTokenIcon = document.getElementById("primaryTokenIcon");
+    const primaryTokenNetworkButton = document.getElementById("primaryTokenNetworkButton");
+    const primaryAssetName = document.getElementById("primaryAssetName");
+    const assetPriceLabel = document.getElementById("assetPriceLabel");
+    const allocationAssetLabel = document.getElementById("allocationAssetLabel");
+    const amountAssetLabel = document.getElementById("amountAssetLabel");
+    const amountAssetUnit = document.getElementById("amountAssetUnit");
     const usdcNetworkLabel = document.getElementById("usdcNetworkLabel");
     const maticNetworkLabel = document.getElementById("maticNetworkLabel");
     const networkStatus = document.getElementById("networkStatus");
@@ -2117,7 +2125,11 @@
     const toast = document.getElementById("toast");
     const tabs = document.getElementById("tabBar");
     const tabButtons = document.querySelectorAll(".tab-btn");
-    const ethPrice = 240000;
+    const assets = {
+      ETH: { name: "Ethereum", symbol: "ETH", icon: "Ξ", price: 240000, decimals: 4 },
+      USDC: { name: "USD Coin", symbol: "USDC", icon: "U", price: 83.0, decimals: 2 },
+      MATIC: { name: "Polygon", symbol: "MATIC", icon: "M", price: 84.5, decimals: 2 },
+    };
     const gasRates = {
       slow: { base: 0.0026, priority: 0.0007, eta: "~2 minutes" },
       standard: { base: 0.0031, priority: 0.0011, eta: "~45 seconds" },
@@ -2125,14 +2137,15 @@
     };
     const networks = ["Ethereum Mainnet", "Base Mainnet", "Arbitrum One"];
     const accounts = [
-      { id: "acc-1", name: "Account 1", address: "0x82a4c2f8b9f1aa9dd98c", balance: 3.4281, initials: "A1" },
-      { id: "acc-2", name: "Trading Vault", address: "0x41d9c7a1a233fa91c981", balance: 7.9342, initials: "TV" },
-      { id: "acc-3", name: "Savings", address: "0x28f4c9e8d1b2a77f502e", balance: 1.2046, initials: "SV" },
+      { id: "acc-1", name: "Account 1", address: "0x82a4c2f8b9f1aa9dd98c", balance: 3.4281, asset: "ETH", initials: "A1" },
+      { id: "acc-2", name: "Trading Vault", address: "0x41d9c7a1a233fa91c981", balance: 12450.75, asset: "USDC", initials: "TV" },
+      { id: "acc-3", name: "Savings", address: "0x28f4c9e8d1b2a77f502e", balance: 3820.5, asset: "MATIC", initials: "SV" },
     ];
     let activeAccountId = accounts[0].id;
-    const walletAddress = accounts[0].address;
+    let walletAddress = accounts[0].address;
     let networkIndex = 0;
-    let availableEth = accounts[0].balance;
+    let activeAssetSymbol = accounts[0].asset;
+    let availableBalance = accounts[0].balance;
     let transactions = [];
     let lastTxHash = "0x97f9c4e1b0d8a0c4...aa93";
     let selectedSpeed = "standard";
@@ -2173,8 +2186,13 @@
 
     const networkStatuses = ["Normal gas", "Low congestion", "High activity"];
 
-    const formatEth = (value) => `${value.toFixed(4)} ETH`;
+    const getAsset = (symbol) => assets[symbol] || assets.ETH;
+    const formatAsset = (value, symbol = activeAssetSymbol) => {
+      const asset = getAsset(symbol);
+      return `${value.toFixed(asset.decimals)} ${asset.symbol}`;
+    };
     const formatInr = (value) => `₹${value.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const formatInrForAsset = (value, symbol = activeAssetSymbol) => formatInr(value * getAsset(symbol).price);
     const parseNumber = (value) => Number.parseFloat(String(value).replace(/[^\d.]/g, "")) || 0;
     const themeStorageKey = "walletTheme";
 
@@ -2245,10 +2263,31 @@
     };
 
     const updateBalance = () => {
-      balanceEth.textContent = formatEth(availableEth);
-      balanceInr.textContent = formatInr(availableEth * ethPrice);
-      if (tokenEthBalance) tokenEthBalance.firstChild.textContent = formatEth(availableEth);
-      if (tokenEthInr) tokenEthInr.textContent = formatInr(availableEth * ethPrice);
+      balanceEth.textContent = formatAsset(availableBalance);
+      balanceInr.textContent = formatInrForAsset(availableBalance);
+      if (primaryTokenBalance) primaryTokenBalance.firstChild.textContent = formatAsset(availableBalance);
+      if (primaryTokenInr) primaryTokenInr.textContent = formatInrForAsset(availableBalance);
+    };
+
+    const updateAssetUI = () => {
+      const asset = getAsset(activeAssetSymbol);
+      if (primaryAssetName) primaryAssetName.textContent = asset.name;
+      if (primaryTokenName) primaryTokenName.textContent = asset.name;
+      if (primaryTokenIcon) primaryTokenIcon.textContent = asset.icon;
+      if (primaryTokenNetworkButton) primaryTokenNetworkButton.dataset.token = asset.symbol;
+      if (primaryNetworkLabel) {
+        primaryNetworkLabel.textContent = `${tokenNetworks[asset.symbol][tokenNetworkIndex[asset.symbol]]} · ${asset.symbol}`;
+      }
+      if (assetPriceLabel) {
+        assetPriceLabel.innerHTML = `${asset.symbol} price ${formatInr(asset.price)} today <strong>+2.3%</strong>`;
+      }
+      if (allocationAssetLabel) allocationAssetLabel.textContent = asset.symbol;
+      if (amountAssetLabel) amountAssetLabel.textContent = asset.symbol;
+      if (amountAssetUnit) amountAssetUnit.textContent = asset.symbol;
+      if (receiveAmount) receiveAmount.placeholder = `0.00 ${asset.symbol}`;
+      updateBalance();
+      updateAmountHints(parseNumber(amountInput?.value));
+      updateGasEstimate(selectedSpeed);
     };
 
     const renderAccountList = () => {
@@ -2266,14 +2305,16 @@
             </div>
           </div>
           <div style="text-align: right;">
-            <div style="font-weight: 600;">${account.balance.toFixed(4)} ETH</div>
-            <div style="color: var(--muted); font-size: 11px;">${formatInr(account.balance * ethPrice)}</div>
+            <div style="font-weight: 600;">${formatAsset(account.balance, account.asset)}</div>
+            <div style="color: var(--muted); font-size: 11px;">${formatInrForAsset(account.balance, account.asset)}</div>
           </div>
         `;
         item.addEventListener("click", () => {
           activeAccountId = account.id;
-          availableEth = account.balance;
-          updateBalance();
+          availableBalance = account.balance;
+          activeAssetSymbol = account.asset;
+          walletAddress = account.address;
+          updateAssetUI();
           if (accountSelector) {
             accountSelector.childNodes[0].textContent = `${account.name} `;
           }
@@ -2330,7 +2371,8 @@
                 </svg>`;
         const confirmations = tx.confirmations ?? (tx.status === "Completed" ? 12 : 0);
         const counterparty = tx.counterparty || tx.to || "Unknown";
-        const feeLabel = tx.fee ? `Fee ${tx.fee.toFixed(4)} ETH` : "No fee";
+        const txAsset = getAsset(tx.token || "ETH");
+        const feeLabel = tx.fee ? `Fee ${formatAsset(tx.fee, txAsset.symbol)}` : "No fee";
         txItem.innerHTML = `
           <div class="meta">
             <div class="transaction-icon ${iconClass}">
@@ -2342,7 +2384,7 @@
               <p>${counterparty} · ${feeLabel}</p>
             </div>
           </div>
-          <div class="amount">${amountPrefix}${tx.amount.toFixed(3)} ETH<span>${formatInr(Math.abs(tx.amount) * ethPrice)}</span></div>
+          <div class="amount">${amountPrefix}${tx.amount.toFixed(txAsset.decimals)} ${txAsset.symbol}<span>${formatInr(Math.abs(tx.amount) * txAsset.price)}</span></div>
         `;
         txItem.addEventListener("click", () => {
           openTransactionModal(tx);
@@ -2354,12 +2396,12 @@
     const loadState = () => {
       const storedBalance = localStorage.getItem("walletBalance");
       const storedTransactions = localStorage.getItem("walletTransactions");
-      if (storedBalance) availableEth = Number.parseFloat(storedBalance) || availableEth;
+      if (storedBalance) availableBalance = Number.parseFloat(storedBalance) || availableBalance;
       transactions = storedTransactions ? JSON.parse(storedTransactions) : initialTransactions;
     };
 
     const persistState = () => {
-      localStorage.setItem("walletBalance", availableEth.toString());
+      localStorage.setItem("walletBalance", availableBalance.toString());
       localStorage.setItem("walletTransactions", JSON.stringify(transactions));
     };
 
@@ -2410,24 +2452,24 @@
     const updateGasEstimate = (speed) => {
       const rate = gasRates[speed] || gasRates.standard;
       const totalGas = rate.base + rate.priority;
-      gasInput.value = `${totalGas.toFixed(4)} ETH (${formatInr(totalGas * ethPrice)})`;
-      confirmGas.textContent = `${totalGas.toFixed(4)} ETH`;
-      baseFee.textContent = `${rate.base.toFixed(4)} ETH`;
-      priorityFee.textContent = `${rate.priority.toFixed(4)} ETH`;
+      gasInput.value = `${formatAsset(totalGas)} (${formatInrForAsset(totalGas)})`;
+      confirmGas.textContent = formatAsset(totalGas);
+      baseFee.textContent = formatAsset(rate.base);
+      priorityFee.textContent = formatAsset(rate.priority);
       if (etaRow) etaRow.textContent = `Estimated confirmation: ${rate.eta}`;
     };
 
-    const updateAmountHints = (ethValue) => {
-      if (amountHint) amountHint.textContent = `≈ ${formatInr(ethValue * ethPrice)}`;
-      if (amountInrInput) amountInrInput.value = (ethValue * ethPrice).toFixed(2);
+    const updateAmountHints = (assetValue) => {
+      if (amountHint) amountHint.textContent = `≈ ${formatInrForAsset(assetValue)}`;
+      if (amountInrInput) amountInrInput.value = (assetValue * getAsset(activeAssetSymbol).price).toFixed(2);
     };
 
-    const updateConfirmTotals = (ethValue, gasValue) => {
-      confirmAmount.textContent = `${ethValue.toFixed(4)} ETH`;
-      if (confirmAmountInr) confirmAmountInr.textContent = formatInr(ethValue * ethPrice);
-      confirmGas.textContent = `${gasValue.toFixed(4)} ETH`;
-      confirmTotal.textContent = `${(ethValue + gasValue).toFixed(4)} ETH`;
-      if (confirmTotalInr) confirmTotalInr.textContent = formatInr((ethValue + gasValue) * ethPrice);
+    const updateConfirmTotals = (assetValue, gasValue) => {
+      confirmAmount.textContent = formatAsset(assetValue);
+      if (confirmAmountInr) confirmAmountInr.textContent = formatInrForAsset(assetValue);
+      confirmGas.textContent = formatAsset(gasValue);
+      confirmTotal.textContent = formatAsset(assetValue + gasValue);
+      if (confirmTotalInr) confirmTotalInr.textContent = formatInrForAsset(assetValue + gasValue);
     };
 
     const updateRecipientPreview = (name, address, verified) => {
@@ -2441,7 +2483,10 @@
     };
 
     const updateTokenNetworks = () => {
-      if (ethNetworkLabel) ethNetworkLabel.textContent = `${tokenNetworks.ETH[tokenNetworkIndex.ETH]} · ETH`;
+      const activeTokenNetworks = tokenNetworks[activeAssetSymbol] || tokenNetworks.ETH;
+      if (primaryNetworkLabel) {
+        primaryNetworkLabel.textContent = `${activeTokenNetworks[tokenNetworkIndex[activeAssetSymbol]]} · ${activeAssetSymbol}`;
+      }
       if (usdcNetworkLabel) usdcNetworkLabel.textContent = `${tokenNetworks.USDC[tokenNetworkIndex.USDC]} · USDC`;
       if (maticNetworkLabel) maticNetworkLabel.textContent = `${tokenNetworks.MATIC[tokenNetworkIndex.MATIC]} · MATIC`;
     };
@@ -2459,13 +2504,14 @@
 
     const openTransactionModal = (tx) => {
       if (!transactionModal) return;
+      const txAsset = getAsset(tx.token || "ETH");
       const confirmations = tx.confirmations ?? 0;
       txDetailStatus.textContent = tx.status;
-      txDetailAmount.textContent = `${tx.amount.toFixed(4)} ETH`;
-      txDetailAmountInr.textContent = formatInr(Math.abs(tx.amount) * ethPrice);
+      txDetailAmount.textContent = `${tx.amount.toFixed(txAsset.decimals)} ${txAsset.symbol}`;
+      txDetailAmountInr.textContent = formatInr(Math.abs(tx.amount) * txAsset.price);
       txDetailTo.textContent = tx.to || "0x82a4...d98c";
       txDetailNetwork.textContent = networks[networkIndex];
-      txDetailFee.textContent = tx.fee ? `${tx.fee.toFixed(4)} ETH` : "0.0042 ETH";
+      txDetailFee.textContent = tx.fee ? `${formatAsset(tx.fee, txAsset.symbol)}` : formatAsset(0.0042, txAsset.symbol);
       txDetailSpeed.textContent = tx.speed ? tx.speed.toUpperCase() : "STANDARD";
       txDetailConf.textContent = `${confirmations}/12`;
       if (txDetailBlock) txDetailBlock.textContent = tx.block || "18,503,221";
@@ -2527,7 +2573,7 @@
 
       showScreen(processingScreen);
       setTimeout(() => {
-        availableEth += amountValue;
+        availableBalance += amountValue;
         updateBalance();
         const txTitle = source === "apy" ? "APY reward" : "QR payment";
         const newTx = {
@@ -2542,7 +2588,7 @@
           speed: "standard",
           confirmations: 12,
           fee: 0,
-          token: "ETH",
+          token: activeAssetSymbol,
           block: "18,503,888",
           nonce: 29,
         };
@@ -2550,11 +2596,11 @@
         renderTransactions();
         persistState();
         successTitle.textContent = source === "apy" ? "APY reward received" : "QR payment received";
-        successMessage.textContent = `${amountValue.toFixed(4)} ETH added to your balance.`;
+        successMessage.textContent = `${formatAsset(amountValue)} added to your balance.`;
         successHash.textContent = txHash;
         successNetwork.textContent = networks[networkIndex];
-        successFee.textContent = "0.0000 ETH";
-        successTotalInr.textContent = formatInr(amountValue * ethPrice);
+        successFee.textContent = formatAsset(0);
+        successTotalInr.textContent = formatInrForAsset(amountValue);
         successStatus.textContent = "Completed · 12/12 confirmations";
         successStatus.classList.add("completed");
         showScreen(successScreen);
@@ -2607,10 +2653,8 @@
     loadState();
     loadPreferences();
     normalizeTransactions();
-    updateBalance();
+    updateAssetUI();
     renderTransactions();
-    updateGasEstimate(selectedSpeed);
-    updateAmountHints(parseNumber(amountInput?.value));
     updateChartRange(selectedChartRange);
     networkLabel.textContent = networks[networkIndex];
     if (networkStatus) networkStatus.textContent = `Network status: ${networkStatuses[networkIndex]}`;
@@ -2668,7 +2712,7 @@
     chartWidget?.addEventListener("mousemove", (event) => {
       const rect = chartWidget.getBoundingClientRect();
       const ratio = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
-      const base = 240000;
+      const base = getAsset(activeAssetSymbol).price;
       const delta = (ratio - 0.5) * 12000;
       const price = Math.round(base + delta);
       updateChartTooltip(selectedChartRange, `₹${price.toLocaleString("en-IN")} · ${selectedChartRange}`);
@@ -2761,27 +2805,27 @@
         showToast("Enter a valid amount");
         return;
       }
-      if (amountValue + gasValue > availableEth) {
+      if (amountValue + gasValue > availableBalance) {
         showToast("Insufficient balance");
         return;
       }
       showScreen(processingScreen);
       setTimeout(() => {
-        availableEth = Math.max(0, availableEth - amountValue - gasValue);
+        availableBalance = Math.max(0, availableBalance - amountValue - gasValue);
         updateBalance();
         const txHash = `0x${Math.random().toString(16).slice(2, 10)}...${Math.random().toString(16).slice(2, 6)}`;
         lastTxHash = txHash;
         successTitle.textContent = "Transfer submitted";
-        successMessage.textContent = `${amountValue.toFixed(4)} ETH sent successfully.`;
+        successMessage.textContent = `${formatAsset(amountValue)} sent successfully.`;
         successHash.textContent = txHash;
         successNetwork.textContent = networks[networkIndex];
-        successFee.textContent = `${gasValue.toFixed(4)} ETH`;
-        successTotalInr.textContent = formatInr((amountValue + gasValue) * ethPrice);
+        successFee.textContent = formatAsset(gasValue);
+        successTotalInr.textContent = formatInrForAsset(amountValue + gasValue);
         successStatus.textContent = "Pending · 0/12 confirmations";
         successStatus.classList.remove("completed");
         const newTx = {
           type: "sent",
-          title: "Sent ETH",
+          title: `Sent ${activeAssetSymbol}`,
           amount: -amountValue,
           status: "Pending",
           timestamp: getTimeLabel(),
@@ -2792,7 +2836,7 @@
           speed: selectedSpeed,
           confirmations: 0,
           fee: gasValue,
-          token: "ETH",
+          token: activeAssetSymbol,
           block: "18,503,221",
           nonce: 28,
         };
@@ -2855,8 +2899,8 @@
       btn.addEventListener("click", () => {
         const action = btn.dataset.action;
         if (action === "max") {
-          if (amountInput) amountInput.value = availableEth.toFixed(4);
-          updateAmountHints(availableEth);
+          if (amountInput) amountInput.value = availableBalance.toFixed(getAsset(activeAssetSymbol).decimals);
+          updateAmountHints(availableBalance);
           persistPreferences();
           showToast("Max amount applied");
           return;
@@ -2990,9 +3034,9 @@
     let isSyncingAmount = false;
     amountInput?.addEventListener("input", () => {
       if (isSyncingAmount) return;
-      const ethValue = parseNumber(amountInput.value);
+      const assetValue = parseNumber(amountInput.value);
       isSyncingAmount = true;
-      updateAmountHints(ethValue);
+      updateAmountHints(assetValue);
       persistPreferences();
       isSyncingAmount = false;
     });
@@ -3000,10 +3044,10 @@
     amountInrInput?.addEventListener("input", () => {
       if (isSyncingAmount) return;
       const inrValue = parseNumber(amountInrInput.value);
-      const ethValue = inrValue / ethPrice;
+      const assetValue = inrValue / getAsset(activeAssetSymbol).price;
       isSyncingAmount = true;
-      if (amountInput) amountInput.value = ethValue.toFixed(4);
-      updateAmountHints(ethValue);
+      if (amountInput) amountInput.value = assetValue.toFixed(getAsset(activeAssetSymbol).decimals);
+      updateAmountHints(assetValue);
       persistPreferences();
       isSyncingAmount = false;
     });
