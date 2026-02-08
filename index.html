@@ -862,6 +862,10 @@
       backdrop-filter: blur(8px);
     }
 
+    .tabs.locked {
+      display: none;
+    }
+
     body[data-theme="dark"] .tabs {
       background: rgba(9, 13, 20, 0.9);
       border-top-color: rgba(148, 163, 184, 0.12);
@@ -1999,6 +2003,7 @@
       settingsScreen,
     ];
     const toast = document.getElementById("toast");
+    const tabs = document.getElementById("tabBar");
     const tabButtons = document.querySelectorAll(".tab-btn");
     const ethPrice = 240000;
     const gasRates = {
@@ -2414,6 +2419,7 @@
     };
 
     setTheme(getPreferredTheme());
+    if (tabs) tabs.classList.add("locked");
     loadState();
     loadPreferences();
     normalizeTransactions();
@@ -2472,6 +2478,7 @@
             if (enteredPin === pin) {
               lockScreen.classList.add("hidden");
               dashboardScreen.classList.remove("hidden");
+              tabs?.classList.remove("locked");
               updateTabs("home");
             } else {
               enteredPin = "";
