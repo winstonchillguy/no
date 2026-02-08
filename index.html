@@ -261,7 +261,7 @@
     .account-selector {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       font-size: 15px;
       font-weight: 600;
       color: var(--text);
@@ -275,43 +275,6 @@
       color: var(--muted);
       font-weight: 500;
       font-size: 12px;
-    }
-
-    .account-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .account-chip .account-avatar {
-      width: 30px;
-      height: 30px;
-      border-radius: 10px;
-      background: rgba(79, 124, 255, 0.16);
-      color: var(--accent);
-      display: grid;
-      place-items: center;
-      font-weight: 600;
-      font-size: 11px;
-    }
-
-    .account-chip .account-meta {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 2px;
-    }
-
-    .account-chip .account-meta small {
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 500;
-    }
-
-    .account-chip .account-balance {
-      font-size: 11px;
-      color: var(--muted);
-      font-weight: 600;
     }
 
     .top-actions {
@@ -1536,13 +1499,7 @@
       <div class="dashboard fade-up" id="dashboardContent">
         <div class="top-bar">
           <button class="account-selector" id="accountSelector" type="button" aria-label="Switch account">
-            <span class="account-chip">
-              <span class="account-avatar" id="accountAvatar">A1</span>
-              <span class="account-meta">
-                <strong id="accountName">Account 1</strong>
-                <span class="account-balance" id="accountBalance">3.4281 ETH</span>
-              </span>
-            </span>
+            Account 1
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
               <path d="M6 9l6 6 6-6"></path>
             </svg>
@@ -1946,7 +1903,7 @@
           <img id="qrImage" alt="Wallet QR code" />
         </div>
         <div style="font-size: 12px; color: var(--muted); margin-bottom: 8px;">Wallet address</div>
-        <div style="font-size: 13px; margin-bottom: 12px;" id="receiveAddress">0x82a4c2f8b9f1aa9d...d98c</div>
+        <div style="font-size: 13px; margin-bottom: 12px;">0x82a4c2f8b9f1aa9d...d98c</div>
         <div class="recipient-list" style="justify-content: center;">
           <button class="copy-btn" id="copyAddress">Copy full</button>
           <button class="copy-btn" id="copyShort">Copy short</button>
@@ -2086,7 +2043,6 @@
     const networkStatus = document.getElementById("networkStatus");
     const receiveAmount = document.getElementById("receiveAmount");
     const receiveMemo = document.getElementById("receiveMemo");
-    const receiveAddress = document.getElementById("receiveAddress");
     const gasInput = document.getElementById("gasInput");
     const memoInput = document.getElementById("memoInput");
     const speedSelector = document.getElementById("speedSelector");
@@ -2124,9 +2080,6 @@
     const accountClose = document.getElementById("accountClose");
     const addAccount = document.getElementById("addAccount");
     const accountSelector = document.getElementById("accountSelector");
-    const accountAvatar = document.getElementById("accountAvatar");
-    const accountName = document.getElementById("accountName");
-    const accountBalance = document.getElementById("accountBalance");
     const scanModal = document.getElementById("scanModal");
     const scanTitle = document.getElementById("scanTitle");
     const scanStatus = document.getElementById("scanStatus");
@@ -2177,7 +2130,7 @@
       { id: "acc-3", name: "Savings", address: "0x28f4c9e8d1b2a77f502e", balance: 1.2046, initials: "SV" },
     ];
     let activeAccountId = accounts[0].id;
-    let walletAddress = accounts[0].address;
+    const walletAddress = accounts[0].address;
     let networkIndex = 0;
     let availableEth = accounts[0].balance;
     let transactions = [];
@@ -2296,46 +2249,6 @@
       balanceInr.textContent = formatInr(availableEth * ethPrice);
       if (tokenEthBalance) tokenEthBalance.firstChild.textContent = formatEth(availableEth);
       if (tokenEthInr) tokenEthInr.textContent = formatInr(availableEth * ethPrice);
-      if (accountBalance) accountBalance.textContent = formatEth(availableEth);
-    };
-
-    const updateAccountHeader = (account) => {
-      if (accountAvatar) accountAvatar.textContent = account.initials;
-      if (accountName) accountName.textContent = account.name;
-      if (receiveAddress) receiveAddress.textContent = `${account.address.slice(0, 10)}...${account.address.slice(-4)}`;
-    };
-
-    const renderAccountList = () => {
-      if (!accountList) return;
-      accountList.innerHTML = "";
-      accounts.forEach((account) => {
-        const item = document.createElement("div");
-        item.className = "account-item";
-        item.innerHTML = `
-          <div class="account-meta">
-            <div class="account-avatar">${account.initials}</div>
-            <div>
-              <strong>${account.name}</strong>
-              <div style="color: var(--muted); font-size: 11px;">${account.address.slice(0, 6)}...${account.address.slice(-4)}</div>
-            </div>
-          </div>
-          <div style="text-align: right;">
-            <div style="font-weight: 600;">${account.balance.toFixed(4)} ETH</div>
-            <div style="color: var(--muted); font-size: 11px;">${formatInr(account.balance * ethPrice)}</div>
-          </div>
-        `;
-        item.addEventListener("click", () => {
-          activeAccountId = account.id;
-          availableEth = account.balance;
-          walletAddress = account.address;
-          updateBalance();
-          updateAccountHeader(account);
-          updateQrCode();
-          accountModal.classList.remove("active");
-          showToast(`${account.name} selected`);
-        });
-        accountList.appendChild(item);
-      });
     };
 
     const renderAccountList = () => {
@@ -2418,7 +2331,6 @@
         const confirmations = tx.confirmations ?? (tx.status === "Completed" ? 12 : 0);
         const counterparty = tx.counterparty || tx.to || "Unknown";
         const feeLabel = tx.fee ? `Fee ${tx.fee.toFixed(4)} ETH` : "No fee";
-        const hashLabel = tx.hash ? `${tx.hash.slice(0, 6)}...${tx.hash.slice(-4)}` : "Pending hash";
         txItem.innerHTML = `
           <div class="meta">
             <div class="transaction-icon ${iconClass}">
@@ -2427,7 +2339,7 @@
             <div>
               <h4>${tx.title}</h4>
               <p>${tx.timestamp} · ${tx.status} · ${confirmations}/12</p>
-              <p>${counterparty} · ${feeLabel} · ${hashLabel}</p>
+              <p>${counterparty} · ${feeLabel}</p>
             </div>
           </div>
           <div class="amount">${amountPrefix}${tx.amount.toFixed(3)} ETH<span>${formatInr(Math.abs(tx.amount) * ethPrice)}</span></div>
@@ -2547,11 +2459,11 @@
 
     const openTransactionModal = (tx) => {
       if (!transactionModal) return;
-      const confirmations = tx.confirmations ?? (tx.status === "Completed" ? 12 : 0);
+      const confirmations = tx.confirmations ?? 0;
       txDetailStatus.textContent = tx.status;
       txDetailAmount.textContent = `${tx.amount.toFixed(4)} ETH`;
       txDetailAmountInr.textContent = formatInr(Math.abs(tx.amount) * ethPrice);
-      txDetailTo.textContent = tx.counterparty || tx.to || "0x82a4...d98c";
+      txDetailTo.textContent = tx.to || "0x82a4...d98c";
       txDetailNetwork.textContent = networks[networkIndex];
       txDetailFee.textContent = tx.fee ? `${tx.fee.toFixed(4)} ETH` : "0.0042 ETH";
       txDetailSpeed.textContent = tx.speed ? tx.speed.toUpperCase() : "STANDARD";
@@ -2559,7 +2471,6 @@
       if (txDetailBlock) txDetailBlock.textContent = tx.block || "18,503,221";
       if (txDetailNonce) txDetailNonce.textContent = String(tx.nonce ?? 27);
       txDetailHash.textContent = tx.hash || lastTxHash;
-      txDetailSub.textContent = `${tx.title} · ${tx.status} · ${confirmations}/12 confirmations`;
       transactionModal.classList.add("active");
     };
 
