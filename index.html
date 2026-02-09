@@ -404,8 +404,9 @@
 
     .balance-sub {
       display: flex;
-      align-items: center;
-      gap: 10px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
       font-size: 12px;
       color: var(--muted);
     }
@@ -2247,7 +2248,7 @@
       if (themeMeta) themeMeta.setAttribute("content", isDark ? "#0c101a" : "#f6f7fb");
     };
 
-    const getPreferredTheme = () => "dark";
+    const getPreferredTheme = () => localStorage.getItem(themeStorageKey) || "light";
 
     const setTheme = (theme) => {
       applyTheme(theme);
