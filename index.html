@@ -251,21 +251,21 @@
     .dashboard {
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
     }
 
     .top-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 6px 4px 0;
+      padding: 8px 2px 0;
     }
 
     .account-selector {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      font-size: 15px;
+      gap: 10px;
+      font-size: 14px;
       font-weight: 600;
       color: var(--text);
       border: none;
@@ -277,7 +277,27 @@
     .account-selector span {
       color: var(--muted);
       font-weight: 500;
+      font-size: 11px;
+    }
+
+    .account-avatar-mini {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3b5cff, #7aa2ff);
+      display: grid;
+      place-items: center;
+      color: #fff;
       font-size: 12px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .account-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1.1;
     }
 
     .top-actions {
@@ -289,13 +309,19 @@
     .icon-btn {
       width: 32px;
       height: 32px;
-      border-radius: 10px;
+      border-radius: 12px;
       border: 1px solid var(--border);
       background: var(--surface);
       display: grid;
       place-items: center;
       color: var(--text);
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 12px 26px rgba(24, 38, 65, 0.12);
+    }
+
+    body[data-theme="dark"] .icon-btn {
+      background: rgba(16, 24, 39, 0.9);
+      border-color: rgba(148, 163, 184, 0.2);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35);
     }
 
     .icon-btn svg {
@@ -361,6 +387,44 @@
     body[data-theme="dark"] .hero-card {
       background: linear-gradient(135deg, rgba(122, 162, 255, 0.18), rgba(68, 212, 163, 0.12));
       border-color: rgba(122, 162, 255, 0.28);
+    }
+
+    .balance-block {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 6px 2px 2px;
+    }
+
+    .balance-total {
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .balance-sub {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .balance-sub strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
 
     .balance-header {
@@ -585,31 +649,70 @@
       color: var(--success);
     }
 
-    .segment {
-      background: rgba(12, 18, 34, 0.035);
-      border-radius: 999px;
+    .category-tabs {
       display: flex;
+      gap: 22px;
+      padding: 6px 2px 2px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    }
+
+    .category-tabs button {
+      border: none;
+      background: none;
+      color: inherit;
+      font: inherit;
+      padding: 8px 0 12px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .category-tabs button.active {
+      color: var(--text);
+    }
+
+    .category-tabs button.active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .segment {
+      background: rgba(12, 18, 34, 0.04);
+      border-radius: 999px;
+      display: inline-flex;
       gap: 6px;
       padding: 4px;
       box-shadow: inset 0 0 0 1px var(--border);
     }
 
     .segment button {
-      flex: 1;
       border: none;
       background: transparent;
-      padding: 8px 12px;
+      padding: 6px 10px;
       border-radius: 999px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       color: var(--muted);
       transition: background var(--transition), color var(--transition);
+      cursor: pointer;
     }
 
     .segment button.active {
       background: var(--surface);
       color: var(--text);
       box-shadow: 0 6px 12px rgba(12, 18, 34, 0.08);
+    }
+
+    body[data-theme="dark"] .segment {
+      background: rgba(15, 24, 40, 0.7);
     }
 
     body[data-theme="dark"] .segment button.active {
@@ -619,40 +722,50 @@
 
     .action-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 12px;
     }
 
     .action-card {
-      background: var(--surface);
-      border-radius: 18px;
-      padding: 14px 8px 12px;
+      background: none;
+      border: none;
+      padding: 0;
       text-align: center;
-      font-size: 11px;
       color: var(--text);
-      border: 1px solid var(--border);
-      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
-      box-shadow: var(--shadow-sm);
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
     }
 
-    .action-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 28px rgba(12, 18, 34, 0.12);
+    .action-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--accent);
+      box-shadow: 0 14px 24px rgba(79, 124, 255, 0.3);
+      color: #fff;
     }
 
     .action-card svg {
-      width: 22px;
-      height: 22px;
-      color: var(--text);
-      opacity: 0.9;
+      width: 20px;
+      height: 20px;
+      color: #fff;
+    }
+
+    body[data-theme="dark"] .action-icon {
+      box-shadow: 0 14px 24px rgba(25, 62, 158, 0.45);
     }
 
     .action-card span {
       display: block;
-      margin-top: 8px;
       color: var(--text);
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 500;
     }
 
     .section-title {
@@ -675,24 +788,23 @@
     .token-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 4px;
     }
 
     .token-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px;
-      border-radius: 18px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-sm);
+      padding: 14px 4px;
+      border-radius: 0;
+      background: transparent;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+      box-shadow: none;
       cursor: pointer;
     }
 
     body[data-theme="dark"] .token-item,
     body[data-theme="dark"] .transaction-item,
-    body[data-theme="dark"] .action-card,
     body[data-theme="dark"] .card,
     body[data-theme="dark"] .list-card,
     body[data-theme="dark"] .modal-card {
@@ -707,48 +819,35 @@
     }
 
     .token-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: 10px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
       display: grid;
       place-items: center;
       font-size: 12px;
-      background: rgba(79, 124, 255, 0.12);
-      color: var(--accent);
+      background: rgba(79, 124, 255, 0.2);
+      color: var(--text);
     }
 
     .token-icon.success {
-      background: rgba(44, 194, 138, 0.12);
-      color: var(--success);
+      background: rgba(244, 166, 58, 0.2);
+      color: #f5b45d;
     }
 
     .token-icon.warning {
-      background: rgba(244, 166, 58, 0.12);
-      color: var(--warning);
+      background: rgba(255, 70, 70, 0.2);
+      color: #ff7b7f;
     }
 
     .token-item h4 {
-      font-size: 13px;
+      font-size: 14px;
       margin-bottom: 4px;
+      font-weight: 600;
     }
 
     .token-item p {
       font-size: 11px;
       color: var(--muted);
-    }
-
-    .token-network {
-      margin-top: 8px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 10px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: rgba(79, 124, 255, 0.12);
-      color: var(--accent);
-      border: none;
-      cursor: pointer;
     }
 
     .transaction-list {
@@ -1406,7 +1505,7 @@
     }
   </style>
 </head>
-<body>
+  <body>
   <div class="phone">
     <div class="toast" id="toast">Transaction sent successfully</div>
     <div class="modal" id="actionModal">
@@ -1435,7 +1534,7 @@
         <div class="tx-detail-grid">
           <div class="tx-detail-row"><span>Status</span><span id="txDetailStatus">Pending</span></div>
           <div class="tx-detail-row"><span>Amount</span><span id="txDetailAmount">0.28 ETH</span></div>
-          <div class="tx-detail-row"><span>Amount (INR)</span><span id="txDetailAmountInr">₹67,200.00</span></div>
+          <div class="tx-detail-row"><span id="txDetailAmountLabel">Amount (USD)</span><span id="txDetailAmountInr">$67,200.00</span></div>
           <div class="tx-detail-row"><span>To</span><span id="txDetailTo">0x82a4...d98c</span></div>
           <div class="tx-detail-row"><span>Network</span><span id="txDetailNetwork">Ethereum Mainnet</span></div>
           <div class="tx-detail-row"><span>Gas fee</span><span id="txDetailFee">0.0042 ETH</span></div>
@@ -1502,7 +1601,11 @@
       <div class="dashboard fade-up" id="dashboardContent">
         <div class="top-bar">
           <button class="account-selector" id="accountSelector" type="button" aria-label="Switch account">
-            Account 1
+            <span class="account-avatar-mini">C</span>
+            <span class="account-text">
+              <strong class="account-title">coinbase.cb.id</strong>
+              <span class="account-subtitle">Primary account</span>
+            </span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
               <path d="M6 9l6 6 6-6"></path>
             </svg>
@@ -1528,174 +1631,130 @@
                 <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
               </svg>
             </button>
-            <button class="icon-btn" type="button" aria-label="Menu">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 6h16"></path>
-                <path d="M4 12h16"></path>
-                <path d="M4 18h16"></path>
-              </svg>
-            </button>
           </div>
         </div>
-        <div class="hero-card">
-          <div class="balance-header">
-            <h2 id="primaryAssetName">Ethereum</h2>
-            <button class="network-label" id="networkLabel">Ethereum Mainnet</button>
+        <div class="balance-block">
+          <div class="balance-total" id="balanceInr">$0.00</div>
+          <div class="balance-sub">
+            <strong id="balanceEth">0.0000 ETH</strong>
           </div>
+        </div>
+        <div class="visually-hidden">
+          <h2 id="primaryAssetName">Ethereum</h2>
+          <button class="network-label" id="networkLabel">Ethereum Mainnet</button>
           <div class="network-status" id="networkStatus">Network status: Normal gas</div>
-          <div class="balance-eth" id="balanceEth">3.4281 ETH</div>
-          <div class="balance-inr" id="balanceInr">₹6,00,240.80</div>
-          <div class="account-badge">
-            <span>Secure · 2FA enabled</span>
-          </div>
-          <div class="price-row">
-            <span id="assetPriceLabel">ETH price ₹2,40,000 today <strong>+2.3%</strong></span>
-            <span style="color: var(--success);">▲ +₹13,540</span>
-          </div>
-          <div class="chart" id="chartWidget">
-            <div class="chart-tooltip" id="chartTooltip">₹2,40,000 · 1D</div>
-            <div class="chart-volume" id="chartVolume">
-              <span style="height: 28%;"></span>
-              <span style="height: 44%;"></span>
-              <span style="height: 36%;"></span>
-              <span style="height: 60%;"></span>
-              <span style="height: 48%;"></span>
-              <span style="height: 70%;"></span>
-              <span style="height: 52%;"></span>
-              <span style="height: 64%;"></span>
-              <span style="height: 40%;"></span>
-              <span style="height: 58%;"></span>
-            </div>
-            <svg viewBox="0 0 300 80" fill="none" stroke="currentColor" stroke-width="2">
-              <path id="chartPath" d="M5 60 C40 20, 80 40, 120 25 C160 10, 200 40, 240 20 C260 10, 280 25, 295 15" stroke="url(#grad)"></path>
-              <defs>
-                <linearGradient id="grad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stop-color="#4f7cff"></stop>
-                  <stop offset="100%" stop-color="#2cc28a"></stop>
-                </linearGradient>
-              </defs>
-            </svg>
-            <div class="chart-tabs" id="chartTabs">
-              <button class="active" data-range="1D">1D</button>
-              <button data-range="1W">1W</button>
-              <button data-range="1M">1M</button>
-              <button data-range="1Y">1Y</button>
-            </div>
-          </div>
-          <div class="allocation-card">
-            <div class="section-title" style="margin-top: 0;">
-              <span>Portfolio allocation</span>
-              <span>Updated just now</span>
-            </div>
-            <div class="allocation-bar">
-              <span style="width: 62%; background: rgba(79, 124, 255, 0.6);"></span>
-              <span style="width: 23%; background: rgba(44, 194, 138, 0.6);"></span>
-              <span style="width: 15%; background: rgba(244, 166, 58, 0.6);"></span>
-            </div>
-            <div class="allocation-legend">
-              <span><span id="allocationAssetLabel">ETH</span> 62%</span>
-              <span>USDC 23%</span>
-              <span>MATIC 15%</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="segment" id="segmentControl">
-          <button class="active" data-segment="assets">Assets</button>
-          <button data-segment="activity">Activity</button>
+          <span id="assetPriceLabel">ETH price $2,403.10 today <strong>+2.3%</strong></span>
+          <span id="allocationAssetLabel">ETH</span>
         </div>
 
         <div class="action-grid">
+          <button class="action-card" data-action="buy">
+            <span class="action-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14"></path>
+                <path d="M5 12h14"></path>
+              </svg>
+            </span>
+            <span>Buy</span>
+          </button>
+          <button class="action-card" data-action="swap">
+            <span class="action-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 3h5v5"></path>
+                <path d="M8 21H3v-5"></path>
+                <path d="M21 8c-2.2-2.3-5.4-3.5-8.7-3"></path>
+                <path d="M3 16c2.2 2.3 5.4 3.5 8.7 3"></path>
+              </svg>
+            </span>
+            <span>Swap</span>
+          </button>
+          <button class="action-card" data-action="bridge">
+            <span class="action-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="M8 8l-4 4 4 4"></path>
+                <path d="M16 16l4-4-4-4"></path>
+              </svg>
+            </span>
+            <span>Bridge</span>
+          </button>
           <button class="action-card" data-nav="send">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="9"></circle>
-              <path d="M9 15l6-6"></path>
-              <path d="M10 9h5v5"></path>
-            </svg>
+            <span class="action-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3v18"></path>
+                <path d="M7 8l5-5 5 5"></path>
+              </svg>
+            </span>
             <span>Send</span>
           </button>
           <button class="action-card" data-nav="receive">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="9"></circle>
-              <path d="M15 9l-6 6"></path>
-              <path d="M9 10v5h5"></path>
-            </svg>
+            <span class="action-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 21V3"></path>
+                <path d="M17 16l-5 5-5-5"></path>
+              </svg>
+            </span>
             <span>Receive</span>
-          </button>
-          <button class="action-card" data-action="scan">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-              <path d="M3 14v7h7"></path>
-            </svg>
-            <span>Scan</span>
-          </button>
-          <button class="action-card" data-action="swap">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M16 3h5v5"></path>
-              <path d="M8 21H3v-5"></path>
-              <path d="M21 8c-2.2-2.3-5.4-3.5-8.7-3"></path>
-              <path d="M3 16c2.2 2.3 5.4 3.5 8.7 3"></path>
-            </svg>
-            <span>Swap</span>
-          </button>
-          <button class="action-card" data-action="apy">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 3v18"></path>
-              <path d="M7 8l5-5 5 5"></path>
-              <path d="M7 16l5 5 5-5"></path>
-            </svg>
-            <span>APY</span>
-          </button>
-          <button class="action-card" data-action="buy">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-              <path d="M7 9h6"></path>
-              <path d="M7 13h10"></path>
-            </svg>
-            <span>Buy</span>
           </button>
         </div>
 
+        <div class="category-tabs" id="categoryTabs">
+          <button class="active" data-category="crypto">Crypto</button>
+          <button data-category="nfts">NFTs</button>
+          <button data-category="defi">DeFi</button>
+        </div>
+
         <div class="pane" id="assetsPane">
-          <div class="section-title">
-            <span>Your assets</span>
-            <span>3 tokens</span>
-          </div>
           <div class="token-list">
             <div class="token-item">
               <div class="token-meta">
                 <div class="token-icon" id="primaryTokenIcon">Ξ</div>
                 <div>
                   <h4 id="primaryTokenName">Ethereum</h4>
-                  <p id="primaryNetworkLabel">Mainnet · ETH</p>
-                  <button class="token-network" id="primaryTokenNetworkButton" type="button" data-token="ETH">Change network</button>
+                  <p id="primaryNetworkLabel">Ethereum Mainnet · ETH</p>
                 </div>
               </div>
-              <div class="amount" id="primaryTokenBalance">3.4281 ETH<span id="primaryTokenInr">₹6,00,240.80</span></div>
+              <div class="amount" id="primaryTokenBalance">0.0000 ETH<span id="primaryTokenInr">$0.00</span></div>
             </div>
             <div class="token-item">
               <div class="token-meta">
-                <div class="token-icon success">U</div>
+                <div class="token-icon success">₿</div>
                 <div>
-                  <h4>USD Coin</h4>
-                  <p id="usdcNetworkLabel">Stablecoin · USDC</p>
-                  <button class="token-network" type="button" data-token="USDC">Change network</button>
+                  <h4>Bitcoin</h4>
+                  <p>0.1394 BTC</p>
                 </div>
               </div>
-              <div class="amount">1,250.00 USDC<span>₹1,03,750.00</span></div>
+              <div class="amount">$3,207.53<span>0.1394 BTC</span></div>
             </div>
             <div class="token-item">
               <div class="token-meta">
-                <div class="token-icon warning">M</div>
+                <div class="token-icon warning">OP</div>
                 <div>
-                  <h4>Polygon</h4>
-                  <p id="maticNetworkLabel">Layer 2 · MATIC</p>
-                  <button class="token-network" type="button" data-token="MATIC">Change network</button>
+                  <h4>Optimism</h4>
+                  <p>922.1390 OP</p>
                 </div>
               </div>
-              <div class="amount">2,840.20 MATIC<span>₹2,27,216.00</span></div>
+              <div class="amount">$2,720.31<span>922.1390 OP</span></div>
+            </div>
+            <div class="token-item">
+              <div class="token-meta">
+                <div class="token-icon">M</div>
+                <div>
+                  <h4>Matic</h4>
+                  <p>1,323.4754 MATIC</p>
+                </div>
+              </div>
+              <div class="amount">$1,614.64<span>1,323.4754 MATIC</span></div>
+            </div>
+            <div class="token-item">
+              <div class="token-meta">
+                <div class="token-icon">S</div>
+                <div>
+                  <h4>Solana</h4>
+                  <p>61.2681 SOL</p>
+                </div>
+              </div>
+              <div class="amount">$1,423.87<span>61.2681 SOL</span></div>
             </div>
           </div>
         </div>
@@ -1792,14 +1851,14 @@
             <input type="text" id="amountInput" value="0.28" />
             <div class="input-unit" id="amountAssetUnit">ETH</div>
           </div>
-          <div class="input-hint" id="amountHint">≈ ₹67,200.00</div>
+          <div class="input-hint" id="amountHint">≈ $0.00</div>
           <button class="max-btn" type="button" data-action="max">Max</button>
         </div>
         <div class="form-group">
-          <label>Amount (INR)</label>
+          <label id="amountFiatLabel">Amount (USD)</label>
           <div class="input-row">
-            <input type="text" id="amountInrInput" value="67200" />
-            <div class="input-unit">INR</div>
+            <input type="text" id="amountInrInput" value="0" />
+            <div class="input-unit" id="amountFiatUnit">USD</div>
           </div>
         </div>
         <div class="form-group">
@@ -1813,7 +1872,7 @@
         </div>
         <div class="form-group">
           <label>Estimated gas fee</label>
-          <input type="text" id="gasInput" value="0.0042 ETH (₹1,008)" />
+          <input type="text" id="gasInput" value="0.0042 ETH ($0.00)" />
         </div>
         <div class="form-group">
           <label>Memo</label>
@@ -1839,8 +1898,8 @@
           <strong id="confirmAmount">0.28 ETH</strong>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 10px; color: var(--muted);">
-          <span>Amount (INR)</span>
-          <strong id="confirmAmountInr">₹67,200.00</strong>
+          <span id="confirmAmountFiatLabel">Amount (USD)</span>
+          <strong id="confirmAmountInr">$0.00</strong>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px;">
           <span>Network</span>
@@ -1859,8 +1918,8 @@
           <strong id="confirmTotal">0.2842 ETH</strong>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 16px; color: var(--muted);">
-          <span>Total (INR)</span>
-          <strong id="confirmTotalInr">₹68,208.00</strong>
+          <span id="confirmTotalFiatLabel">Total (USD)</span>
+          <strong id="confirmTotalInr">$0.00</strong>
         </div>
         <button class="primary-btn" id="processSend">Send now</button>
         <button class="secondary-btn" data-nav="send">Back</button>
@@ -1889,7 +1948,7 @@
         <div class="tx-detail-grid" style="margin: 16px 0;">
           <div class="tx-detail-row"><span>Network</span><span id="successNetwork">Ethereum Mainnet</span></div>
           <div class="tx-detail-row"><span>Gas paid</span><span id="successFee">0.0042 ETH</span></div>
-          <div class="tx-detail-row"><span>Total (INR)</span><span id="successTotalInr">₹68,208.00</span></div>
+          <div class="tx-detail-row"><span id="successTotalLabel">Total (USD)</span><span id="successTotalInr">$68,208.00</span></div>
         </div>
         <div style="font-size: 12px; color: var(--muted); word-break: break-all;">
           Tx Hash: <span id="successHash">0x97f9c4e1b0d8a0c4...aa93</span>
@@ -1943,6 +2002,16 @@
               <div style="font-size: 11px; color: var(--muted);">Adaptive theme</div>
             </div>
             <div class="toggle" id="darkToggle"></div>
+          </div>
+          <div class="settings-item">
+            <div>
+              <div style="font-size: 13px;">Currency</div>
+              <div style="font-size: 11px; color: var(--muted);">Choose fiat display</div>
+            </div>
+            <div class="segment" id="currencyToggle" style="padding: 3px;">
+              <button class="active" data-currency="USD">USD</button>
+              <button data-currency="INR">INR</button>
+            </div>
           </div>
           <div class="settings-item" data-action="security">
             <div>
@@ -2049,6 +2118,8 @@
     const allocationAssetLabel = document.getElementById("allocationAssetLabel");
     const amountAssetLabel = document.getElementById("amountAssetLabel");
     const amountAssetUnit = document.getElementById("amountAssetUnit");
+    const amountFiatLabel = document.getElementById("amountFiatLabel");
+    const amountFiatUnit = document.getElementById("amountFiatUnit");
     const usdcNetworkLabel = document.getElementById("usdcNetworkLabel");
     const maticNetworkLabel = document.getElementById("maticNetworkLabel");
     const networkStatus = document.getElementById("networkStatus");
@@ -2062,6 +2133,8 @@
     const confirmGas = document.getElementById("confirmGas");
     const confirmTotal = document.getElementById("confirmTotal");
     const confirmTotalInr = document.getElementById("confirmTotalInr");
+    const confirmAmountFiatLabel = document.getElementById("confirmAmountFiatLabel");
+    const confirmTotalFiatLabel = document.getElementById("confirmTotalFiatLabel");
     const baseFee = document.getElementById("baseFee");
     const priorityFee = document.getElementById("priorityFee");
     const etaRow = document.getElementById("etaRow");
@@ -2072,6 +2145,8 @@
     const successNetwork = document.getElementById("successNetwork");
     const successFee = document.getElementById("successFee");
     const successTotalInr = document.getElementById("successTotalInr");
+    const successTotalLabel = document.getElementById("successTotalLabel");
+    const successTotalLabel = document.getElementById("successTotalLabel");
     const transactionList = document.getElementById("transactionList");
     const assetsPane = document.getElementById("assetsPane");
     const activityPane = document.getElementById("activityPane");
@@ -2090,6 +2165,7 @@
     const accountList = document.getElementById("accountList");
     const accountClose = document.getElementById("accountClose");
     const addAccount = document.getElementById("addAccount");
+    const currencyToggle = document.getElementById("currencyToggle");
     const accountSelector = document.getElementById("accountSelector");
     const scanModal = document.getElementById("scanModal");
     const scanTitle = document.getElementById("scanTitle");
@@ -2103,6 +2179,7 @@
     const txDetailStatus = document.getElementById("txDetailStatus");
     const txDetailAmount = document.getElementById("txDetailAmount");
     const txDetailAmountInr = document.getElementById("txDetailAmountInr");
+    const txDetailAmountLabel = document.getElementById("txDetailAmountLabel");
     const txDetailTo = document.getElementById("txDetailTo");
     const txDetailNetwork = document.getElementById("txDetailNetwork");
     const txDetailFee = document.getElementById("txDetailFee");
@@ -2129,9 +2206,9 @@
     const tabs = document.getElementById("tabBar");
     const tabButtons = document.querySelectorAll(".tab-btn");
     const assets = {
-      ETH: { name: "Ethereum", symbol: "ETH", icon: "Ξ", price: 240000, decimals: 4 },
-      USDC: { name: "USD Coin", symbol: "USDC", icon: "U", price: 83.0, decimals: 2 },
-      MATIC: { name: "Polygon", symbol: "MATIC", icon: "M", price: 84.5, decimals: 2 },
+      ETH: { name: "Ethereum", symbol: "ETH", icon: "Ξ", price: 2403.1, decimals: 4 },
+      USDC: { name: "USD Coin", symbol: "USDC", icon: "U", price: 1.0, decimals: 2 },
+      MATIC: { name: "Polygon", symbol: "MATIC", icon: "M", price: 0.78, decimals: 4 },
     };
     const gasRates = {
       slow: { base: 0.0026, priority: 0.0007, eta: "~2 minutes" },
@@ -2140,7 +2217,7 @@
     };
     const networks = ["Ethereum Mainnet", "Base Mainnet", "Arbitrum One"];
     const accounts = [
-      { id: "acc-1", name: "Account 1", address: "0x82a4c2f8b9f1aa9dd98c", balance: 3.4281, asset: "ETH", initials: "A1" },
+      { id: "acc-1", name: "Account 1", address: "0x82a4c2f8b9f1aa9dd98c", balance: 3.1418, asset: "ETH", initials: "A1" },
       { id: "acc-2", name: "Trading Vault", address: "0x41d9c7a1a233fa91c981", balance: 12450.75, asset: "USDC", initials: "TV" },
       { id: "acc-3", name: "Savings", address: "0x28f4c9e8d1b2a77f502e", balance: 3820.5, asset: "MATIC", initials: "SV" },
     ];
@@ -2194,10 +2271,25 @@
       const asset = getAsset(symbol);
       return `${value.toFixed(asset.decimals)} ${asset.symbol}`;
     };
-    const formatInr = (value) => `₹${value.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    const formatInrForAsset = (value, symbol = activeAssetSymbol) => formatInr(value * getAsset(symbol).price);
+    const currencyRates = {
+      USD: 1,
+      INR: 83,
+    };
+    const currencySymbols = {
+      USD: "$",
+      INR: "₹",
+    };
+    let selectedCurrency = "USD";
+    const formatFiat = (value) => {
+      const rate = currencyRates[selectedCurrency] || 1;
+      const locale = selectedCurrency === "INR" ? "en-IN" : "en-US";
+      const symbol = currencySymbols[selectedCurrency] || "$";
+      return `${symbol}${(value * rate).toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    };
+    const formatFiatForAsset = (value, symbol = activeAssetSymbol) => formatFiat(value * getAsset(symbol).price);
     const parseNumber = (value) => Number.parseFloat(String(value).replace(/[^\d.]/g, "")) || 0;
     const themeStorageKey = "walletTheme";
+    const currencyStorageKey = "walletCurrency";
 
     const applyTheme = (theme) => {
       const isDark = theme === "dark";
@@ -2216,6 +2308,30 @@
     const setTheme = (theme) => {
       applyTheme(theme);
       localStorage.setItem(themeStorageKey, theme);
+    };
+
+    const applyCurrency = (currency) => {
+      selectedCurrency = currency;
+      const label = currency === "INR" ? "INR" : "USD";
+      if (currencyToggle) {
+        currencyToggle.querySelectorAll("button").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.currency === currency);
+        });
+      }
+      if (amountFiatLabel) amountFiatLabel.textContent = `Amount (${label})`;
+      if (amountFiatUnit) amountFiatUnit.textContent = label;
+      if (confirmAmountFiatLabel) confirmAmountFiatLabel.textContent = `Amount (${label})`;
+      if (confirmTotalFiatLabel) confirmTotalFiatLabel.textContent = `Total (${label})`;
+      if (txDetailAmountLabel) txDetailAmountLabel.textContent = `Amount (${label})`;
+      if (successTotalLabel) successTotalLabel.textContent = `Total (${label})`;
+      updateAssetUI();
+      renderTransactions();
+      updateChartTooltip(selectedChartRange);
+    };
+
+    const setCurrency = (currency) => {
+      applyCurrency(currency);
+      localStorage.setItem(currencyStorageKey, currency);
     };
 
     const buildQrPayload = () => {
@@ -2243,12 +2359,13 @@
     const updateChartTooltip = (range, priceOverride) => {
       if (!chartTooltip) return;
       const priceMap = {
-        "1D": "₹2,40,000 · 1D",
-        "1W": "₹2,28,420 · 1W",
-        "1M": "₹2,18,900 · 1M",
-        "1Y": "₹1,98,300 · 1Y",
+        "1D": 2403.1,
+        "1W": 2284.2,
+        "1M": 2189.0,
+        "1Y": 1983.0,
       };
-      chartTooltip.textContent = priceOverride || priceMap[range] || "₹2,40,000";
+      const priceValue = priceOverride ?? priceMap[range] ?? 2403.1;
+      chartTooltip.textContent = `${formatFiat(priceValue)} · ${range}`;
     };
 
     const updateChartVolume = (range) => {
@@ -2267,9 +2384,9 @@
 
     const updateBalance = () => {
       balanceEth.textContent = formatAsset(availableBalance);
-      balanceInr.textContent = formatInrForAsset(availableBalance);
+      balanceInr.textContent = formatFiatForAsset(availableBalance);
       if (primaryTokenBalance) primaryTokenBalance.firstChild.textContent = formatAsset(availableBalance);
-      if (primaryTokenInr) primaryTokenInr.textContent = formatInrForAsset(availableBalance);
+      if (primaryTokenInr) primaryTokenInr.textContent = formatFiatForAsset(availableBalance);
     };
 
     const updateAssetUI = () => {
@@ -2282,7 +2399,7 @@
         primaryNetworkLabel.textContent = `${tokenNetworks[asset.symbol][tokenNetworkIndex[asset.symbol]]} · ${asset.symbol}`;
       }
       if (assetPriceLabel) {
-        assetPriceLabel.innerHTML = `${asset.symbol} price ${formatInr(asset.price)} today <strong>+2.3%</strong>`;
+        assetPriceLabel.innerHTML = `${asset.symbol} price ${formatFiat(asset.price)} today <strong>+2.3%</strong>`;
       }
       if (allocationAssetLabel) allocationAssetLabel.textContent = asset.symbol;
       if (amountAssetLabel) amountAssetLabel.textContent = asset.symbol;
@@ -2309,7 +2426,7 @@
           </div>
           <div style="text-align: right;">
             <div style="font-weight: 600;">${formatAsset(account.balance, account.asset)}</div>
-            <div style="color: var(--muted); font-size: 11px;">${formatInrForAsset(account.balance, account.asset)}</div>
+            <div style="color: var(--muted); font-size: 11px;">${formatFiatForAsset(account.balance, account.asset)}</div>
           </div>
         `;
         item.addEventListener("click", () => {
@@ -2319,7 +2436,10 @@
           walletAddress = account.address;
           updateAssetUI();
           if (accountSelector) {
-            accountSelector.childNodes[0].textContent = `${account.name} `;
+            const accountTitle = accountSelector.querySelector(".account-title");
+            const accountSubtitle = accountSelector.querySelector(".account-subtitle");
+            if (accountTitle) accountTitle.textContent = account.name;
+            if (accountSubtitle) accountSubtitle.textContent = "Primary account";
           }
           accountModal.classList.remove("active");
           showToast(`${account.name} selected`);
@@ -2387,7 +2507,7 @@
               <p>${counterparty} · ${feeLabel}</p>
             </div>
           </div>
-          <div class="amount">${amountPrefix}${tx.amount.toFixed(txAsset.decimals)} ${txAsset.symbol}<span>${formatInr(Math.abs(tx.amount) * txAsset.price)}</span></div>
+          <div class="amount">${amountPrefix}${tx.amount.toFixed(txAsset.decimals)} ${txAsset.symbol}<span>${formatFiat(Math.abs(tx.amount) * txAsset.price)}</span></div>
         `;
         txItem.addEventListener("click", () => {
           openTransactionModal(tx);
@@ -2415,8 +2535,10 @@
       const storedAmount = localStorage.getItem("walletLastAmount");
       const storedChart = localStorage.getItem("walletChartRange");
       const storedTokenNetworks = localStorage.getItem("walletTokenNetworks");
+      const storedCurrency = localStorage.getItem(currencyStorageKey);
       if (storedNetwork) networkIndex = Number.parseInt(storedNetwork, 10) || 0;
       if (storedSpeed) selectedSpeed = storedSpeed;
+      if (storedCurrency === "USD" || storedCurrency === "INR") selectedCurrency = storedCurrency;
       if (storedAddress && addressInput) addressInput.value = storedAddress;
       if (storedAmount && amountInput) amountInput.value = storedAmount;
       if (storedChart) selectedChartRange = storedChart;
@@ -2455,7 +2577,7 @@
     const updateGasEstimate = (speed) => {
       const rate = gasRates[speed] || gasRates.standard;
       const totalGas = rate.base + rate.priority;
-      gasInput.value = `${formatAsset(totalGas)} (${formatInrForAsset(totalGas)})`;
+      gasInput.value = `${formatAsset(totalGas)} (${formatFiatForAsset(totalGas)})`;
       confirmGas.textContent = formatAsset(totalGas);
       baseFee.textContent = formatAsset(rate.base);
       priorityFee.textContent = formatAsset(rate.priority);
@@ -2463,16 +2585,20 @@
     };
 
     const updateAmountHints = (assetValue) => {
-      if (amountHint) amountHint.textContent = `≈ ${formatInrForAsset(assetValue)}`;
-      if (amountInrInput) amountInrInput.value = (assetValue * getAsset(activeAssetSymbol).price).toFixed(2);
+      if (amountHint) amountHint.textContent = `≈ ${formatFiatForAsset(assetValue)}`;
+      if (amountInrInput) {
+        const rate = currencyRates[selectedCurrency] || 1;
+        const fiatValue = assetValue * getAsset(activeAssetSymbol).price * rate;
+        amountInrInput.value = fiatValue.toFixed(2);
+      }
     };
 
     const updateConfirmTotals = (assetValue, gasValue) => {
       confirmAmount.textContent = formatAsset(assetValue);
-      if (confirmAmountInr) confirmAmountInr.textContent = formatInrForAsset(assetValue);
+      if (confirmAmountInr) confirmAmountInr.textContent = formatFiatForAsset(assetValue);
       confirmGas.textContent = formatAsset(gasValue);
       confirmTotal.textContent = formatAsset(assetValue + gasValue);
-      if (confirmTotalInr) confirmTotalInr.textContent = formatInrForAsset(assetValue + gasValue);
+      if (confirmTotalInr) confirmTotalInr.textContent = formatFiatForAsset(assetValue + gasValue);
     };
 
     const updateRecipientPreview = (name, address, verified) => {
@@ -2511,7 +2637,7 @@
       const confirmations = tx.confirmations ?? 0;
       txDetailStatus.textContent = tx.status;
       txDetailAmount.textContent = `${tx.amount.toFixed(txAsset.decimals)} ${txAsset.symbol}`;
-      txDetailAmountInr.textContent = formatInr(Math.abs(tx.amount) * txAsset.price);
+      txDetailAmountInr.textContent = formatFiat(Math.abs(tx.amount) * txAsset.price);
       txDetailTo.textContent = tx.to || "0x82a4...d98c";
       txDetailNetwork.textContent = networks[networkIndex];
       txDetailFee.textContent = tx.fee ? `${formatAsset(tx.fee, txAsset.symbol)}` : formatAsset(0.0042, txAsset.symbol);
@@ -2603,7 +2729,7 @@
         successHash.textContent = txHash;
         successNetwork.textContent = networks[networkIndex];
         successFee.textContent = formatAsset(0);
-        successTotalInr.textContent = formatInrForAsset(amountValue);
+        successTotalInr.textContent = formatFiatForAsset(amountValue);
         successStatus.textContent = "Completed · 12/12 confirmations";
         successStatus.classList.add("completed");
         showScreen(successScreen);
@@ -2659,6 +2785,7 @@
     updateAssetUI();
     renderTransactions();
     updateChartRange(selectedChartRange);
+    applyCurrency(selectedCurrency);
     networkLabel.textContent = networks[networkIndex];
     if (networkStatus) networkStatus.textContent = `Network status: ${networkStatuses[networkIndex]}`;
     speedSelector?.querySelectorAll(".speed-btn").forEach((btn) => {
@@ -2718,7 +2845,7 @@
       const base = getAsset(activeAssetSymbol).price;
       const delta = (ratio - 0.5) * 12000;
       const price = Math.round(base + delta);
-      updateChartTooltip(selectedChartRange, `₹${price.toLocaleString("en-IN")} · ${selectedChartRange}`);
+      updateChartTooltip(selectedChartRange, price);
     });
     chartWidget?.addEventListener("mouseleave", () => {
       updateChartTooltip(selectedChartRange);
@@ -2823,7 +2950,7 @@
         successHash.textContent = txHash;
         successNetwork.textContent = networks[networkIndex];
         successFee.textContent = formatAsset(gasValue);
-        successTotalInr.textContent = formatInrForAsset(amountValue + gasValue);
+        successTotalInr.textContent = formatFiatForAsset(amountValue + gasValue);
         successStatus.textContent = "Pending · 0/12 confirmations";
         successStatus.classList.remove("completed");
         const newTx = {
@@ -2912,6 +3039,10 @@
           openModal("Swap assets", "Swap ETH to USDC with zero hidden fees and live pricing.", "Start swap");
           return;
         }
+        if (action === "bridge") {
+          openModal("Bridge assets", "Move assets across chains with a single secure transfer.", "Start bridge");
+          return;
+        }
         if (action === "scan") {
           openScanModal("scan");
           return;
@@ -2958,15 +3089,19 @@
       });
     });
 
-    const segmentControl = document.getElementById("segmentControl");
-    if (segmentControl) {
-      segmentControl.querySelectorAll("button").forEach((button) => {
+    const categoryTabs = document.getElementById("categoryTabs");
+    if (categoryTabs) {
+      categoryTabs.querySelectorAll("button").forEach((button) => {
         button.addEventListener("click", () => {
-          segmentControl.querySelectorAll("button").forEach((btn) => btn.classList.remove("active"));
+          categoryTabs.querySelectorAll("button").forEach((btn) => btn.classList.remove("active"));
           button.classList.add("active");
-          const isActivity = button.dataset.segment === "activity";
-          assetsPane.classList.toggle("hidden", isActivity);
-          activityPane.classList.toggle("hidden", !isActivity);
+          const category = button.dataset.category;
+          const isCrypto = category === "crypto";
+          assetsPane.classList.toggle("hidden", !isCrypto);
+          activityPane.classList.toggle("hidden", isCrypto);
+          if (!isCrypto) {
+            showToast(`${button.textContent} view loaded`);
+          }
         });
       });
     }
@@ -3046,8 +3181,9 @@
 
     amountInrInput?.addEventListener("input", () => {
       if (isSyncingAmount) return;
-      const inrValue = parseNumber(amountInrInput.value);
-      const assetValue = inrValue / getAsset(activeAssetSymbol).price;
+      const fiatValue = parseNumber(amountInrInput.value);
+      const rate = currencyRates[selectedCurrency] || 1;
+      const assetValue = (fiatValue / rate) / getAsset(activeAssetSymbol).price;
       isSyncingAmount = true;
       if (amountInput) amountInput.value = assetValue.toFixed(getAsset(activeAssetSymbol).decimals);
       updateAmountHints(assetValue);
@@ -3149,6 +3285,15 @@
       const nextTheme = document.body.dataset.theme === "dark" ? "light" : "dark";
       setTheme(nextTheme);
       showToast("Display preference saved");
+    });
+
+    currencyToggle?.querySelectorAll("button").forEach((button) => {
+      button.addEventListener("click", () => {
+        const currency = button.dataset.currency;
+        if (!currency) return;
+        setCurrency(currency);
+        showToast(`Currency set to ${currency}`);
+      });
     });
   </script>
 </body>
