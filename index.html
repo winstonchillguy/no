@@ -310,12 +310,18 @@
       width: 32px;
       height: 32px;
       border-radius: 12px;
-      border: 1px solid rgba(148, 163, 184, 0.2);
-      background: rgba(16, 24, 39, 0.9);
+      border: 1px solid var(--border);
+      background: var(--surface);
       display: grid;
       place-items: center;
       color: var(--text);
-      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35);
+      box-shadow: var(--shadow-sm);
+    }
+
+    body[data-theme="dark"] .icon-btn {
+      background: rgba(15, 21, 34, 0.9);
+      border-color: rgba(148, 163, 184, 0.2);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.45);
     }
 
     .icon-btn svg {
@@ -398,8 +404,9 @@
 
     .balance-sub {
       display: flex;
-      align-items: center;
-      gap: 10px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
       font-size: 12px;
       color: var(--muted);
     }
@@ -407,6 +414,11 @@
     .balance-sub strong {
       color: var(--text);
       font-weight: 600;
+    }
+
+    .balance-sub span {
+      color: var(--muted);
+      font-weight: 500;
     }
 
     .visually-hidden {
@@ -703,8 +715,9 @@
       width: 42px;
       height: 42px;
       border-radius: 50%;
-      display: grid;
-      place-items: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: #3d63ff;
       box-shadow: 0 14px 24px rgba(25, 62, 158, 0.4);
       color: #0b0f18;
@@ -714,6 +727,7 @@
       width: 20px;
       height: 20px;
       color: #0b0f18;
+      display: block;
     }
 
     .action-card span {
@@ -1595,9 +1609,10 @@
           </div>
         </div>
         <div class="balance-block">
-          <div class="balance-total" id="balanceInr">$15,392.75</div>
+          <div class="balance-total" id="balanceUsd">$7,545.73</div>
           <div class="balance-sub">
-            <strong id="balanceEth">2.5100 ETH</strong>
+            <strong id="balanceEth">3.1400 ETH</strong>
+            <span id="balanceInr">₹626,294.59</span>
           </div>
         </div>
         <div class="visually-hidden">
@@ -2044,6 +2059,7 @@
     const receiveScreen = document.getElementById("receiveScreen");
     const settingsScreen = document.getElementById("settingsScreen");
     const balanceEth = document.getElementById("balanceEth");
+    const balanceUsd = document.getElementById("balanceUsd");
     const balanceInr = document.getElementById("balanceInr");
     const primaryTokenBalance = document.getElementById("primaryTokenBalance");
     const primaryTokenInr = document.getElementById("primaryTokenInr");
@@ -2148,10 +2164,13 @@
     const toast = document.getElementById("toast");
     const tabs = document.getElementById("tabBar");
     const tabButtons = document.querySelectorAll(".tab-btn");
+    const fxRates = {
+      usdToInr: 83,
+    };
     const assets = {
-      ETH: { name: "Ethereum", symbol: "ETH", icon: "Ξ", price: 240000, decimals: 4 },
-      USDC: { name: "USD Coin", symbol: "USDC", icon: "U", price: 83.0, decimals: 2 },
-      MATIC: { name: "Polygon", symbol: "MATIC", icon: "M", price: 84.5, decimals: 2 },
+      ETH: { name: "Ethereum", symbol: "ETH", icon: "Ξ", priceUsd: 2403.1, priceInr: 2403.1 * fxRates.usdToInr, decimals: 4 },
+      USDC: { name: "USD Coin", symbol: "USDC", icon: "U", priceUsd: 1, priceInr: 1 * fxRates.usdToInr, decimals: 2 },
+      MATIC: { name: "Polygon", symbol: "MATIC", icon: "M", priceUsd: 1.02, priceInr: 1.02 * fxRates.usdToInr, decimals: 2 },
     };
     const gasRates = {
       slow: { base: 0.0026, priority: 0.0007, eta: "~2 minutes" },
@@ -2160,7 +2179,7 @@
     };
     const networks = ["Ethereum Mainnet", "Base Mainnet", "Arbitrum One"];
     const accounts = [
-      { id: "acc-1", name: "Account 1", address: "0x82a4c2f8b9f1aa9dd98c", balance: 3.4281, asset: "ETH", initials: "A1" },
+      { id: "acc-1", name: "Account 1", address: "0x82a4c2f8b9f1aa9dd98c", balance: 3.14, asset: "ETH", initials: "A1" },
       { id: "acc-2", name: "Trading Vault", address: "0x41d9c7a1a233fa91c981", balance: 12450.75, asset: "USDC", initials: "TV" },
       { id: "acc-3", name: "Savings", address: "0x28f4c9e8d1b2a77f502e", balance: 3820.5, asset: "MATIC", initials: "SV" },
     ];
@@ -2214,8 +2233,10 @@
       const asset = getAsset(symbol);
       return `${value.toFixed(asset.decimals)} ${asset.symbol}`;
     };
-    const formatInr = (value) => `$${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    const formatInrForAsset = (value, symbol = activeAssetSymbol) => formatInr(value * getAsset(symbol).price);
+    const formatUsd = (value) => `$${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const formatInr = (value) => `₹${value.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const formatUsdForAsset = (value, symbol = activeAssetSymbol) => formatUsd(value * getAsset(symbol).priceUsd);
+    const formatInrForAsset = (value, symbol = activeAssetSymbol) => formatInr(value * getAsset(symbol).priceInr);
     const parseNumber = (value) => Number.parseFloat(String(value).replace(/[^\d.]/g, "")) || 0;
     const themeStorageKey = "walletTheme";
 
@@ -2227,7 +2248,7 @@
       if (themeMeta) themeMeta.setAttribute("content", isDark ? "#0c101a" : "#f6f7fb");
     };
 
-    const getPreferredTheme = () => "dark";
+    const getPreferredTheme = () => localStorage.getItem(themeStorageKey) || "light";
 
     const setTheme = (theme) => {
       applyTheme(theme);
@@ -2283,6 +2304,7 @@
 
     const updateBalance = () => {
       balanceEth.textContent = formatAsset(availableBalance);
+      if (balanceUsd) balanceUsd.textContent = formatUsdForAsset(availableBalance);
       balanceInr.textContent = formatInrForAsset(availableBalance);
       if (primaryTokenBalance) primaryTokenBalance.firstChild.textContent = formatAsset(availableBalance);
       if (primaryTokenInr) primaryTokenInr.textContent = formatInrForAsset(availableBalance);
@@ -2298,7 +2320,7 @@
         primaryNetworkLabel.textContent = `${tokenNetworks[asset.symbol][tokenNetworkIndex[asset.symbol]]} · ${asset.symbol}`;
       }
       if (assetPriceLabel) {
-        assetPriceLabel.innerHTML = `${asset.symbol} price ${formatInr(asset.price)} today <strong>+2.3%</strong>`;
+        assetPriceLabel.innerHTML = `${asset.symbol} price ${formatUsd(asset.priceUsd)} today <strong>+2.3%</strong>`;
       }
       if (allocationAssetLabel) allocationAssetLabel.textContent = asset.symbol;
       if (amountAssetLabel) amountAssetLabel.textContent = asset.symbol;
@@ -2406,7 +2428,7 @@
               <p>${counterparty} · ${feeLabel}</p>
             </div>
           </div>
-          <div class="amount">${amountPrefix}${tx.amount.toFixed(txAsset.decimals)} ${txAsset.symbol}<span>${formatInr(Math.abs(tx.amount) * txAsset.price)}</span></div>
+          <div class="amount">${amountPrefix}${tx.amount.toFixed(txAsset.decimals)} ${txAsset.symbol}<span>${formatInr(Math.abs(tx.amount) * txAsset.priceInr)}</span></div>
         `;
         txItem.addEventListener("click", () => {
           openTransactionModal(tx);
@@ -2483,7 +2505,7 @@
 
     const updateAmountHints = (assetValue) => {
       if (amountHint) amountHint.textContent = `≈ ${formatInrForAsset(assetValue)}`;
-      if (amountInrInput) amountInrInput.value = (assetValue * getAsset(activeAssetSymbol).price).toFixed(2);
+      if (amountInrInput) amountInrInput.value = (assetValue * getAsset(activeAssetSymbol).priceInr).toFixed(2);
     };
 
     const updateConfirmTotals = (assetValue, gasValue) => {
@@ -2530,7 +2552,7 @@
       const confirmations = tx.confirmations ?? 0;
       txDetailStatus.textContent = tx.status;
       txDetailAmount.textContent = `${tx.amount.toFixed(txAsset.decimals)} ${txAsset.symbol}`;
-      txDetailAmountInr.textContent = formatInr(Math.abs(tx.amount) * txAsset.price);
+      txDetailAmountInr.textContent = formatInr(Math.abs(tx.amount) * txAsset.priceInr);
       txDetailTo.textContent = tx.to || "0x82a4...d98c";
       txDetailNetwork.textContent = networks[networkIndex];
       txDetailFee.textContent = tx.fee ? `${formatAsset(tx.fee, txAsset.symbol)}` : formatAsset(0.0042, txAsset.symbol);
@@ -2734,7 +2756,7 @@
     chartWidget?.addEventListener("mousemove", (event) => {
       const rect = chartWidget.getBoundingClientRect();
       const ratio = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
-      const base = getAsset(activeAssetSymbol).price;
+      const base = getAsset(activeAssetSymbol).priceUsd;
       const delta = (ratio - 0.5) * 12000;
       const price = Math.round(base + delta);
       updateChartTooltip(selectedChartRange, `$${price.toLocaleString("en-US")} · ${selectedChartRange}`);
@@ -3074,7 +3096,7 @@
     amountInrInput?.addEventListener("input", () => {
       if (isSyncingAmount) return;
       const inrValue = parseNumber(amountInrInput.value);
-      const assetValue = inrValue / getAsset(activeAssetSymbol).price;
+      const assetValue = inrValue / getAsset(activeAssetSymbol).priceInr;
       isSyncingAmount = true;
       if (amountInput) amountInput.value = assetValue.toFixed(getAsset(activeAssetSymbol).decimals);
       updateAmountHints(assetValue);
