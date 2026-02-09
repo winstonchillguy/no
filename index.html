@@ -310,17 +310,11 @@
       width: 32px;
       height: 32px;
       border-radius: 12px;
-      border: 1px solid var(--border);
-      background: var(--surface);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      background: rgba(16, 24, 39, 0.9);
       display: grid;
       place-items: center;
       color: var(--text);
-      box-shadow: 0 12px 26px rgba(24, 38, 65, 0.12);
-    }
-
-    body[data-theme="dark"] .icon-btn {
-      background: rgba(16, 24, 39, 0.9);
-      border-color: rgba(148, 163, 184, 0.2);
       box-shadow: 0 12px 26px rgba(0, 0, 0, 0.35);
     }
 
@@ -684,40 +678,6 @@
       background: var(--accent);
     }
 
-    .segment {
-      background: rgba(12, 18, 34, 0.04);
-      border-radius: 999px;
-      display: inline-flex;
-      gap: 6px;
-      padding: 4px;
-      box-shadow: inset 0 0 0 1px var(--border);
-    }
-
-    .segment button {
-      border: none;
-      background: transparent;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--muted);
-      transition: background var(--transition), color var(--transition);
-      cursor: pointer;
-    }
-
-    .category-tabs button.active {
-      color: var(--text);
-    }
-
-    body[data-theme="dark"] .segment {
-      background: rgba(15, 24, 40, 0.7);
-    }
-
-    body[data-theme="dark"] .segment button.active {
-      background: rgba(15, 24, 40, 0.95);
-      box-shadow: 0 6px 12px rgba(2, 4, 10, 0.6);
-    }
-
     .action-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -745,19 +705,15 @@
       border-radius: 50%;
       display: grid;
       place-items: center;
-      background: var(--accent);
-      box-shadow: 0 14px 24px rgba(79, 124, 255, 0.3);
-      color: #fff;
+      background: #3d63ff;
+      box-shadow: 0 14px 24px rgba(25, 62, 158, 0.4);
+      color: #0b0f18;
     }
 
     .action-card svg {
       width: 20px;
       height: 20px;
-      color: #fff;
-    }
-
-    body[data-theme="dark"] .action-icon {
-      box-shadow: 0 14px 24px rgba(25, 62, 158, 0.45);
+      color: #0b0f18;
     }
 
     .action-card span {
@@ -1510,7 +1466,7 @@
     }
   </style>
 </head>
-  <body>
+  <body data-theme="dark">
   <div class="phone">
     <div class="toast" id="toast">Transaction sent successfully</div>
     <div class="modal" id="actionModal">
@@ -1539,7 +1495,7 @@
         <div class="tx-detail-grid">
           <div class="tx-detail-row"><span>Status</span><span id="txDetailStatus">Pending</span></div>
           <div class="tx-detail-row"><span>Amount</span><span id="txDetailAmount">0.28 ETH</span></div>
-          <div class="tx-detail-row"><span id="txDetailAmountLabel">Amount (USD)</span><span id="txDetailAmountInr">$67,200.00</span></div>
+          <div class="tx-detail-row"><span>Amount (INR)</span><span id="txDetailAmountInr">₹67,200.00</span></div>
           <div class="tx-detail-row"><span>To</span><span id="txDetailTo">0x82a4...d98c</span></div>
           <div class="tx-detail-row"><span>Network</span><span id="txDetailNetwork">Ethereum Mainnet</span></div>
           <div class="tx-detail-row"><span>Gas fee</span><span id="txDetailFee">0.0042 ETH</span></div>
@@ -1639,9 +1595,9 @@
           </div>
         </div>
         <div class="balance-block">
-          <div class="balance-total" id="balanceInr">$0.00</div>
+          <div class="balance-total" id="balanceInr">$15,392.75</div>
           <div class="balance-sub">
-            <strong id="balanceEth">0.0000 ETH</strong>
+            <strong id="balanceEth">2.5100 ETH</strong>
           </div>
         </div>
         <div class="visually-hidden">
@@ -1701,21 +1657,6 @@
             </span>
             <span>Receive</span>
           </button>
-          <button class="action-card" data-nav="receive">
-            <span class="action-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 21V3"></path>
-                <path d="M17 16l-5 5-5-5"></path>
-              </svg>
-            </span>
-            <span>Receive</span>
-          </button>
-        </div>
-
-        <div class="category-tabs" id="categoryTabs">
-          <button class="active" data-category="crypto">Crypto</button>
-          <button data-category="nfts">NFTs</button>
-          <button data-category="defi">DeFi</button>
         </div>
 
         <div class="category-tabs" id="categoryTabs">
@@ -1731,10 +1672,10 @@
                 <div class="token-icon" id="primaryTokenIcon">Ξ</div>
                 <div>
                   <h4 id="primaryTokenName">Ethereum</h4>
-                  <p id="primaryNetworkLabel">Ethereum Mainnet · ETH</p>
+                  <p id="primaryNetworkLabel">2.5100 ETH</p>
                 </div>
               </div>
-              <div class="amount" id="primaryTokenBalance">0.0000 ETH<span id="primaryTokenInr">$0.00</span></div>
+              <div class="amount" id="primaryTokenBalance">3.4281 ETH<span id="primaryTokenInr">$4,131.25</span></div>
             </div>
             <div class="token-item">
               <div class="token-meta">
@@ -1871,14 +1812,14 @@
             <input type="text" id="amountInput" value="0.28" />
             <div class="input-unit" id="amountAssetUnit">ETH</div>
           </div>
-          <div class="input-hint" id="amountHint">≈ $0.00</div>
+          <div class="input-hint" id="amountHint">≈ ₹67,200.00</div>
           <button class="max-btn" type="button" data-action="max">Max</button>
         </div>
         <div class="form-group">
-          <label id="amountFiatLabel">Amount (USD)</label>
+          <label>Amount (INR)</label>
           <div class="input-row">
-            <input type="text" id="amountInrInput" value="0" />
-            <div class="input-unit" id="amountFiatUnit">USD</div>
+            <input type="text" id="amountInrInput" value="67200" />
+            <div class="input-unit">INR</div>
           </div>
         </div>
         <div class="form-group">
@@ -1892,7 +1833,7 @@
         </div>
         <div class="form-group">
           <label>Estimated gas fee</label>
-          <input type="text" id="gasInput" value="0.0042 ETH ($0.00)" />
+          <input type="text" id="gasInput" value="0.0042 ETH (₹1,008)" />
         </div>
         <div class="form-group">
           <label>Memo</label>
@@ -1918,8 +1859,8 @@
           <strong id="confirmAmount">0.28 ETH</strong>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 10px; color: var(--muted);">
-          <span id="confirmAmountFiatLabel">Amount (USD)</span>
-          <strong id="confirmAmountInr">$0.00</strong>
+          <span>Amount (INR)</span>
+          <strong id="confirmAmountInr">₹67,200.00</strong>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 10px;">
           <span>Network</span>
@@ -1938,8 +1879,8 @@
           <strong id="confirmTotal">0.2842 ETH</strong>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 16px; color: var(--muted);">
-          <span id="confirmTotalFiatLabel">Total (USD)</span>
-          <strong id="confirmTotalInr">$0.00</strong>
+          <span>Total (INR)</span>
+          <strong id="confirmTotalInr">₹68,208.00</strong>
         </div>
         <button class="primary-btn" id="processSend">Send now</button>
         <button class="secondary-btn" data-nav="send">Back</button>
@@ -1968,7 +1909,7 @@
         <div class="tx-detail-grid" style="margin: 16px 0;">
           <div class="tx-detail-row"><span>Network</span><span id="successNetwork">Ethereum Mainnet</span></div>
           <div class="tx-detail-row"><span>Gas paid</span><span id="successFee">0.0042 ETH</span></div>
-          <div class="tx-detail-row"><span id="successTotalLabel">Total (USD)</span><span id="successTotalInr">$68,208.00</span></div>
+          <div class="tx-detail-row"><span>Total (INR)</span><span id="successTotalInr">₹68,208.00</span></div>
         </div>
         <div style="font-size: 12px; color: var(--muted); word-break: break-all;">
           Tx Hash: <span id="successHash">0x97f9c4e1b0d8a0c4...aa93</span>
@@ -2022,16 +1963,6 @@
               <div style="font-size: 11px; color: var(--muted);">Adaptive theme</div>
             </div>
             <div class="toggle" id="darkToggle"></div>
-          </div>
-          <div class="settings-item">
-            <div>
-              <div style="font-size: 13px;">Currency</div>
-              <div style="font-size: 11px; color: var(--muted);">Choose fiat display</div>
-            </div>
-            <div class="segment" id="currencyToggle" style="padding: 3px;">
-              <button class="active" data-currency="USD">USD</button>
-              <button data-currency="INR">INR</button>
-            </div>
           </div>
           <div class="settings-item" data-action="security">
             <div>
@@ -2138,8 +2069,6 @@
     const allocationAssetLabel = document.getElementById("allocationAssetLabel");
     const amountAssetLabel = document.getElementById("amountAssetLabel");
     const amountAssetUnit = document.getElementById("amountAssetUnit");
-    const amountFiatLabel = document.getElementById("amountFiatLabel");
-    const amountFiatUnit = document.getElementById("amountFiatUnit");
     const usdcNetworkLabel = document.getElementById("usdcNetworkLabel");
     const maticNetworkLabel = document.getElementById("maticNetworkLabel");
     const networkStatus = document.getElementById("networkStatus");
@@ -2153,8 +2082,6 @@
     const confirmGas = document.getElementById("confirmGas");
     const confirmTotal = document.getElementById("confirmTotal");
     const confirmTotalInr = document.getElementById("confirmTotalInr");
-    const confirmAmountFiatLabel = document.getElementById("confirmAmountFiatLabel");
-    const confirmTotalFiatLabel = document.getElementById("confirmTotalFiatLabel");
     const baseFee = document.getElementById("baseFee");
     const priorityFee = document.getElementById("priorityFee");
     const etaRow = document.getElementById("etaRow");
@@ -2165,8 +2092,6 @@
     const successNetwork = document.getElementById("successNetwork");
     const successFee = document.getElementById("successFee");
     const successTotalInr = document.getElementById("successTotalInr");
-    const successTotalLabel = document.getElementById("successTotalLabel");
-    const successTotalLabel = document.getElementById("successTotalLabel");
     const transactionList = document.getElementById("transactionList");
     const assetsPane = document.getElementById("assetsPane");
     const activityPane = document.getElementById("activityPane");
@@ -2185,7 +2110,6 @@
     const accountList = document.getElementById("accountList");
     const accountClose = document.getElementById("accountClose");
     const addAccount = document.getElementById("addAccount");
-    const currencyToggle = document.getElementById("currencyToggle");
     const accountSelector = document.getElementById("accountSelector");
     const scanModal = document.getElementById("scanModal");
     const scanTitle = document.getElementById("scanTitle");
@@ -2199,7 +2123,6 @@
     const txDetailStatus = document.getElementById("txDetailStatus");
     const txDetailAmount = document.getElementById("txDetailAmount");
     const txDetailAmountInr = document.getElementById("txDetailAmountInr");
-    const txDetailAmountLabel = document.getElementById("txDetailAmountLabel");
     const txDetailTo = document.getElementById("txDetailTo");
     const txDetailNetwork = document.getElementById("txDetailNetwork");
     const txDetailFee = document.getElementById("txDetailFee");
@@ -2226,9 +2149,9 @@
     const tabs = document.getElementById("tabBar");
     const tabButtons = document.querySelectorAll(".tab-btn");
     const assets = {
-      ETH: { name: "Ethereum", symbol: "ETH", icon: "Ξ", price: 2403.1, decimals: 4 },
-      USDC: { name: "USD Coin", symbol: "USDC", icon: "U", price: 1.0, decimals: 2 },
-      MATIC: { name: "Polygon", symbol: "MATIC", icon: "M", price: 0.78, decimals: 4 },
+      ETH: { name: "Ethereum", symbol: "ETH", icon: "Ξ", price: 240000, decimals: 4 },
+      USDC: { name: "USD Coin", symbol: "USDC", icon: "U", price: 83.0, decimals: 2 },
+      MATIC: { name: "Polygon", symbol: "MATIC", icon: "M", price: 84.5, decimals: 2 },
     };
     const gasRates = {
       slow: { base: 0.0026, priority: 0.0007, eta: "~2 minutes" },
@@ -2237,7 +2160,7 @@
     };
     const networks = ["Ethereum Mainnet", "Base Mainnet", "Arbitrum One"];
     const accounts = [
-      { id: "acc-1", name: "Account 1", address: "0x82a4c2f8b9f1aa9dd98c", balance: 3.1418, asset: "ETH", initials: "A1" },
+      { id: "acc-1", name: "Account 1", address: "0x82a4c2f8b9f1aa9dd98c", balance: 3.4281, asset: "ETH", initials: "A1" },
       { id: "acc-2", name: "Trading Vault", address: "0x41d9c7a1a233fa91c981", balance: 12450.75, asset: "USDC", initials: "TV" },
       { id: "acc-3", name: "Savings", address: "0x28f4c9e8d1b2a77f502e", balance: 3820.5, asset: "MATIC", initials: "SV" },
     ];
@@ -2291,25 +2214,10 @@
       const asset = getAsset(symbol);
       return `${value.toFixed(asset.decimals)} ${asset.symbol}`;
     };
-    const currencyRates = {
-      USD: 1,
-      INR: 83,
-    };
-    const currencySymbols = {
-      USD: "$",
-      INR: "₹",
-    };
-    let selectedCurrency = "USD";
-    const formatFiat = (value) => {
-      const rate = currencyRates[selectedCurrency] || 1;
-      const locale = selectedCurrency === "INR" ? "en-IN" : "en-US";
-      const symbol = currencySymbols[selectedCurrency] || "$";
-      return `${symbol}${(value * rate).toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-    };
-    const formatFiatForAsset = (value, symbol = activeAssetSymbol) => formatFiat(value * getAsset(symbol).price);
+    const formatInr = (value) => `$${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const formatInrForAsset = (value, symbol = activeAssetSymbol) => formatInr(value * getAsset(symbol).price);
     const parseNumber = (value) => Number.parseFloat(String(value).replace(/[^\d.]/g, "")) || 0;
     const themeStorageKey = "walletTheme";
-    const currencyStorageKey = "walletCurrency";
 
     const applyTheme = (theme) => {
       const isDark = theme === "dark";
@@ -2324,30 +2232,6 @@
     const setTheme = (theme) => {
       applyTheme(theme);
       localStorage.setItem(themeStorageKey, theme);
-    };
-
-    const applyCurrency = (currency) => {
-      selectedCurrency = currency;
-      const label = currency === "INR" ? "INR" : "USD";
-      if (currencyToggle) {
-        currencyToggle.querySelectorAll("button").forEach((btn) => {
-          btn.classList.toggle("active", btn.dataset.currency === currency);
-        });
-      }
-      if (amountFiatLabel) amountFiatLabel.textContent = `Amount (${label})`;
-      if (amountFiatUnit) amountFiatUnit.textContent = label;
-      if (confirmAmountFiatLabel) confirmAmountFiatLabel.textContent = `Amount (${label})`;
-      if (confirmTotalFiatLabel) confirmTotalFiatLabel.textContent = `Total (${label})`;
-      if (txDetailAmountLabel) txDetailAmountLabel.textContent = `Amount (${label})`;
-      if (successTotalLabel) successTotalLabel.textContent = `Total (${label})`;
-      updateAssetUI();
-      renderTransactions();
-      updateChartTooltip(selectedChartRange);
-    };
-
-    const setCurrency = (currency) => {
-      applyCurrency(currency);
-      localStorage.setItem(currencyStorageKey, currency);
     };
 
     const buildQrPayload = () => {
@@ -2375,13 +2259,12 @@
     const updateChartTooltip = (range, priceOverride) => {
       if (!chartTooltip) return;
       const priceMap = {
-        "1D": 2403.1,
-        "1W": 2284.2,
-        "1M": 2189.0,
-        "1Y": 1983.0,
+        "1D": "$2,403.10 · 1D",
+        "1W": "$2,284.20 · 1W",
+        "1M": "$2,189.00 · 1M",
+        "1Y": "$1,983.00 · 1Y",
       };
-      const priceValue = priceOverride ?? priceMap[range] ?? 2403.1;
-      chartTooltip.textContent = `${formatFiat(priceValue)} · ${range}`;
+      chartTooltip.textContent = priceOverride || priceMap[range] || "$2,403.10";
     };
 
     const updateChartVolume = (range) => {
@@ -2400,9 +2283,9 @@
 
     const updateBalance = () => {
       balanceEth.textContent = formatAsset(availableBalance);
-      balanceInr.textContent = formatFiatForAsset(availableBalance);
+      balanceInr.textContent = formatInrForAsset(availableBalance);
       if (primaryTokenBalance) primaryTokenBalance.firstChild.textContent = formatAsset(availableBalance);
-      if (primaryTokenInr) primaryTokenInr.textContent = formatFiatForAsset(availableBalance);
+      if (primaryTokenInr) primaryTokenInr.textContent = formatInrForAsset(availableBalance);
     };
 
     const updateAssetUI = () => {
@@ -2415,7 +2298,7 @@
         primaryNetworkLabel.textContent = `${tokenNetworks[asset.symbol][tokenNetworkIndex[asset.symbol]]} · ${asset.symbol}`;
       }
       if (assetPriceLabel) {
-        assetPriceLabel.innerHTML = `${asset.symbol} price ${formatFiat(asset.price)} today <strong>+2.3%</strong>`;
+        assetPriceLabel.innerHTML = `${asset.symbol} price ${formatInr(asset.price)} today <strong>+2.3%</strong>`;
       }
       if (allocationAssetLabel) allocationAssetLabel.textContent = asset.symbol;
       if (amountAssetLabel) amountAssetLabel.textContent = asset.symbol;
@@ -2442,7 +2325,7 @@
           </div>
           <div style="text-align: right;">
             <div style="font-weight: 600;">${formatAsset(account.balance, account.asset)}</div>
-            <div style="color: var(--muted); font-size: 11px;">${formatFiatForAsset(account.balance, account.asset)}</div>
+            <div style="color: var(--muted); font-size: 11px;">${formatInrForAsset(account.balance, account.asset)}</div>
           </div>
         `;
         item.addEventListener("click", () => {
@@ -2523,7 +2406,7 @@
               <p>${counterparty} · ${feeLabel}</p>
             </div>
           </div>
-          <div class="amount">${amountPrefix}${tx.amount.toFixed(txAsset.decimals)} ${txAsset.symbol}<span>${formatFiat(Math.abs(tx.amount) * txAsset.price)}</span></div>
+          <div class="amount">${amountPrefix}${tx.amount.toFixed(txAsset.decimals)} ${txAsset.symbol}<span>${formatInr(Math.abs(tx.amount) * txAsset.price)}</span></div>
         `;
         txItem.addEventListener("click", () => {
           openTransactionModal(tx);
@@ -2551,10 +2434,8 @@
       const storedAmount = localStorage.getItem("walletLastAmount");
       const storedChart = localStorage.getItem("walletChartRange");
       const storedTokenNetworks = localStorage.getItem("walletTokenNetworks");
-      const storedCurrency = localStorage.getItem(currencyStorageKey);
       if (storedNetwork) networkIndex = Number.parseInt(storedNetwork, 10) || 0;
       if (storedSpeed) selectedSpeed = storedSpeed;
-      if (storedCurrency === "USD" || storedCurrency === "INR") selectedCurrency = storedCurrency;
       if (storedAddress && addressInput) addressInput.value = storedAddress;
       if (storedAmount && amountInput) amountInput.value = storedAmount;
       if (storedChart) selectedChartRange = storedChart;
@@ -2593,7 +2474,7 @@
     const updateGasEstimate = (speed) => {
       const rate = gasRates[speed] || gasRates.standard;
       const totalGas = rate.base + rate.priority;
-      gasInput.value = `${formatAsset(totalGas)} (${formatFiatForAsset(totalGas)})`;
+      gasInput.value = `${formatAsset(totalGas)} (${formatInrForAsset(totalGas)})`;
       confirmGas.textContent = formatAsset(totalGas);
       baseFee.textContent = formatAsset(rate.base);
       priorityFee.textContent = formatAsset(rate.priority);
@@ -2601,20 +2482,16 @@
     };
 
     const updateAmountHints = (assetValue) => {
-      if (amountHint) amountHint.textContent = `≈ ${formatFiatForAsset(assetValue)}`;
-      if (amountInrInput) {
-        const rate = currencyRates[selectedCurrency] || 1;
-        const fiatValue = assetValue * getAsset(activeAssetSymbol).price * rate;
-        amountInrInput.value = fiatValue.toFixed(2);
-      }
+      if (amountHint) amountHint.textContent = `≈ ${formatInrForAsset(assetValue)}`;
+      if (amountInrInput) amountInrInput.value = (assetValue * getAsset(activeAssetSymbol).price).toFixed(2);
     };
 
     const updateConfirmTotals = (assetValue, gasValue) => {
       confirmAmount.textContent = formatAsset(assetValue);
-      if (confirmAmountInr) confirmAmountInr.textContent = formatFiatForAsset(assetValue);
+      if (confirmAmountInr) confirmAmountInr.textContent = formatInrForAsset(assetValue);
       confirmGas.textContent = formatAsset(gasValue);
       confirmTotal.textContent = formatAsset(assetValue + gasValue);
-      if (confirmTotalInr) confirmTotalInr.textContent = formatFiatForAsset(assetValue + gasValue);
+      if (confirmTotalInr) confirmTotalInr.textContent = formatInrForAsset(assetValue + gasValue);
     };
 
     const updateRecipientPreview = (name, address, verified) => {
@@ -2653,7 +2530,7 @@
       const confirmations = tx.confirmations ?? 0;
       txDetailStatus.textContent = tx.status;
       txDetailAmount.textContent = `${tx.amount.toFixed(txAsset.decimals)} ${txAsset.symbol}`;
-      txDetailAmountInr.textContent = formatFiat(Math.abs(tx.amount) * txAsset.price);
+      txDetailAmountInr.textContent = formatInr(Math.abs(tx.amount) * txAsset.price);
       txDetailTo.textContent = tx.to || "0x82a4...d98c";
       txDetailNetwork.textContent = networks[networkIndex];
       txDetailFee.textContent = tx.fee ? `${formatAsset(tx.fee, txAsset.symbol)}` : formatAsset(0.0042, txAsset.symbol);
@@ -2745,7 +2622,7 @@
         successHash.textContent = txHash;
         successNetwork.textContent = networks[networkIndex];
         successFee.textContent = formatAsset(0);
-        successTotalInr.textContent = formatFiatForAsset(amountValue);
+        successTotalInr.textContent = formatInrForAsset(amountValue);
         successStatus.textContent = "Completed · 12/12 confirmations";
         successStatus.classList.add("completed");
         showScreen(successScreen);
@@ -2801,7 +2678,6 @@
     updateAssetUI();
     renderTransactions();
     updateChartRange(selectedChartRange);
-    applyCurrency(selectedCurrency);
     networkLabel.textContent = networks[networkIndex];
     if (networkStatus) networkStatus.textContent = `Network status: ${networkStatuses[networkIndex]}`;
     speedSelector?.querySelectorAll(".speed-btn").forEach((btn) => {
@@ -2861,7 +2737,7 @@
       const base = getAsset(activeAssetSymbol).price;
       const delta = (ratio - 0.5) * 12000;
       const price = Math.round(base + delta);
-      updateChartTooltip(selectedChartRange, price);
+      updateChartTooltip(selectedChartRange, `$${price.toLocaleString("en-US")} · ${selectedChartRange}`);
     });
     chartWidget?.addEventListener("mouseleave", () => {
       updateChartTooltip(selectedChartRange);
@@ -2966,7 +2842,7 @@
         successHash.textContent = txHash;
         successNetwork.textContent = networks[networkIndex];
         successFee.textContent = formatAsset(gasValue);
-        successTotalInr.textContent = formatFiatForAsset(amountValue + gasValue);
+        successTotalInr.textContent = formatInrForAsset(amountValue + gasValue);
         successStatus.textContent = "Pending · 0/12 confirmations";
         successStatus.classList.remove("completed");
         const newTx = {
@@ -3197,9 +3073,8 @@
 
     amountInrInput?.addEventListener("input", () => {
       if (isSyncingAmount) return;
-      const fiatValue = parseNumber(amountInrInput.value);
-      const rate = currencyRates[selectedCurrency] || 1;
-      const assetValue = (fiatValue / rate) / getAsset(activeAssetSymbol).price;
+      const inrValue = parseNumber(amountInrInput.value);
+      const assetValue = inrValue / getAsset(activeAssetSymbol).price;
       isSyncingAmount = true;
       if (amountInput) amountInput.value = assetValue.toFixed(getAsset(activeAssetSymbol).decimals);
       updateAmountHints(assetValue);
@@ -3301,15 +3176,6 @@
       const nextTheme = document.body.dataset.theme === "dark" ? "light" : "dark";
       setTheme(nextTheme);
       showToast("Display preference saved");
-    });
-
-    currencyToggle?.querySelectorAll("button").forEach((button) => {
-      button.addEventListener("click", () => {
-        const currency = button.dataset.currency;
-        if (!currency) return;
-        setCurrency(currency);
-        showToast(`Currency set to ${currency}`);
-      });
     });
   </script>
 </body>
