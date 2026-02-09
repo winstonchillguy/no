@@ -705,10 +705,8 @@
       cursor: pointer;
     }
 
-    .segment button.active {
-      background: var(--surface);
+    .category-tabs button.active {
       color: var(--text);
-      box-shadow: 0 6px 12px rgba(12, 18, 34, 0.08);
     }
 
     body[data-theme="dark"] .segment {
@@ -724,6 +722,7 @@
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 12px;
+      justify-items: center;
     }
 
     .action-card {
@@ -803,6 +802,10 @@
       cursor: pointer;
     }
 
+    .token-item:last-child {
+      border-bottom: none;
+    }
+
     body[data-theme="dark"] .token-item,
     body[data-theme="dark"] .transaction-item,
     body[data-theme="dark"] .card,
@@ -816,6 +819,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      flex: 1;
     }
 
     .token-icon {
@@ -1026,6 +1030,7 @@
       text-align: right;
       font-size: 13px;
       font-weight: 600;
+      min-width: 110px;
     }
 
     .amount span {
@@ -1696,6 +1701,21 @@
             </span>
             <span>Receive</span>
           </button>
+          <button class="action-card" data-nav="receive">
+            <span class="action-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 21V3"></path>
+                <path d="M17 16l-5 5-5-5"></path>
+              </svg>
+            </span>
+            <span>Receive</span>
+          </button>
+        </div>
+
+        <div class="category-tabs" id="categoryTabs">
+          <button class="active" data-category="crypto">Crypto</button>
+          <button data-category="nfts">NFTs</button>
+          <button data-category="defi">DeFi</button>
         </div>
 
         <div class="category-tabs" id="categoryTabs">
@@ -2299,11 +2319,7 @@
       if (themeMeta) themeMeta.setAttribute("content", isDark ? "#0c101a" : "#f6f7fb");
     };
 
-    const getPreferredTheme = () => {
-      const storedTheme = localStorage.getItem(themeStorageKey);
-      if (storedTheme === "dark" || storedTheme === "light") return storedTheme;
-      return window.matchMedia?.("(prefers-color-scheme: dark)")?.matches ? "dark" : "light";
-    };
+    const getPreferredTheme = () => "dark";
 
     const setTheme = (theme) => {
       applyTheme(theme);
