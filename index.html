@@ -730,10 +730,10 @@
       height: 18px;
       color: #0b0f18;
       display: block;
-      transform: translate(var(--icon-shift-x), var(--icon-shift-y));
+      transform: none;
     }
 
-    .action-card span {
+    .action-card .action-label {
       display: block;
       color: var(--text);
       font-size: 11px;
@@ -1633,7 +1633,7 @@
                 <path d="M5 12h14"></path>
               </svg>
             </span>
-            <span>Buy</span>
+            <span class="action-label">Buy</span>
           </button>
           <button class="action-card" data-action="swap">
             <span class="action-icon">
@@ -1644,7 +1644,7 @@
                 <path d="M3 16c2.2 2.3 5.4 3.5 8.7 3"></path>
               </svg>
             </span>
-            <span>Swap</span>
+            <span class="action-label">Swap</span>
           </button>
           <button class="action-card" data-action="bridge">
             <span class="action-icon">
@@ -1654,7 +1654,7 @@
                 <path d="M16 16l4-4-4-4"></path>
               </svg>
             </span>
-            <span>Bridge</span>
+            <span class="action-label">Bridge</span>
           </button>
           <button class="action-card" data-nav="send">
             <span class="action-icon">
@@ -1663,7 +1663,7 @@
                 <path d="M7 8l5-5 5 5"></path>
               </svg>
             </span>
-            <span>Send</span>
+            <span class="action-label">Send</span>
           </button>
           <button class="action-card" data-nav="receive">
             <span class="action-icon">
@@ -1672,7 +1672,7 @@
                 <path d="M17 16l-5 5-5-5"></path>
               </svg>
             </span>
-            <span>Receive</span>
+            <span class="action-label">Receive</span>
           </button>
         </div>
 
