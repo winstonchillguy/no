@@ -1621,7 +1621,7 @@
           <h2 id="primaryAssetName">Ethereum</h2>
           <button class="network-label" id="networkLabel">Ethereum Mainnet</button>
           <div class="network-status" id="networkStatus">Network status: Normal gas</div>
-          <span id="assetPriceLabel">ETH price $2,403.10 today <strong>+2.3%</strong></span>
+          <span id="assetPriceLabel">ETH price ₹2,40,000.00 today <strong>+2.3%</strong></span>
           <span id="allocationAssetLabel">ETH</span>
         </div>
 
@@ -1702,7 +1702,7 @@
                   <p>0.1394 BTC</p>
                 </div>
               </div>
-              <div class="amount">$3,207.53<span>0.1394 BTC</span></div>
+              <div class="amount">₹2,66,225.00<span>0.1394 BTC</span></div>
             </div>
             <div class="token-item">
               <div class="token-meta">
@@ -1712,7 +1712,7 @@
                   <p>922.1390 OP</p>
                 </div>
               </div>
-              <div class="amount">$2,720.31<span>922.1390 OP</span></div>
+              <div class="amount">₹2,25,786.00<span>922.1390 OP</span></div>
             </div>
             <div class="token-item">
               <div class="token-meta">
@@ -1722,7 +1722,7 @@
                   <p>1,323.4754 MATIC</p>
                 </div>
               </div>
-              <div class="amount">$1,614.64<span>1,323.4754 MATIC</span></div>
+              <div class="amount">₹1,34,015.00<span>1,323.4754 MATIC</span></div>
             </div>
             <div class="token-item">
               <div class="token-meta">
@@ -1732,7 +1732,7 @@
                   <p>61.2681 SOL</p>
                 </div>
               </div>
-              <div class="amount">$1,423.87<span>61.2681 SOL</span></div>
+              <div class="amount">₹1,18,181.00<span>61.2681 SOL</span></div>
             </div>
           </div>
         </div>
@@ -1830,6 +1830,7 @@
             <div class="input-unit" id="amountAssetUnit">ETH</div>
           </div>
           <div class="input-hint" id="amountHint">≈ ₹67,200.00</div>
+          <div class="input-hint" id="exactInrValue">Exact: ₹67,200.00000000</div>
           <button class="max-btn" type="button" data-action="max">Max</button>
         </div>
         <div class="form-group">
@@ -2067,6 +2068,7 @@
     const amountInput = document.getElementById("amountInput");
     const amountInrInput = document.getElementById("amountInrInput");
     const amountHint = document.getElementById("amountHint");
+    const exactInrValue = document.getElementById("exactInrValue");
     const addressInput = document.getElementById("addressInput");
     const recipientInput = document.getElementById("recipientInput");
     const recipientAvatar = document.getElementById("recipientAvatar");
@@ -2166,7 +2168,7 @@
     const tabs = document.getElementById("tabBar");
     const tabButtons = document.querySelectorAll(".tab-btn");
     const assets = {
-      ETH: { name: "Ethereum", symbol: "ETH", icon: "Ξ", price: 22222.54, decimals: 4 },
+      ETH: { name: "Ethereum", symbol: "ETH", icon: "Ξ", price: 240000, decimals: 4 },
       USDC: { name: "USD Coin", symbol: "USDC", icon: "U", price: 83.0, decimals: 2 },
       MATIC: { name: "Polygon", symbol: "MATIC", icon: "M", price: 84.5, decimals: 2 },
     };
@@ -2231,7 +2233,8 @@
       const asset = getAsset(symbol);
       return `${value.toFixed(asset.decimals)} ${asset.symbol}`;
     };
-    const formatInr = (value) => `$${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const formatInr = (value) => `₹${value.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const formatInrExact = (value) => `₹${value.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 8 })}`;
     const formatInrForAsset = (value, symbol = activeAssetSymbol) => formatInr(value * getAsset(symbol).price);
     const parseNumber = (value) => Number.parseFloat(String(value).replace(/[^\d.]/g, "")) || 0;
     const themeStorageKey = "walletTheme";
@@ -2276,12 +2279,12 @@
     const updateChartTooltip = (range, priceOverride) => {
       if (!chartTooltip) return;
       const priceMap = {
-        "1D": "$2,403.10 · 1D",
-        "1W": "$2,284.20 · 1W",
-        "1M": "$2,189.00 · 1M",
-        "1Y": "$1,983.00 · 1Y",
+        "1D": "₹2,40,310.00 · 1D",
+        "1W": "₹2,28,420.00 · 1W",
+        "1M": "₹2,18,900.00 · 1M",
+        "1Y": "₹1,98,300.00 · 1Y",
       };
-      chartTooltip.textContent = priceOverride || priceMap[range] || "$2,403.10";
+      chartTooltip.textContent = priceOverride || priceMap[range] || "₹2,40,310.00";
     };
 
     const updateChartVolume = (range) => {
@@ -2499,8 +2502,10 @@
     };
 
     const updateAmountHints = (assetValue) => {
-      if (amountHint) amountHint.textContent = `≈ ${formatInrForAsset(assetValue)}`;
-      if (amountInrInput) amountInrInput.value = (assetValue * getAsset(activeAssetSymbol).price).toFixed(2);
+      const convertedValue = assetValue * getAsset(activeAssetSymbol).price;
+      if (amountHint) amountHint.textContent = `≈ ${formatInr(convertedValue)}`;
+      if (exactInrValue) exactInrValue.textContent = `Exact: ${formatInrExact(convertedValue)}`;
+      if (amountInrInput) amountInrInput.value = convertedValue.toFixed(2);
     };
 
     const updateConfirmTotals = (assetValue, gasValue) => {
@@ -2754,7 +2759,7 @@
       const base = getAsset(activeAssetSymbol).price;
       const delta = (ratio - 0.5) * 12000;
       const price = Math.round(base + delta);
-      updateChartTooltip(selectedChartRange, `$${price.toLocaleString("en-US")} · ${selectedChartRange}`);
+      updateChartTooltip(selectedChartRange, `${formatInr(price)} · ${selectedChartRange}`);
     });
     chartWidget?.addEventListener("mouseleave", () => {
       updateChartTooltip(selectedChartRange);
