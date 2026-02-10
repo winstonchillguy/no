@@ -14,9 +14,9 @@
   <style>
     :root {
       color-scheme: light;
-      --bg: #f5f6fa;
-      --bg-alt: #eef1f7;
-      --bg-gradient: radial-gradient(circle at top, #dfe7ff 0%, #f6f7fb 50%, #eef1f7 100%);
+      --bg: #edf3ff;
+      --bg-alt: #e5eeff;
+      --bg-gradient: radial-gradient(circle at top, #d6e4ff 0%, #f8fbff 52%, #e7f0ff 100%);
       --card: #ffffff;
       --card-soft: rgba(255, 255, 255, 0.7);
       --surface: #ffffff;
@@ -24,7 +24,7 @@
       --text: #0c1222;
       --muted: #7b879f;
       --accent: #4f7cff;
-      --accent-2: #2cc28a;
+      --accent-2: #6ea0ff;
       --danger: #ff5a5f;
       --success: #24b47e;
       --warning: #f4a63a;
@@ -78,7 +78,7 @@
 
     .phone {
       width: min(393px, 100%);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, var(--bg-alt) 100%);
+      background: linear-gradient(180deg, #ffffff 0%, #f2f7ff 100%);
       border-radius: 34px;
       box-shadow: 0 40px 90px rgba(0, 0, 0, 0.18);
       overflow: hidden;
@@ -370,16 +370,16 @@
     }
 
     .hero-card {
-      background: linear-gradient(135deg, rgba(79, 124, 255, 0.12), rgba(44, 194, 138, 0.12));
+      background: linear-gradient(140deg, #ffffff 0%, #f6f9ff 58%, #ebf1ff 100%);
       border-radius: var(--radius);
       padding: 22px;
       box-shadow: var(--shadow);
-      border: 1px solid rgba(79, 124, 255, 0.2);
+      border: 1px solid rgba(79, 124, 255, 0.24);
       backdrop-filter: blur(8px);
     }
 
     body[data-theme="dark"] .hero-card {
-      background: linear-gradient(135deg, rgba(122, 162, 255, 0.18), rgba(68, 212, 163, 0.12));
+      background: linear-gradient(140deg, rgba(122, 162, 255, 0.2), rgba(39, 64, 122, 0.16));
       border-color: rgba(122, 162, 255, 0.28);
     }
 
@@ -449,7 +449,7 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: linear-gradient(135deg, rgba(79, 124, 255, 0.3), rgba(44, 194, 138, 0.3));
+      background: linear-gradient(135deg, rgba(79, 124, 255, 0.2), rgba(79, 124, 255, 0.42));
       display: grid;
       place-items: center;
       color: var(--accent);
@@ -625,8 +625,8 @@
       gap: 6px;
       margin-top: 8px;
       font-size: 11px;
-      color: var(--success);
-      background: rgba(36, 180, 126, 0.12);
+      color: var(--accent);
+      background: rgba(79, 124, 255, 0.12);
       padding: 4px 10px;
       border-radius: 999px;
     }
@@ -698,29 +698,16 @@
       gap: 6px;
       width: 100%;
       cursor: pointer;
-      --icon-shift-x: 0px;
-      --icon-shift-y: 0px;
     }
-
-    .action-card[data-action="swap"],
-    .action-card[data-action="bridge"] {
-      --icon-shift-x: 0.5px;
-    }
-
-    .action-card[data-nav="send"],
-    .action-card[data-nav="receive"] {
-      --icon-shift-y: 0.5px;
-    }
-
     .action-icon {
       width: 42px;
       height: 42px;
       border-radius: 50%;
       display: grid;
       place-items: center;
-      background: #3d63ff;
+      background: linear-gradient(145deg, #2f63ff, #5f8bff);
       box-shadow: 0 14px 24px rgba(25, 62, 158, 0.4);
-      color: #0b0f18;
+      color: #ffffff;
       line-height: 0;
       margin: 0 auto;
     }
@@ -728,7 +715,7 @@
     .action-card svg {
       width: 18px;
       height: 18px;
-      color: #0b0f18;
+      color: #ffffff;
       display: block;
       transform: none;
     }
@@ -801,19 +788,17 @@
       border-radius: 50%;
       display: grid;
       place-items: center;
-      font-size: 12px;
-      background: rgba(79, 124, 255, 0.2);
-      color: var(--text);
+      background: rgba(79, 124, 255, 0.12);
+      border: 1px solid rgba(79, 124, 255, 0.18);
+      overflow: hidden;
+      flex-shrink: 0;
     }
 
-    .token-icon.success {
-      background: rgba(244, 166, 58, 0.2);
-      color: #f5b45d;
-    }
-
-    .token-icon.warning {
-      background: rgba(255, 70, 70, 0.2);
-      color: #ff7b7f;
+    .token-logo {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      display: block;
     }
 
     .token-item h4 {
@@ -925,11 +910,16 @@
       gap: 10px;
     }
 
+    .input-row input {
+      flex: 1;
+      min-width: 0;
+    }
+
     .input-unit {
       font-size: 12px;
       color: var(--muted);
       background: rgba(12, 18, 34, 0.06);
-      border-radius: 10px;
+      border-radius: 11px;
       padding: 8px 10px;
       min-width: 64px;
       text-align: center;
@@ -945,7 +935,7 @@
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      margin-top: 10px;
+      margin-top: 12px;
     }
 
     .recipient-chip {
@@ -1103,6 +1093,125 @@
       -webkit-text-size-adjust: 100%;
     }
 
+    .form-group input:focus {
+      outline: none;
+      border-color: rgba(79, 124, 255, 0.52);
+      box-shadow: 0 0 0 4px rgba(79, 124, 255, 0.14);
+      background: var(--surface);
+    }
+
+    .send-section {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 13px;
+      margin-bottom: 12px;
+      box-shadow: 0 10px 24px rgba(26, 43, 86, 0.05);
+    }
+
+    .section-kicker {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .recipient-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .recipient-row .recipient-identity {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    .scan-inline-btn {
+      border: 1px solid rgba(79, 124, 255, 0.2);
+      background: rgba(79, 124, 255, 0.08);
+      color: var(--accent);
+      border-radius: 12px;
+      padding: 9px 11px;
+      font-size: 11px;
+      font-weight: 600;
+      min-width: 62px;
+    }
+
+    .balance-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .balance-row strong {
+      color: var(--text);
+      font-size: 12px;
+    }
+
+    .quick-amounts {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .quick-amount-btn {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      border-radius: 10px;
+      font-size: 11px;
+      padding: 9px 0;
+      font-weight: 600;
+    }
+
+    .quick-amount-btn.active {
+      border-color: rgba(79, 124, 255, 0.45);
+      color: var(--accent);
+      background: rgba(79, 124, 255, 0.08);
+    }
+
+    .field-status {
+      font-size: 11px;
+      margin-top: 6px;
+      color: var(--muted);
+    }
+
+    .field-status.warn {
+      color: var(--warning);
+    }
+
+    .send-summary {
+      background: linear-gradient(135deg, rgba(79, 124, 255, 0.12), rgba(79, 124, 255, 0.04));
+      border-radius: 14px;
+      border: 1px solid rgba(79, 124, 255, 0.18);
+      padding: 12px;
+      margin: 2px 0 14px;
+    }
+
+    .send-summary .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .send-summary .summary-row:last-child {
+      margin-bottom: 0;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 13px;
+    }
+
     .speed-selector {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -1160,6 +1269,13 @@
       font-size: 14px;
       margin-top: 8px;
       box-shadow: 0 12px 24px rgba(79, 124, 255, 0.25);
+    }
+
+    .primary-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
     }
 
     .secondary-btn {
@@ -1686,7 +1802,7 @@
           <div class="token-list">
             <div class="token-item">
               <div class="token-meta">
-                <div class="token-icon" id="primaryTokenIcon">Ξ</div>
+                <div class="token-icon" id="primaryTokenIcon"><img class="token-logo" src="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png" alt="Ethereum" /></div>
                 <div>
                   <h4 id="primaryTokenName">Ethereum</h4>
                   <p id="primaryNetworkLabel">2.5100 ETH</p>
@@ -1696,7 +1812,7 @@
             </div>
             <div class="token-item">
               <div class="token-meta">
-                <div class="token-icon success">₿</div>
+                <div class="token-icon"><img class="token-logo" src="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png" alt="Bitcoin" /></div>
                 <div>
                   <h4>Bitcoin</h4>
                   <p>0.1394 BTC</p>
@@ -1706,7 +1822,7 @@
             </div>
             <div class="token-item">
               <div class="token-meta">
-                <div class="token-icon warning">OP</div>
+                <div class="token-icon"><img class="token-logo" src="https://cryptologos.cc/logos/optimism-ethereum-op-logo.png?v=040" alt="Optimism" /></div>
                 <div>
                   <h4>Optimism</h4>
                   <p>922.1390 OP</p>
@@ -1716,7 +1832,7 @@
             </div>
             <div class="token-item">
               <div class="token-meta">
-                <div class="token-icon">M</div>
+                <div class="token-icon"><img class="token-logo" src="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/matic.png" alt="MATIC" /></div>
                 <div>
                   <h4>Matic</h4>
                   <p>1,323.4754 MATIC</p>
@@ -1726,7 +1842,7 @@
             </div>
             <div class="token-item">
               <div class="token-meta">
-                <div class="token-icon">S</div>
+                <div class="token-icon"><img class="token-logo" src="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/sol.png" alt="Solana" /></div>
                 <div>
                   <h4>Solana</h4>
                   <p>61.2681 SOL</p>
@@ -1799,60 +1915,91 @@
 
     <div class="screen hidden" id="sendScreen">
       <div class="card fade-up">
-        <h3 style="font-size: 18px; margin-bottom: 14px;">Send Ethereum</h3>
-        <div class="recipient-identity">
-          <div class="recipient-avatar" id="recipientAvatar">AK</div>
-          <div class="recipient-meta">
-            <h5 id="recipientDisplay">Arjun Kumar <span class="verified-pill">Verified</span></h5>
-            <p id="recipientAddress">0x4b29...a8d2</p>
+        <div class="send-section">
+          <div class="section-kicker">Recipient</div>
+          <div class="recipient-row">
+            <div class="recipient-identity">
+              <div class="recipient-avatar" id="recipientAvatar">AK</div>
+              <div class="recipient-meta">
+                <h5 id="recipientDisplay">Arjun Kumar <span class="verified-pill">Verified</span></h5>
+                <p id="recipientAddress">0x4b29...a8d2</p>
+              </div>
+            </div>
+            <button class="scan-inline-btn" type="button" data-action="scan">Scan</button>
+          </div>
+          <div class="risk-banner" id="riskBanner">
+            New address detected · Verify before sending
+          </div>
+          <div class="form-group">
+            <label>Recipient name</label>
+            <input type="text" id="recipientInput" placeholder="Name (optional)" />
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label>To address</label>
+            <input type="text" id="addressInput" value="0x82a4...d98c" />
+            <div class="recipient-list">
+              <button class="recipient-chip" type="button" data-address="0x4b29...a8d2" data-name="Arjun">Arjun</button>
+              <button class="recipient-chip" type="button" data-address="0x92f1...51b6" data-name="Neha">Neha</button>
+              <button class="recipient-chip" type="button" data-address="0x17c4...aa11" data-name="Studio">Studio</button>
+            </div>
+            <div class="field-status" id="recipientStatus">Verified recipient selected</div>
           </div>
         </div>
-        <div class="risk-banner" id="riskBanner">
-          New address detected · Verify before sending
-        </div>
-        <div class="form-group">
-          <label>Recipient name</label>
-          <input type="text" id="recipientInput" placeholder="Name (optional)" />
-        </div>
-        <div class="form-group">
-          <label>To address</label>
-          <input type="text" id="addressInput" value="0x82a4...d98c" />
-          <div class="recipient-list">
-            <button class="recipient-chip" type="button" data-address="0x4b29...a8d2" data-name="Arjun">Arjun</button>
-            <button class="recipient-chip" type="button" data-address="0x92f1...51b6" data-name="Neha">Neha</button>
-            <button class="recipient-chip" type="button" data-address="0x17c4...aa11" data-name="Studio">Studio</button>
+
+        <div class="send-section">
+          <div class="section-kicker">Amount</div>
+          <div class="balance-row">
+            <span>Available balance</span>
+            <strong id="sendAvailableBalance">3.1450 ETH</strong>
+          </div>
+          <div class="form-group">
+            <label>Amount (<span id="amountAssetLabel">ETH</span>)</label>
+            <div class="input-row">
+              <input type="text" id="amountInput" value="0.28" />
+              <div class="input-unit" id="amountAssetUnit">ETH</div>
+            </div>
+            <div class="input-hint" id="amountHint">≈ ₹67,200.00</div>
+            <div class="input-hint" id="exactInrValue">Exact: ₹67,200.00000000</div>
+            <div class="quick-amounts" id="quickAmounts">
+              <button class="quick-amount-btn" type="button" data-quick="0.1">10%</button>
+              <button class="quick-amount-btn" type="button" data-quick="0.25">25%</button>
+              <button class="quick-amount-btn" type="button" data-quick="0.5">50%</button>
+              <button class="quick-amount-btn" type="button" data-quick="1">Max</button>
+            </div>
+            <button class="max-btn" type="button" data-action="max">Use max</button>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label>Amount (INR)</label>
+            <div class="input-row">
+              <input type="text" id="amountInrInput" value="67200" />
+              <div class="input-unit">INR</div>
+            </div>
           </div>
         </div>
-        <div class="form-group">
-          <label>Amount (<span id="amountAssetLabel">ETH</span>)</label>
-          <div class="input-row">
-            <input type="text" id="amountInput" value="0.28" />
-            <div class="input-unit" id="amountAssetUnit">ETH</div>
+
+        <div class="send-section">
+          <div class="section-kicker">Network</div>
+          <div class="form-group">
+            <label>Speed</label>
+            <div class="speed-selector" id="speedSelector">
+              <button class="speed-btn" data-speed="slow">Slow</button>
+              <button class="speed-btn active" data-speed="standard">Standard</button>
+              <button class="speed-btn" data-speed="fast">Fast</button>
+            </div>
+            <div class="eta-row" id="etaRow">Estimated confirmation: ~45 seconds</div>
           </div>
-          <div class="input-hint" id="amountHint">≈ ₹67,200.00</div>
-          <div class="input-hint" id="exactInrValue">Exact: ₹67,200.00000000</div>
-          <button class="max-btn" type="button" data-action="max">Max</button>
-        </div>
-        <div class="form-group">
-          <label>Amount (INR)</label>
-          <div class="input-row">
-            <input type="text" id="amountInrInput" value="67200" />
-            <div class="input-unit">INR</div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label>Estimated gas fee</label>
+            <input type="text" id="gasInput" value="0.0042 ETH (₹1,008)" />
           </div>
         </div>
-        <div class="form-group">
-          <label>Speed</label>
-          <div class="speed-selector" id="speedSelector">
-            <button class="speed-btn" data-speed="slow">Slow</button>
-            <button class="speed-btn active" data-speed="standard">Standard</button>
-            <button class="speed-btn" data-speed="fast">Fast</button>
-          </div>
-          <div class="eta-row" id="etaRow">Estimated confirmation: ~45 seconds</div>
+
+        <div class="send-summary" id="sendSummary">
+          <div class="summary-row"><span>You send</span><span id="summaryAmount">0.2800 ETH</span></div>
+          <div class="summary-row"><span>Estimated fee</span><span id="summaryFee">0.0042 ETH</span></div>
+          <div class="summary-row"><span>Total debit</span><span id="summaryTotal">0.2842 ETH</span></div>
         </div>
-        <div class="form-group">
-          <label>Estimated gas fee</label>
-          <input type="text" id="gasInput" value="0.0042 ETH (₹1,008)" />
-        </div>
+
         <div class="form-group">
           <label>Memo</label>
           <input type="text" id="memoInput" placeholder="Add a note (optional)" />
@@ -2104,6 +2251,12 @@
     const baseFee = document.getElementById("baseFee");
     const priorityFee = document.getElementById("priorityFee");
     const etaRow = document.getElementById("etaRow");
+    const sendAvailableBalance = document.getElementById("sendAvailableBalance");
+    const recipientStatus = document.getElementById("recipientStatus");
+    const summaryAmount = document.getElementById("summaryAmount");
+    const summaryFee = document.getElementById("summaryFee");
+    const summaryTotal = document.getElementById("summaryTotal");
+    const quickAmounts = document.getElementById("quickAmounts");
     const successTitle = document.getElementById("successTitle");
     const successMessage = document.getElementById("successMessage");
     const successHash = document.getElementById("successHash");
@@ -2168,9 +2321,9 @@
     const tabs = document.getElementById("tabBar");
     const tabButtons = document.querySelectorAll(".tab-btn");
     const assets = {
-      ETH: { name: "Ethereum", symbol: "ETH", icon: "Ξ", price: 240000, decimals: 4 },
-      USDC: { name: "USD Coin", symbol: "USDC", icon: "U", price: 83.0, decimals: 2 },
-      MATIC: { name: "Polygon", symbol: "MATIC", icon: "M", price: 84.5, decimals: 2 },
+      ETH: { name: "Ethereum", symbol: "ETH", icon: "Ξ", logo: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png", price: 240000, decimals: 4 },
+      USDC: { name: "USD Coin", symbol: "USDC", icon: "U", logo: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdc.png", price: 83.0, decimals: 2 },
+      MATIC: { name: "Polygon", symbol: "MATIC", icon: "M", logo: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/matic.png", price: 84.5, decimals: 2 },
     };
     const gasRates = {
       slow: { base: 0.0026, priority: 0.0007, eta: "~2 minutes" },
@@ -2306,13 +2459,15 @@
       balanceInr.textContent = formatInrForAsset(availableBalance);
       if (primaryTokenBalance) primaryTokenBalance.firstChild.textContent = formatAsset(availableBalance);
       if (primaryTokenInr) primaryTokenInr.textContent = formatInrForAsset(availableBalance);
+      if (sendAvailableBalance) sendAvailableBalance.textContent = formatAsset(availableBalance);
+      updateSendSummary(parseNumber(amountInput?.value), parseNumber(gasInput?.value) || 0.0042);
     };
 
     const updateAssetUI = () => {
       const asset = getAsset(activeAssetSymbol);
       if (primaryAssetName) primaryAssetName.textContent = asset.name;
       if (primaryTokenName) primaryTokenName.textContent = asset.name;
-      if (primaryTokenIcon) primaryTokenIcon.textContent = asset.icon;
+      if (primaryTokenIcon) primaryTokenIcon.innerHTML = `<img class="token-logo" src="${asset.logo}" alt="${asset.name}" />`;
       if (primaryTokenNetworkButton) primaryTokenNetworkButton.dataset.token = asset.symbol;
       if (primaryNetworkLabel) {
         primaryNetworkLabel.textContent = `${tokenNetworks[asset.symbol][tokenNetworkIndex[asset.symbol]]} · ${asset.symbol}`;
@@ -2499,6 +2654,7 @@
       baseFee.textContent = formatAsset(rate.base);
       priorityFee.textContent = formatAsset(rate.priority);
       if (etaRow) etaRow.textContent = `Estimated confirmation: ${rate.eta}`;
+      updateSendSummary(parseNumber(amountInput?.value), totalGas);
     };
 
     const updateAmountHints = (assetValue) => {
@@ -2506,6 +2662,7 @@
       if (amountHint) amountHint.textContent = `≈ ${formatInr(convertedValue)}`;
       if (exactInrValue) exactInrValue.textContent = `Exact: ${formatInrExact(convertedValue)}`;
       if (amountInrInput) amountInrInput.value = convertedValue.toFixed(2);
+      updateSendSummary(assetValue, parseNumber(gasInput?.value) || 0.0042);
     };
 
     const updateConfirmTotals = (assetValue, gasValue) => {
@@ -2514,6 +2671,38 @@
       confirmGas.textContent = formatAsset(gasValue);
       confirmTotal.textContent = formatAsset(assetValue + gasValue);
       if (confirmTotalInr) confirmTotalInr.textContent = formatInrForAsset(assetValue + gasValue);
+    };
+
+    const updateSendSummary = (assetValue = parseNumber(amountInput?.value), gasValue = parseNumber(gasInput?.value) || 0.0042) => {
+      if (summaryAmount) summaryAmount.textContent = formatAsset(assetValue);
+      if (summaryFee) summaryFee.textContent = formatAsset(gasValue);
+      if (summaryTotal) summaryTotal.textContent = formatAsset(assetValue + gasValue);
+      if (sendAvailableBalance) sendAvailableBalance.textContent = formatAsset(availableBalance);
+    };
+
+    const validateSendForm = () => {
+      const amountValue = parseNumber(amountInput?.value);
+      const gasValue = parseNumber(gasInput?.value) || 0.0042;
+      const hasAddress = Boolean((addressInput?.value || "").trim());
+      const isAmountValid = amountValue > 0;
+      const hasBalance = amountValue + gasValue <= availableBalance;
+      const canProceed = hasAddress && isAmountValid && hasBalance;
+      const confirmButton = document.getElementById("confirmSend");
+      if (confirmButton) confirmButton.disabled = !canProceed;
+      if (recipientStatus) {
+        if (!hasAddress) {
+          recipientStatus.textContent = "Recipient address required";
+          recipientStatus.classList.add("warn");
+        } else if (!hasBalance && isAmountValid) {
+          recipientStatus.textContent = "Amount exceeds available balance";
+          recipientStatus.classList.add("warn");
+        } else {
+          recipientStatus.textContent = "Ready to review transaction";
+          recipientStatus.classList.remove("warn");
+        }
+      }
+      updateSendSummary(amountValue, gasValue);
+      return canProceed;
     };
 
     const updateRecipientPreview = (name, address, verified) => {
@@ -2708,6 +2897,8 @@
     updateRecipientPreview("Arjun Kumar", "0x4b29...a8d2", true);
     updateTokenNetworks();
     updateQrCode();
+    updateSendSummary();
+    validateSendForm();
 
     modalClose.addEventListener("click", closeModal);
     modalPrimary.addEventListener("click", () => {
@@ -2833,6 +3024,10 @@
       resetAutoLock();
       const amountValue = parseNumber(amountInput.value);
       const gasValue = parseNumber(gasInput.value) || 0.0042;
+      if (!validateSendForm()) {
+        showToast("Please complete recipient and amount details");
+        return;
+      }
       const recipientName = recipientInput?.value || "New recipient";
       const recipientAddr = addressInput?.value || "0x...";
       const isVerified = document.querySelector(`.recipient-chip[data-address="${recipientAddr}"]`) !== null;
@@ -2945,6 +3140,7 @@
         if (action === "max") {
           if (amountInput) amountInput.value = availableBalance.toFixed(getAsset(activeAssetSymbol).decimals);
           updateAmountHints(availableBalance);
+          validateSendForm();
           persistPreferences();
           showToast("Max amount applied");
           return;
@@ -3078,8 +3274,21 @@
         btn.classList.add("active");
         selectedSpeed = btn.dataset.speed;
         updateGasEstimate(selectedSpeed);
+        validateSendForm();
         persistPreferences();
         showToast(`Speed set to ${btn.dataset.speed}`);
+      });
+    });
+
+    quickAmounts?.querySelectorAll(".quick-amount-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const ratio = parseNumber(btn.dataset.quick);
+        const assetValue = ratio >= 1 ? availableBalance : availableBalance * ratio;
+        if (amountInput) amountInput.value = assetValue.toFixed(getAsset(activeAssetSymbol).decimals);
+        quickAmounts.querySelectorAll(".quick-amount-btn").forEach((chip) => chip.classList.remove("active"));
+        btn.classList.add("active");
+        updateAmountHints(assetValue);
+        validateSendForm();
       });
     });
 
@@ -3089,6 +3298,7 @@
       const assetValue = parseNumber(amountInput.value);
       isSyncingAmount = true;
       updateAmountHints(assetValue);
+      validateSendForm();
       persistPreferences();
       isSyncingAmount = false;
     });
@@ -3100,6 +3310,7 @@
       isSyncingAmount = true;
       if (amountInput) amountInput.value = assetValue.toFixed(getAsset(activeAssetSymbol).decimals);
       updateAmountHints(assetValue);
+      validateSendForm();
       persistPreferences();
       isSyncingAmount = false;
     });
@@ -3114,18 +3325,29 @@
       showToast("Receive note updated");
     });
 
-    addressInput?.addEventListener("input", persistPreferences);
-    recipientInput?.addEventListener("input", persistPreferences);
+    recipientInput?.addEventListener("input", () => {
+      persistPreferences();
+      validateSendForm();
+    });
     addressInput?.addEventListener("input", () => {
       persistPreferences();
       const matchedChip = document.querySelector(`.recipient-chip[data-address="${addressInput.value}"]`);
       if (matchedChip) {
         updateRecipientPreview(matchedChip.dataset.name, matchedChip.dataset.address, true);
         riskBanner?.classList.remove("active");
+        if (recipientStatus) {
+          recipientStatus.textContent = "Verified recipient selected";
+          recipientStatus.classList.remove("warn");
+        }
       } else {
         updateRecipientPreview(recipientInput?.value || "New recipient", addressInput.value, false);
         riskBanner?.classList.add("active");
+        if (recipientStatus) {
+          recipientStatus.textContent = "Unrecognized address — verify before continuing";
+          recipientStatus.classList.add("warn");
+        }
       }
+      validateSendForm();
     });
 
     document.querySelectorAll(".recipient-chip").forEach((chip) => {
@@ -3135,6 +3357,11 @@
         persistPreferences();
         updateRecipientPreview(chip.dataset.name, chip.dataset.address, true);
         riskBanner?.classList.remove("active");
+        if (recipientStatus) {
+          recipientStatus.textContent = "Verified recipient selected";
+          recipientStatus.classList.remove("warn");
+        }
+        validateSendForm();
         showToast(`Recipient set to ${chip.dataset.name}`);
       });
     });
