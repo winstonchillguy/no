@@ -1830,6 +1830,7 @@
             <div class="input-unit" id="amountAssetUnit">ETH</div>
           </div>
           <div class="input-hint" id="amountHint">≈ ₹67,200.00</div>
+          <div class="input-hint" id="exactInrValue">Exact: ₹67,200.00000000</div>
           <button class="max-btn" type="button" data-action="max">Max</button>
         </div>
         <div class="form-group">
@@ -2067,6 +2068,7 @@
     const amountInput = document.getElementById("amountInput");
     const amountInrInput = document.getElementById("amountInrInput");
     const amountHint = document.getElementById("amountHint");
+    const exactInrValue = document.getElementById("exactInrValue");
     const addressInput = document.getElementById("addressInput");
     const recipientInput = document.getElementById("recipientInput");
     const recipientAvatar = document.getElementById("recipientAvatar");
@@ -2231,7 +2233,8 @@
       const asset = getAsset(symbol);
       return `${value.toFixed(asset.decimals)} ${asset.symbol}`;
     };
-    const formatInr = (value) => `$${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const formatInr = (value) => `₹${value.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const formatInrExact = (value) => `₹${value.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 8 })}`;
     const formatInrForAsset = (value, symbol = activeAssetSymbol) => formatInr(value * getAsset(symbol).price);
     const parseNumber = (value) => Number.parseFloat(String(value).replace(/[^\d.]/g, "")) || 0;
     const themeStorageKey = "walletTheme";
@@ -2499,8 +2502,10 @@
     };
 
     const updateAmountHints = (assetValue) => {
-      if (amountHint) amountHint.textContent = `≈ ${formatInrForAsset(assetValue)}`;
-      if (amountInrInput) amountInrInput.value = (assetValue * getAsset(activeAssetSymbol).price).toFixed(2);
+      const convertedValue = assetValue * getAsset(activeAssetSymbol).price;
+      if (amountHint) amountHint.textContent = `≈ ${formatInr(convertedValue)}`;
+      if (exactInrValue) exactInrValue.textContent = `Exact: ${formatInrExact(convertedValue)}`;
+      if (amountInrInput) amountInrInput.value = convertedValue.toFixed(2);
     };
 
     const updateConfirmTotals = (assetValue, gasValue) => {
