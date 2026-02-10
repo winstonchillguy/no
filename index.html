@@ -14,9 +14,9 @@
   <style>
     :root {
       color-scheme: light;
-      --bg: #f5f6fa;
-      --bg-alt: #eef1f7;
-      --bg-gradient: radial-gradient(circle at top, #dfe7ff 0%, #f6f7fb 50%, #eef1f7 100%);
+      --bg: #edf3ff;
+      --bg-alt: #e5eeff;
+      --bg-gradient: radial-gradient(circle at top, #d6e4ff 0%, #f8fbff 52%, #e7f0ff 100%);
       --card: #ffffff;
       --card-soft: rgba(255, 255, 255, 0.7);
       --surface: #ffffff;
@@ -24,7 +24,7 @@
       --text: #0c1222;
       --muted: #7b879f;
       --accent: #4f7cff;
-      --accent-2: #2cc28a;
+      --accent-2: #6ea0ff;
       --danger: #ff5a5f;
       --success: #24b47e;
       --warning: #f4a63a;
@@ -78,7 +78,7 @@
 
     .phone {
       width: min(393px, 100%);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, var(--bg-alt) 100%);
+      background: linear-gradient(180deg, #ffffff 0%, #f2f7ff 100%);
       border-radius: 34px;
       box-shadow: 0 40px 90px rgba(0, 0, 0, 0.18);
       overflow: hidden;
@@ -370,16 +370,16 @@
     }
 
     .hero-card {
-      background: linear-gradient(135deg, rgba(79, 124, 255, 0.12), rgba(44, 194, 138, 0.12));
+      background: linear-gradient(140deg, #ffffff 0%, #f6f9ff 58%, #ebf1ff 100%);
       border-radius: var(--radius);
       padding: 22px;
       box-shadow: var(--shadow);
-      border: 1px solid rgba(79, 124, 255, 0.2);
+      border: 1px solid rgba(79, 124, 255, 0.24);
       backdrop-filter: blur(8px);
     }
 
     body[data-theme="dark"] .hero-card {
-      background: linear-gradient(135deg, rgba(122, 162, 255, 0.18), rgba(68, 212, 163, 0.12));
+      background: linear-gradient(140deg, rgba(122, 162, 255, 0.2), rgba(39, 64, 122, 0.16));
       border-color: rgba(122, 162, 255, 0.28);
     }
 
@@ -449,7 +449,7 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: linear-gradient(135deg, rgba(79, 124, 255, 0.3), rgba(44, 194, 138, 0.3));
+      background: linear-gradient(135deg, rgba(79, 124, 255, 0.2), rgba(79, 124, 255, 0.42));
       display: grid;
       place-items: center;
       color: var(--accent);
@@ -625,8 +625,8 @@
       gap: 6px;
       margin-top: 8px;
       font-size: 11px;
-      color: var(--success);
-      background: rgba(36, 180, 126, 0.12);
+      color: var(--accent);
+      background: rgba(79, 124, 255, 0.12);
       padding: 4px 10px;
       border-radius: 999px;
     }
@@ -698,29 +698,16 @@
       gap: 6px;
       width: 100%;
       cursor: pointer;
-      --icon-shift-x: 0px;
-      --icon-shift-y: 0px;
     }
-
-    .action-card[data-action="swap"],
-    .action-card[data-action="bridge"] {
-      --icon-shift-x: 0.5px;
-    }
-
-    .action-card[data-nav="send"],
-    .action-card[data-nav="receive"] {
-      --icon-shift-y: 0.5px;
-    }
-
     .action-icon {
       width: 42px;
       height: 42px;
       border-radius: 50%;
       display: grid;
       place-items: center;
-      background: #3d63ff;
+      background: linear-gradient(145deg, #2f63ff, #5f8bff);
       box-shadow: 0 14px 24px rgba(25, 62, 158, 0.4);
-      color: #0b0f18;
+      color: #ffffff;
       line-height: 0;
       margin: 0 auto;
     }
@@ -728,7 +715,7 @@
     .action-card svg {
       width: 18px;
       height: 18px;
-      color: #0b0f18;
+      color: #ffffff;
       display: block;
       transform: none;
     }
@@ -925,11 +912,16 @@
       gap: 10px;
     }
 
+    .input-row input {
+      flex: 1;
+      min-width: 0;
+    }
+
     .input-unit {
       font-size: 12px;
       color: var(--muted);
       background: rgba(12, 18, 34, 0.06);
-      border-radius: 10px;
+      border-radius: 11px;
       padding: 8px 10px;
       min-width: 64px;
       text-align: center;
@@ -945,7 +937,7 @@
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      margin-top: 10px;
+      margin-top: 12px;
     }
 
     .recipient-chip {
@@ -1112,36 +1104,49 @@
 
     .send-header {
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: flex-start;
+      width: 100%;
       margin-bottom: 14px;
+      background: linear-gradient(145deg, #ffffff 0%, #f2f6ff 100%);
+      border-radius: 16px;
+      border: 1px solid rgba(79, 124, 255, 0.18);
+      padding: 12px 14px;
+      box-shadow: var(--shadow-sm);
       gap: 12px;
     }
 
-    .send-header p {
-      margin-top: 6px;
-      font-size: 12px;
+    .send-title h3 {
+      font-size: 17px;
+      margin-bottom: 4px;
+    }
+
+    .send-title p {
+      font-size: 11px;
       color: var(--muted);
     }
 
-    .secure-pill {
+    .network-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      font-size: 11px;
-      background: rgba(36, 180, 126, 0.14);
-      color: var(--success);
       border-radius: 999px;
+      background: rgba(79, 124, 255, 0.13);
+      color: var(--accent);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
       padding: 6px 10px;
       white-space: nowrap;
     }
 
     .send-section {
-      background: rgba(12, 18, 34, 0.02);
+      background: #ffffff;
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 12px;
+      padding: 13px;
       margin-bottom: 12px;
+      box-shadow: 0 10px 24px rgba(26, 43, 86, 0.05);
     }
 
     .section-kicker {
@@ -1151,6 +1156,30 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       font-weight: 600;
+    }
+
+    .recipient-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .recipient-row .recipient-identity {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    .scan-inline-btn {
+      border: 1px solid rgba(79, 124, 255, 0.2);
+      background: rgba(79, 124, 255, 0.08);
+      color: var(--accent);
+      border-radius: 12px;
+      padding: 9px 11px;
+      font-size: 11px;
+      font-weight: 600;
+      min-width: 62px;
     }
 
     .balance-row {
@@ -1180,7 +1209,7 @@
       color: var(--muted);
       border-radius: 10px;
       font-size: 11px;
-      padding: 8px 0;
+      padding: 9px 0;
       font-weight: 600;
     }
 
@@ -1201,7 +1230,7 @@
     }
 
     .send-summary {
-      background: linear-gradient(135deg, rgba(79, 124, 255, 0.12), rgba(44, 194, 138, 0.08));
+      background: linear-gradient(135deg, rgba(79, 124, 255, 0.12), rgba(79, 124, 255, 0.04));
       border-radius: 14px;
       border: 1px solid rgba(79, 124, 255, 0.18);
       padding: 12px;
@@ -1927,21 +1956,24 @@
     <div class="screen hidden" id="sendScreen">
       <div class="card fade-up">
         <div class="send-header">
-          <div>
-            <h3 style="font-size: 18px;">Send Ethereum</h3>
-            <p>Fast, secure, and transparent transfers</p>
+          <div class="send-title">
+            <h3>Send crypto</h3>
+            <p>Mainnet transfer · White-list protected</p>
           </div>
-          <div class="secure-pill">✓ Secure</div>
+          <div class="network-pill">🔒 Ethereum</div>
         </div>
 
         <div class="send-section">
           <div class="section-kicker">Recipient</div>
-          <div class="recipient-identity">
-            <div class="recipient-avatar" id="recipientAvatar">AK</div>
-            <div class="recipient-meta">
-              <h5 id="recipientDisplay">Arjun Kumar <span class="verified-pill">Verified</span></h5>
-              <p id="recipientAddress">0x4b29...a8d2</p>
+          <div class="recipient-row">
+            <div class="recipient-identity">
+              <div class="recipient-avatar" id="recipientAvatar">AK</div>
+              <div class="recipient-meta">
+                <h5 id="recipientDisplay">Arjun Kumar <span class="verified-pill">Verified</span></h5>
+                <p id="recipientAddress">0x4b29...a8d2</p>
+              </div>
             </div>
+            <button class="scan-inline-btn" type="button" data-action="scan">Scan</button>
           </div>
           <div class="risk-banner" id="riskBanner">
             New address detected · Verify before sending
