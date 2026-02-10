@@ -1172,6 +1172,106 @@
       margin-top: 8px;
     }
 
+    .send-card {
+      border-radius: 28px;
+      padding: 18px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.78));
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(20px) saturate(140%);
+      box-shadow: 0 18px 44px rgba(15, 23, 42, 0.12);
+    }
+
+    body[data-theme="dark"] .send-card {
+      background: linear-gradient(180deg, rgba(18, 26, 42, 0.96), rgba(15, 22, 36, 0.88));
+      border-color: rgba(148, 163, 184, 0.2);
+      box-shadow: 0 24px 48px rgba(1, 4, 10, 0.55);
+    }
+
+    .send-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .send-header h3 {
+      font-size: 20px;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+    }
+
+    .send-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .apple-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: var(--accent);
+      background: rgba(79, 124, 255, 0.14);
+      border: 1px solid rgba(79, 124, 255, 0.25);
+    }
+
+    .send-section {
+      background: rgba(255, 255, 255, 0.68);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 20px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    body[data-theme="dark"] .send-section {
+      background: rgba(15, 23, 38, 0.82);
+      border-color: rgba(148, 163, 184, 0.18);
+    }
+
+    .send-section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .send-card .form-group {
+      margin-bottom: 12px;
+    }
+
+    .send-card .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .send-card .form-group input {
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.86);
+      border-color: rgba(148, 163, 184, 0.28);
+    }
+
+    body[data-theme="dark"] .send-card .form-group input {
+      background: rgba(9, 15, 24, 0.88);
+      border-color: rgba(148, 163, 184, 0.22);
+    }
+
+    .send-card .input-unit {
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    .send-card .max-btn {
+      margin-top: 8px;
+    }
+
+    .send-actions {
+      margin-top: 8px;
+      display: grid;
+      gap: 8px;
+    }
+
     .qr-box {
       background: rgba(12, 18, 34, 0.04);
       border-radius: 18px;
@@ -1621,7 +1721,7 @@
           <h2 id="primaryAssetName">Ethereum</h2>
           <button class="network-label" id="networkLabel">Ethereum Mainnet</button>
           <div class="network-status" id="networkStatus">Network status: Normal gas</div>
-          <span id="assetPriceLabel">ETH price $2,403.10 today <strong>+2.3%</strong></span>
+          <span id="assetPriceLabel">ETH price ₹2,40,000.00 today <strong>+2.3%</strong></span>
           <span id="allocationAssetLabel">ETH</span>
         </div>
 
@@ -1702,7 +1802,7 @@
                   <p>0.1394 BTC</p>
                 </div>
               </div>
-              <div class="amount">$3,207.53<span>0.1394 BTC</span></div>
+              <div class="amount">₹2,66,225.00<span>0.1394 BTC</span></div>
             </div>
             <div class="token-item">
               <div class="token-meta">
@@ -1712,7 +1812,7 @@
                   <p>922.1390 OP</p>
                 </div>
               </div>
-              <div class="amount">$2,720.31<span>922.1390 OP</span></div>
+              <div class="amount">₹2,25,786.00<span>922.1390 OP</span></div>
             </div>
             <div class="token-item">
               <div class="token-meta">
@@ -1722,7 +1822,7 @@
                   <p>1,323.4754 MATIC</p>
                 </div>
               </div>
-              <div class="amount">$1,614.64<span>1,323.4754 MATIC</span></div>
+              <div class="amount">₹1,34,015.00<span>1,323.4754 MATIC</span></div>
             </div>
             <div class="token-item">
               <div class="token-meta">
@@ -1732,7 +1832,7 @@
                   <p>61.2681 SOL</p>
                 </div>
               </div>
-              <div class="amount">$1,423.87<span>61.2681 SOL</span></div>
+              <div class="amount">₹1,18,181.00<span>61.2681 SOL</span></div>
             </div>
           </div>
         </div>
@@ -1798,66 +1898,88 @@
     </div>
 
     <div class="screen hidden" id="sendScreen">
-      <div class="card fade-up">
-        <h3 style="font-size: 18px; margin-bottom: 14px;">Send Ethereum</h3>
-        <div class="recipient-identity">
-          <div class="recipient-avatar" id="recipientAvatar">AK</div>
-          <div class="recipient-meta">
-            <h5 id="recipientDisplay">Arjun Kumar <span class="verified-pill">Verified</span></h5>
-            <p id="recipientAddress">0x4b29...a8d2</p>
+      <div class="card fade-up send-card">
+        <div class="send-header">
+          <div>
+            <h3>Send <span id="sendAssetLabel">Ethereum</span></h3>
+            <p class="send-subtitle">Fast, secure, and clear like iPhone Wallet.</p>
+          </div>
+          <span class="apple-badge">iOS style</span>
+        </div>
+
+        <div class="send-section">
+          <div class="send-section-title">Recipient</div>
+          <div class="recipient-identity">
+            <div class="recipient-avatar" id="recipientAvatar">AK</div>
+            <div class="recipient-meta">
+              <h5 id="recipientDisplay">Arjun Kumar <span class="verified-pill">Verified</span></h5>
+              <p id="recipientAddress">0x4b29...a8d2</p>
+            </div>
+          </div>
+          <div class="risk-banner" id="riskBanner">
+            New address detected · Verify before sending
+          </div>
+          <div class="form-group">
+            <label>Recipient name</label>
+            <input type="text" id="recipientInput" placeholder="Name (optional)" />
+          </div>
+          <div class="form-group">
+            <label>To address</label>
+            <input type="text" id="addressInput" value="0x82a4...d98c" />
+            <div class="recipient-list">
+              <button class="recipient-chip" type="button" data-address="0x4b29...a8d2" data-name="Arjun">Arjun</button>
+              <button class="recipient-chip" type="button" data-address="0x92f1...51b6" data-name="Neha">Neha</button>
+              <button class="recipient-chip" type="button" data-address="0x17c4...aa11" data-name="Studio">Studio</button>
+            </div>
           </div>
         </div>
-        <div class="risk-banner" id="riskBanner">
-          New address detected · Verify before sending
-        </div>
-        <div class="form-group">
-          <label>Recipient name</label>
-          <input type="text" id="recipientInput" placeholder="Name (optional)" />
-        </div>
-        <div class="form-group">
-          <label>To address</label>
-          <input type="text" id="addressInput" value="0x82a4...d98c" />
-          <div class="recipient-list">
-            <button class="recipient-chip" type="button" data-address="0x4b29...a8d2" data-name="Arjun">Arjun</button>
-            <button class="recipient-chip" type="button" data-address="0x92f1...51b6" data-name="Neha">Neha</button>
-            <button class="recipient-chip" type="button" data-address="0x17c4...aa11" data-name="Studio">Studio</button>
+
+        <div class="send-section">
+          <div class="send-section-title">Amount</div>
+          <div class="form-group">
+            <label>Amount (<span id="amountAssetLabel">ETH</span>)</label>
+            <div class="input-row">
+              <input type="text" id="amountInput" value="0.28" />
+              <div class="input-unit" id="amountAssetUnit">ETH</div>
+            </div>
+            <div class="input-hint" id="amountHint">≈ ₹67,200.00</div>
+            <div class="input-hint" id="exactInrValue">Exact: ₹67,200.00000000</div>
+            <button class="max-btn" type="button" data-action="max">Max</button>
+          </div>
+          <div class="form-group">
+            <label>Amount (INR)</label>
+            <div class="input-row">
+              <input type="text" id="amountInrInput" value="67200" />
+              <div class="input-unit">INR</div>
+            </div>
           </div>
         </div>
-        <div class="form-group">
-          <label>Amount (<span id="amountAssetLabel">ETH</span>)</label>
-          <div class="input-row">
-            <input type="text" id="amountInput" value="0.28" />
-            <div class="input-unit" id="amountAssetUnit">ETH</div>
+
+        <div class="send-section">
+          <div class="send-section-title">Network</div>
+          <div class="form-group">
+            <label>Speed</label>
+            <div class="speed-selector" id="speedSelector">
+              <button class="speed-btn" data-speed="slow">Slow</button>
+              <button class="speed-btn active" data-speed="standard">Standard</button>
+              <button class="speed-btn" data-speed="fast">Fast</button>
+            </div>
+            <div class="eta-row" id="etaRow">Estimated confirmation: ~45 seconds</div>
           </div>
-          <div class="input-hint" id="amountHint">≈ ₹67,200.00</div>
-          <button class="max-btn" type="button" data-action="max">Max</button>
-        </div>
-        <div class="form-group">
-          <label>Amount (INR)</label>
-          <div class="input-row">
-            <input type="text" id="amountInrInput" value="67200" />
-            <div class="input-unit">INR</div>
+          <div class="form-group">
+            <label>Estimated gas fee</label>
+            <input type="text" id="gasInput" value="0.0042 ETH (₹1,008)" />
+          </div>
+          <div class="form-group">
+            <label>Memo</label>
+            <input type="text" id="memoInput" placeholder="Add a note (optional)" />
           </div>
         </div>
-        <div class="form-group">
-          <label>Speed</label>
-          <div class="speed-selector" id="speedSelector">
-            <button class="speed-btn" data-speed="slow">Slow</button>
-            <button class="speed-btn active" data-speed="standard">Standard</button>
-            <button class="speed-btn" data-speed="fast">Fast</button>
-          </div>
-          <div class="eta-row" id="etaRow">Estimated confirmation: ~45 seconds</div>
+
+        <div class="send-actions">
+          <button class="primary-btn" id="confirmSend">Review &amp; Confirm</button>
+          <button class="secondary-btn" data-nav="home">Cancel</button>
         </div>
-        <div class="form-group">
-          <label>Estimated gas fee</label>
-          <input type="text" id="gasInput" value="0.0042 ETH (₹1,008)" />
-        </div>
-        <div class="form-group">
-          <label>Memo</label>
-          <input type="text" id="memoInput" placeholder="Add a note (optional)" />
-        </div>
-        <button class="primary-btn" id="confirmSend">Review &amp; Confirm</button>
-        <button class="secondary-btn" data-nav="home">Cancel</button>
       </div>
     </div>
 
@@ -2067,6 +2189,7 @@
     const amountInput = document.getElementById("amountInput");
     const amountInrInput = document.getElementById("amountInrInput");
     const amountHint = document.getElementById("amountHint");
+    const exactInrValue = document.getElementById("exactInrValue");
     const addressInput = document.getElementById("addressInput");
     const recipientInput = document.getElementById("recipientInput");
     const recipientAvatar = document.getElementById("recipientAvatar");
@@ -2082,6 +2205,7 @@
     const primaryTokenIcon = document.getElementById("primaryTokenIcon");
     const primaryTokenNetworkButton = document.getElementById("primaryTokenNetworkButton");
     const primaryAssetName = document.getElementById("primaryAssetName");
+    const sendAssetLabel = document.getElementById("sendAssetLabel");
     const assetPriceLabel = document.getElementById("assetPriceLabel");
     const allocationAssetLabel = document.getElementById("allocationAssetLabel");
     const amountAssetLabel = document.getElementById("amountAssetLabel");
@@ -2166,7 +2290,7 @@
     const tabs = document.getElementById("tabBar");
     const tabButtons = document.querySelectorAll(".tab-btn");
     const assets = {
-      ETH: { name: "Ethereum", symbol: "ETH", icon: "Ξ", price: 22222.54, decimals: 4 },
+      ETH: { name: "Ethereum", symbol: "ETH", icon: "Ξ", price: 240000, decimals: 4 },
       USDC: { name: "USD Coin", symbol: "USDC", icon: "U", price: 83.0, decimals: 2 },
       MATIC: { name: "Polygon", symbol: "MATIC", icon: "M", price: 84.5, decimals: 2 },
     };
@@ -2231,7 +2355,8 @@
       const asset = getAsset(symbol);
       return `${value.toFixed(asset.decimals)} ${asset.symbol}`;
     };
-    const formatInr = (value) => `$${value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const formatInr = (value) => `₹${value.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const formatInrExact = (value) => `₹${value.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 8 })}`;
     const formatInrForAsset = (value, symbol = activeAssetSymbol) => formatInr(value * getAsset(symbol).price);
     const parseNumber = (value) => Number.parseFloat(String(value).replace(/[^\d.]/g, "")) || 0;
     const themeStorageKey = "walletTheme";
@@ -2276,12 +2401,12 @@
     const updateChartTooltip = (range, priceOverride) => {
       if (!chartTooltip) return;
       const priceMap = {
-        "1D": "$2,403.10 · 1D",
-        "1W": "$2,284.20 · 1W",
-        "1M": "$2,189.00 · 1M",
-        "1Y": "$1,983.00 · 1Y",
+        "1D": "₹2,40,310.00 · 1D",
+        "1W": "₹2,28,420.00 · 1W",
+        "1M": "₹2,18,900.00 · 1M",
+        "1Y": "₹1,98,300.00 · 1Y",
       };
-      chartTooltip.textContent = priceOverride || priceMap[range] || "$2,403.10";
+      chartTooltip.textContent = priceOverride || priceMap[range] || "₹2,40,310.00";
     };
 
     const updateChartVolume = (range) => {
@@ -2309,6 +2434,7 @@
       const asset = getAsset(activeAssetSymbol);
       if (primaryAssetName) primaryAssetName.textContent = asset.name;
       if (primaryTokenName) primaryTokenName.textContent = asset.name;
+      if (sendAssetLabel) sendAssetLabel.textContent = asset.name;
       if (primaryTokenIcon) primaryTokenIcon.textContent = asset.icon;
       if (primaryTokenNetworkButton) primaryTokenNetworkButton.dataset.token = asset.symbol;
       if (primaryNetworkLabel) {
@@ -2499,8 +2625,10 @@
     };
 
     const updateAmountHints = (assetValue) => {
-      if (amountHint) amountHint.textContent = `≈ ${formatInrForAsset(assetValue)}`;
-      if (amountInrInput) amountInrInput.value = (assetValue * getAsset(activeAssetSymbol).price).toFixed(2);
+      const convertedValue = assetValue * getAsset(activeAssetSymbol).price;
+      if (amountHint) amountHint.textContent = `≈ ${formatInr(convertedValue)}`;
+      if (exactInrValue) exactInrValue.textContent = `Exact: ${formatInrExact(convertedValue)}`;
+      if (amountInrInput) amountInrInput.value = convertedValue.toFixed(2);
     };
 
     const updateConfirmTotals = (assetValue, gasValue) => {
@@ -2754,7 +2882,7 @@
       const base = getAsset(activeAssetSymbol).price;
       const delta = (ratio - 0.5) * 12000;
       const price = Math.round(base + delta);
-      updateChartTooltip(selectedChartRange, `$${price.toLocaleString("en-US")} · ${selectedChartRange}`);
+      updateChartTooltip(selectedChartRange, `${formatInr(price)} · ${selectedChartRange}`);
     });
     chartWidget?.addEventListener("mouseleave", () => {
       updateChartTooltip(selectedChartRange);
