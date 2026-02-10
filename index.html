@@ -788,19 +788,17 @@
       border-radius: 50%;
       display: grid;
       place-items: center;
-      font-size: 12px;
-      background: rgba(79, 124, 255, 0.2);
-      color: var(--text);
+      background: rgba(79, 124, 255, 0.12);
+      border: 1px solid rgba(79, 124, 255, 0.18);
+      overflow: hidden;
+      flex-shrink: 0;
     }
 
-    .token-icon.success {
-      background: rgba(244, 166, 58, 0.2);
-      color: #f5b45d;
-    }
-
-    .token-icon.warning {
-      background: rgba(255, 70, 70, 0.2);
-      color: #ff7b7f;
+    .token-logo {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      display: block;
     }
 
     .token-item h4 {
@@ -1100,44 +1098,6 @@
       border-color: rgba(79, 124, 255, 0.52);
       box-shadow: 0 0 0 4px rgba(79, 124, 255, 0.14);
       background: var(--surface);
-    }
-
-    .send-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      margin-bottom: 14px;
-      background: linear-gradient(145deg, #ffffff 0%, #f2f6ff 100%);
-      border-radius: 16px;
-      border: 1px solid rgba(79, 124, 255, 0.18);
-      padding: 12px 14px;
-      box-shadow: var(--shadow-sm);
-      gap: 12px;
-    }
-
-    .send-title h3 {
-      font-size: 17px;
-      margin-bottom: 4px;
-    }
-
-    .send-title p {
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .network-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      border-radius: 999px;
-      background: rgba(79, 124, 255, 0.13);
-      color: var(--accent);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      padding: 6px 10px;
-      white-space: nowrap;
     }
 
     .send-section {
@@ -1842,7 +1802,7 @@
           <div class="token-list">
             <div class="token-item">
               <div class="token-meta">
-                <div class="token-icon" id="primaryTokenIcon">Ξ</div>
+                <div class="token-icon" id="primaryTokenIcon"><img class="token-logo" src="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png" alt="Ethereum" /></div>
                 <div>
                   <h4 id="primaryTokenName">Ethereum</h4>
                   <p id="primaryNetworkLabel">2.5100 ETH</p>
@@ -1852,7 +1812,7 @@
             </div>
             <div class="token-item">
               <div class="token-meta">
-                <div class="token-icon success">₿</div>
+                <div class="token-icon"><img class="token-logo" src="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/btc.png" alt="Bitcoin" /></div>
                 <div>
                   <h4>Bitcoin</h4>
                   <p>0.1394 BTC</p>
@@ -1862,7 +1822,7 @@
             </div>
             <div class="token-item">
               <div class="token-meta">
-                <div class="token-icon warning">OP</div>
+                <div class="token-icon"><img class="token-logo" src="https://cryptologos.cc/logos/optimism-ethereum-op-logo.png?v=040" alt="Optimism" /></div>
                 <div>
                   <h4>Optimism</h4>
                   <p>922.1390 OP</p>
@@ -1872,7 +1832,7 @@
             </div>
             <div class="token-item">
               <div class="token-meta">
-                <div class="token-icon">M</div>
+                <div class="token-icon"><img class="token-logo" src="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/matic.png" alt="MATIC" /></div>
                 <div>
                   <h4>Matic</h4>
                   <p>1,323.4754 MATIC</p>
@@ -1882,7 +1842,7 @@
             </div>
             <div class="token-item">
               <div class="token-meta">
-                <div class="token-icon">S</div>
+                <div class="token-icon"><img class="token-logo" src="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/sol.png" alt="Solana" /></div>
                 <div>
                   <h4>Solana</h4>
                   <p>61.2681 SOL</p>
@@ -1955,14 +1915,6 @@
 
     <div class="screen hidden" id="sendScreen">
       <div class="card fade-up">
-        <div class="send-header">
-          <div class="send-title">
-            <h3>Send crypto</h3>
-            <p>Mainnet transfer · White-list protected</p>
-          </div>
-          <div class="network-pill">🔒 Ethereum</div>
-        </div>
-
         <div class="send-section">
           <div class="section-kicker">Recipient</div>
           <div class="recipient-row">
@@ -2369,9 +2321,9 @@
     const tabs = document.getElementById("tabBar");
     const tabButtons = document.querySelectorAll(".tab-btn");
     const assets = {
-      ETH: { name: "Ethereum", symbol: "ETH", icon: "Ξ", price: 240000, decimals: 4 },
-      USDC: { name: "USD Coin", symbol: "USDC", icon: "U", price: 83.0, decimals: 2 },
-      MATIC: { name: "Polygon", symbol: "MATIC", icon: "M", price: 84.5, decimals: 2 },
+      ETH: { name: "Ethereum", symbol: "ETH", icon: "Ξ", logo: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png", price: 240000, decimals: 4 },
+      USDC: { name: "USD Coin", symbol: "USDC", icon: "U", logo: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/usdc.png", price: 83.0, decimals: 2 },
+      MATIC: { name: "Polygon", symbol: "MATIC", icon: "M", logo: "https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/matic.png", price: 84.5, decimals: 2 },
     };
     const gasRates = {
       slow: { base: 0.0026, priority: 0.0007, eta: "~2 minutes" },
@@ -2515,7 +2467,7 @@
       const asset = getAsset(activeAssetSymbol);
       if (primaryAssetName) primaryAssetName.textContent = asset.name;
       if (primaryTokenName) primaryTokenName.textContent = asset.name;
-      if (primaryTokenIcon) primaryTokenIcon.textContent = asset.icon;
+      if (primaryTokenIcon) primaryTokenIcon.innerHTML = `<img class="token-logo" src="${asset.logo}" alt="${asset.name}" />`;
       if (primaryTokenNetworkButton) primaryTokenNetworkButton.dataset.token = asset.symbol;
       if (primaryNetworkLabel) {
         primaryNetworkLabel.textContent = `${tokenNetworks[asset.symbol][tokenNetworkIndex[asset.symbol]]} · ${asset.symbol}`;
