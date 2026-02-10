@@ -1272,67 +1272,10 @@
       margin: 18px auto;
     }
 
-    .settings-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-    }
-
-    .settings-title {
-      font-size: 18px;
-    }
-
-    .settings-subtitle {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    .settings-quick-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .settings-quick-action {
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
-      border-radius: 16px;
-      padding: 12px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--text);
-      text-align: left;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .settings-quick-action span {
-      color: var(--muted);
-      font-size: 10px;
-      display: block;
-      font-weight: 500;
-      margin-top: 3px;
-    }
-
-    .settings-quick-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 10px;
-      display: grid;
-      place-items: center;
-      background: rgba(44, 194, 138, 0.16);
-      color: #9ef0cf;
-      flex-shrink: 0;
-    }
-
     .settings-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
 
     .settings-item {
@@ -1341,39 +1284,7 @@
       align-items: center;
       padding: 14px;
       border-radius: 16px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .settings-item h4 {
-      font-size: 13px;
-      margin-bottom: 3px;
-    }
-
-    .settings-item p {
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .settings-chevron {
-      color: var(--muted);
-      font-size: 18px;
-      margin-left: 12px;
-    }
-
-    body[data-theme="light"] .settings-quick-action {
-      border-color: rgba(12, 18, 34, 0.08);
-      background: linear-gradient(180deg, rgba(12, 18, 34, 0.03), rgba(12, 18, 34, 0.01));
-    }
-
-    body[data-theme="light"] .settings-item {
-      background: rgba(12, 18, 34, 0.03);
-      border-color: rgba(12, 18, 34, 0.06);
-    }
-
-    body[data-theme="light"] .settings-quick-icon {
-      background: rgba(23, 92, 211, 0.12);
-      color: #175cd3;
+      background: rgba(12, 18, 34, 0.04);
     }
 
     .toggle {
@@ -2054,77 +1965,49 @@
 
     <div class="screen hidden" id="settingsScreen">
       <div class="card fade-up">
-        <div class="settings-header">
-          <div>
-            <h3 class="settings-title">Settings</h3>
-            <p class="settings-subtitle">Customize your wallet experience</p>
-          </div>
-        </div>
-
-        <div class="settings-quick-grid">
-          <button class="settings-quick-action" data-nav="send" type="button">
-            <div class="settings-quick-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 2L11 13"></path>
-                <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
-              </svg>
-            </div>
-            <div>Send<br /><span>Transfer assets</span></div>
-          </button>
-          <button class="settings-quick-action" data-nav="receive" type="button">
-            <div class="settings-quick-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-            </div>
-            <div>Receive<br /><span>Share wallet address</span></div>
-          </button>
-        </div>
-
+        <h3 style="font-size: 18px; margin-bottom: 14px;">Settings</h3>
         <div class="settings-list">
           <div class="settings-item" data-action="change-pin">
             <div>
-              <h4>Change PIN</h4>
-              <p>Update wallet access code</p>
+              <div style="font-size: 13px;">Change PIN</div>
+              <div style="font-size: 11px; color: var(--muted);">Update wallet access code</div>
             </div>
-            <span class="settings-chevron">›</span>
+            <span>›</span>
           </div>
           <div class="settings-item" data-action="language">
             <div>
-              <h4>Dark mode</h4>
-              <p>Adaptive theme</p>
+              <div style="font-size: 13px;">Dark mode</div>
+              <div style="font-size: 11px; color: var(--muted);">Adaptive theme</div>
             </div>
             <div class="toggle" id="darkToggle"></div>
           </div>
           <div class="settings-item" data-action="security">
             <div>
-              <h4>Language</h4>
-              <p>English (India)</p>
+              <div style="font-size: 13px;">Language</div>
+              <div style="font-size: 11px; color: var(--muted);">English (India)</div>
             </div>
-            <span class="settings-chevron">›</span>
+            <span>›</span>
           </div>
           <div class="settings-item" data-action="backup">
             <div>
-              <h4>Backup &amp; Recovery</h4>
-              <p>Secure your recovery phrase</p>
+              <div style="font-size: 13px;">Backup &amp; Recovery</div>
+              <div style="font-size: 11px; color: var(--muted);">Secure your recovery phrase</div>
             </div>
-            <span class="settings-chevron">›</span>
+            <span>›</span>
           </div>
           <div class="settings-item" data-action="support">
             <div>
-              <h4>Security</h4>
-              <p>2-step &amp; biometric</p>
+              <div style="font-size: 13px;">Security</div>
+              <div style="font-size: 11px; color: var(--muted);">2-step &amp; biometric</div>
             </div>
-            <span class="settings-chevron">›</span>
+            <span>›</span>
           </div>
           <div class="settings-item">
             <div>
-              <h4>Help &amp; Support</h4>
-              <p>24/7 live chat</p>
+              <div style="font-size: 13px;">Help &amp; Support</div>
+              <div style="font-size: 11px; color: var(--muted);">24/7 live chat</div>
             </div>
-            <span class="settings-chevron">›</span>
+            <span>›</span>
           </div>
         </div>
         <button class="secondary-btn" data-nav="home" style="margin-top: 16px;">Back to wallet</button>
