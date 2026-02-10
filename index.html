@@ -698,6 +698,18 @@
       gap: 6px;
       width: 100%;
       cursor: pointer;
+      --icon-shift-x: 0px;
+      --icon-shift-y: 0px;
+    }
+
+    .action-card[data-action="swap"],
+    .action-card[data-action="bridge"] {
+      --icon-shift-x: 0.5px;
+    }
+
+    .action-card[data-nav="send"],
+    .action-card[data-nav="receive"] {
+      --icon-shift-y: 0.5px;
     }
 
     .action-icon {
