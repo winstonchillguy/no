@@ -1255,9 +1255,14 @@
       margin: 0 auto 10px;
       display: grid;
       place-items: center;
-      font-size: 34px;
-      background: linear-gradient(145deg, #ffd45f, #ffbe1f);
-      color: #1e1f22;
+      background: linear-gradient(145deg, #fff8dd, #ffe7a3);
+      border: 1px solid rgba(255, 190, 31, 0.45);
+      overflow: hidden;
+    }
+
+    .review-token-icon .token-logo {
+      width: 42px;
+      height: 42px;
     }
 
     .review-hero strong {
@@ -2229,7 +2234,7 @@
         </div>
 
         <div class="review-hero">
-          <div class="review-token-icon">Ξ</div>
+          <div class="review-token-icon" id="confirmTokenLogo"><img class="token-logo" src="https://cdn.jsdelivr.net/gh/spothq/cryptocurrency-icons@master/128/color/eth.png" alt="Ethereum" /></div>
           <strong id="confirmAmount">0.28 ETH</strong>
           <span id="confirmAmountInr">₹67,200.00</span>
         </div>
@@ -2475,6 +2480,7 @@
     const gasInput = document.getElementById("gasInput");
     const memoInput = document.getElementById("memoInput");
     const speedSelector = document.getElementById("speedSelector");
+    const confirmTokenLogo = document.getElementById("confirmTokenLogo");
     const confirmAmount = document.getElementById("confirmAmount");
     const confirmAmountInr = document.getElementById("confirmAmountInr");
     const confirmGas = document.getElementById("confirmGas");
@@ -2903,8 +2909,10 @@
     };
 
     const updateConfirmTotals = (assetValue, gasValue) => {
+      const asset = getAsset(activeAssetSymbol);
       confirmAmount.textContent = formatAsset(assetValue);
       if (confirmAmountInr) confirmAmountInr.textContent = formatInrForAsset(assetValue);
+      if (confirmTokenLogo) confirmTokenLogo.innerHTML = `<img class="token-logo" src="${asset.logo}" alt="${asset.name}" />`;
       confirmGas.textContent = formatAsset(gasValue);
       confirmTotal.textContent = formatAsset(assetValue + gasValue);
       if (confirmTotalInr) confirmTotalInr.textContent = formatInrForAsset(assetValue + gasValue);
